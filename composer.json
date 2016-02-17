@@ -1,0 +1,28 @@
+{
+    "name": "xepan/production",
+    "type": "library",
+    "description": "Production Management Application for xEpan Platform",
+    "homepage": "https://github.com/xepan/production",
+    "keywords": ["xEpan","SaaS","ERP","Production Management","Job Management"],
+    "license": "MIT",
+    "minimum-stability" : "dev",
+    "authors": [
+        {
+            "name": "Xavoc Technocrats Pvt. Ltd.",
+            "email": "info@xavoc.com"
+        }
+    ],
+    "source": {
+        "url": "git@github.com:xepan/production.git",
+        "type": "git",
+        "reference": "origin/master"
+    },
+    "require": {
+        "atk4/atk4": "master-dev",
+        "xepan/base" : "dev-master",
+        "php": ">=5.3"
+    },
+    "autoload": {
+        "psr-0": { "autocomplete": "lib" }
+    }
+}

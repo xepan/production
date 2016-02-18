@@ -1,14 +1,17 @@
-// <?php
+<?php
 
-// namespace xepan\production;
+namespace xepan\production;
 
-// class page_jobcarddetail extends \Page {
-// 	public $title='JobcardDetail';
+class page_jobcarddetail extends \Page {
+	public $title='JobcardDetail';
 
-// 	function init(){
-// 		parent::init();
+	function init(){
+		parent::init();
 
-// 		$crud = $this->add('CRUD');
-// 		$crud->setModel('xepan\production\Model_JobcardDetail');
-// 	}
-// }
+		// $crud = $this->add('CRUD');
+		// $crud->setModel('xepan\production\Model_JobcardDetail');
+	}
+	function defaultTemplate(){
+		return['page/jobcarddetail'];
+	}
+}

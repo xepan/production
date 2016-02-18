@@ -1,18 +1,14 @@
 <?php
-
 namespace xepan\production;
-
-class page_jobcard extends \Page {
-	
-	public $title='Jobcard';
+class View_Opportunity extends \View{
 
 	function init(){
 		parent::init();
-
 	}
 
 	function defaultTemplate(){
-		return['page/jobcard'];
+
+		return ['view/opportunity'];
 	}
 
 }

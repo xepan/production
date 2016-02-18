@@ -15,5 +15,6 @@ class Initiator extends \Controller_Addon {
 		$m->addItem('outsourceparty','xepan_production_outsourceparty');
 		$m->addItem('Departments','xepan_production_jobcard');
 		
+		$this->addLocation(array('template'=>'templates'));
 	}
 }

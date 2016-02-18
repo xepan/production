@@ -1,19 +1,19 @@
-// <?php
+<?php
 
-// namespace xepan\production;
+namespace xepan\production;
 
-// class Model_OutsourceParty extends \xepan\base\Model_Contact{
+class Model_OutsourceParty extends \xepan\base\Model_Contact{
 
-// 	public $table="OutsourceParty";
+	public $table="OutsourceParty";
 
-// 	function init(){
-// 		parent::init();
+	function init(){
+		parent::init();
 
-// 		$this->hasOne('xepan','epan_id');
-// 		$this->addCondition('xepan_id');
+		$this->hasOne('xepan','epan_id');
+		$this->addCondition('xepan_id');
 
-// 		$this->addField('is_active')->type('boolean')->defaultValue(true);
-// 		$this->addField('tin_no');
+		$this->addField('is_active')->type('boolean')->defaultValue(true);
+		$this->addField('tin_no');
 
-// 	}
-// }
+	}
+}

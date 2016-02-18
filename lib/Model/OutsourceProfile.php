@@ -1,13 +1,13 @@
-// <?php
+<?php
 
-// namespace xepan\production;
+namespace xepan\production;
 
-// class Model_OutsourceProfile extends \xepan\base\Model_Contact{
+class Model_OutsourceProfile extends \xepan\base\Model_Contact{
 
-// 	public $table="OutsourceProfile";
+	public $table="OutsourceProfile";
 
-// 	function init(){
-// 		parent::init();
+	function init(){
+		parent::init();
 		
-// 	}
-// }
+	}
+}

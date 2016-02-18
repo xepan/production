@@ -1,6 +1,6 @@
 <?php
 namespace xepan\production;
-class View_Opportunity extends \View{
+class View_OutsourceStatus extends \View{
 
 	function init(){
 		parent::init();
@@ -8,7 +8,7 @@ class View_Opportunity extends \View{
 
 	function defaultTemplate(){
 
-		return ['view/opportunity'];
+		return ['view/outsourcestatus'];
 	}
 
 }

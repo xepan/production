@@ -10,7 +10,7 @@ class page_outsourceprofile extends \Page {
 		parent::init();
 
 		$this->add('xepan/production/View_Activity',null,'activity');
-		$this->add('xepan/production/View_Opportunity',null,'opportunity');
+		$this->add('xepan/production/View_OutsourceStatus',null,'outsourcestatus');
 	}
 	function defaultTemplate(){
 		return['page/outsourceprofile'];

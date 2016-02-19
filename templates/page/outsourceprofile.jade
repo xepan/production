@@ -9,9 +9,13 @@
             li.active
               a(data-toggle='tab', href='#tab-activity') Activity
             li
-              a(data-toggle='tab', href='#tab-outsourcestatus') OutsourceStatus  
+              a(data-toggle='tab', href='#tab-orderstatus') OrderStatus 
+            li.active
+              a(data-toggle='tab', href='#tab-portfolio') Portfolio
           .tab-content
             #tab-activity.tab-pane.fade.in.active
               {$activity}
-            #tab-outsourcestatus.tab-pane.clearfix.fade
-              {$outsourcestatus}  
+            #tab-orderstatus.tab-pane.clearfix.fade
+              {$orderstatus}
+            #tab-portfolio.tab-pane.clearfix.fade
+              {$portfolio}   

@@ -13,8 +13,6 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$job_j->addField('order_name');
 		$job_j->addField('date');
 		$job_j->addField('day');
-		
-		//$job_j->addField('status')->enum(['Active','DeActive']);
 	
 	}
 }

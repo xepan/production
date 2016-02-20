@@ -1,4 +1,4 @@
-#portfolio
+#tab-orderstatus
   .row
     .panel.panel-default
       .panel-body
@@ -9,44 +9,39 @@
           .col-lg-3
             button.btn.btn-success(type='submit') Edit Information   
         br
-        .row
-          .col-lg-4
-            label Company Name:
-            br
-            | Xavoc Technocrats pvt.ltd udaipur
-          .col-lg-4
-            label Company Type:
-            br
-            | IT
-          .col-lg-4
-            label Registeration:
-            br
-            |  153522
-      .row
-          header.main-box-header.clearfix
-            h2 Orders:
-            .row
-              .col-lg-4
-                label Item:
-                br
-                |  printing
-              .col-lg-4
-                label Type:
-                br
-                |  digital printing
-              .col-lg-4
-                label Created Date:
-                br
-                |  06-feb-16
-            .row
-              .col-lg-4
-                label Department:
-                  br
-                |  IT
-              .col-lg-4
-                label Price:
-                br
-              .col-lg-4
-                label Duration:
-                br
-                |  7 months{From To Date}         
+  .row
+    .table-responsive
+      table.table.user-list.table-hover
+        thead
+          tr
+            th
+              span Job Card
+            th
+              span Duration
+            th.text-center
+              span Status
+            th  
+        tbody
+          tr
+            td
+              img(alt='' src='img/samples/scarlet-159.png')
+              a.user-link(href='{url}?page=xepan_production_jobcarddetail{/}') I.B printing corporates
+              span
+                small| F-4301 Greeting Card
+            td
+              span|15-02-2016
+              div
+                a.user-subhead|3 days left
+            td.text-center
+              span(style='width:10%;')
+                img(style='width:80%', src='/xepan2/vendor/xepan/production/templates//img/new.png')
+              span.btn.btn-success Next
+            td(style='width: 10%;')
+              a.table-link.danger(href='#')
+                span.fa-stack
+                  i.fa.fa-square.fa-stack-2x
+                  i.fa.fa-trash-o.fa-stack-1x.fa-inverse
+              a.table-link(href='#')
+                span.fa-stack
+                  i.fa.fa-square.fa-stack-2x
+                  i.glyphicon.glyphicon-remove-circle.fa-stack-1x.fa-inverse      

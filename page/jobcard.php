@@ -9,15 +9,17 @@ class page_jobcard extends \Page {
 	function init(){
 		parent::init();
 
-		$jobcard=$this->add('xepan\production\Model_Jobcard');
+		$job_j=$this->add('xepan\production\Model_Jobcard');
+		
 		$crud=$this->add('xepan\base\CRUD',
-						array(
-							'grid_class'=>'xepan\base\Grid',
-							'grid_options'=>array(
-											'defaultTemplate'=>['grid/jobcard']
-											)
-						));
-		$crud->setModel($jobcard);
+						[
+							'action_page'=>'xepan_production_jobcarddetail',
+							'grid_options'=>[
+											'defaultTemplate'=>['grid/jobcard-grid']
+											]
+						]);
+
+		$crud->setModel($job_j);
 		$crud->grid->addQuickSearch(['name']);
 
 	

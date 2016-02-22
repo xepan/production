@@ -1,21 +1,24 @@
 {$Content}
 .row
   .col-lg-3.co-md-3.col-sm-3
+    {contact_view}
     include contact.jade
+    {/contact_view}
   .col-lg-9.col-md-8.col-sm-8
       .main-box.clearfix
         .tabs-wrapper.profile-tabs
           ul.nav.nav-tabs
             li.active
-              a(data-toggle='tab', href='#tab-activity') Activity
+              a(data-toggle='tab', href='#tab-activity') Portfolio
             li
               a(data-toggle='tab', href='#tab-orderstatus') OrderStatus 
             li.active
-              a(data-toggle='tab', href='#tab-portfolio') Portfolio
+              a(data-toggle='tab', href='#tab-portfolio') Activity
           .tab-content
-            #tab-activity.tab-pane.fade.in.active
-              {$activity}
+           
             #tab-orderstatus.tab-pane.clearfix.fade
-              {$orderstatus}
+              {$orderstatus} 
+            #tab-activity.tab-pane.fade.in.active
+              {$activity} 
             #tab-portfolio.tab-pane.clearfix.fade
-              {$portfolio}   
+              {$portfolio}

@@ -8,10 +8,17 @@ class page_outsourceparty extends \Page {
 	function init(){
 		parent::init();
 
-		// $crud=$this->add('CRUD');
-		// $crud->setModel('xepan\production\Model_OutsourceParty');
-	}
-	function defaultTemplate(){
-		return['page/outsourceparty'];
+		$os_j=$this->add('xepan\production\Model_OutsourceParty');
+
+		$crud=$this->add('xepan\base\CRUD',
+						[
+							'action_page'=>'xepan_production_outsourceprofile',
+							'grid_options'=>[
+											'defaultTemplate'=>['grid/outsourceparty-grid']
+											]
+						]);
+
+		$crud->setModel($os_j);
+		$crud->grid->addQuickSearch(['name']);
 	}
 }

@@ -1,6 +1,6 @@
 {$Content}
 <div class="row">
-  <div class="col-lg-3 co-md-3 col-sm-3">
+  <div class="col-lg-3 co-md-3 col-sm-3">{contact_view}
     <div id="user-profile">
       <div class="main-box clearfix">
         <header class="main-box-header clearfix">
@@ -72,20 +72,20 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>{/contact_view}
   </div>
   <div class="col-lg-9 col-md-8 col-sm-8">
     <div class="main-box clearfix">
       <div class="tabs-wrapper profile-tabs">
         <ul class="nav nav-tabs">
-          <li class="active"><a data-toggle="tab" href="#tab-activity">Activity</a></li>
+          <li class="active"><a data-toggle="tab" href="#tab-activity">Portfolio</a></li>
           <li><a data-toggle="tab" href="#tab-orderstatus">OrderStatus </a></li>
-          <li class="active"><a data-toggle="tab" href="#tab-portfolio">Portfolio</a></li>
+          <li class="active"><a data-toggle="tab" href="#tab-portfolio">Activity</a></li>
         </ul>
         <div class="tab-content">
-          <div id="tab-activity" class="tab-pane fade in active">{$activity}</div>
-          <div id="tab-orderstatus" class="tab-pane clearfix fade">{$orderstatus}</div>
-          <div id="tab-portfolio" class="tab-pane clearfix fade">{$portfolio}   </div>
+          <div id="tab-orderstatus" class="tab-pane clearfix fade">{$orderstatus} </div>
+          <div id="tab-activity" class="tab-pane fade in active">{$activity} </div>
+          <div id="tab-portfolio" class="tab-pane clearfix fade">{$portfolio}</div>
         </div>
       </div>
     </div>

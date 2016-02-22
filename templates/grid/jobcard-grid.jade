@@ -11,42 +11,41 @@
                         i(class="fa fa-search search-icon")
     {/Pannel}
     .main-box-body.clearfix.table
-        table.user-list.table-hover(style="width:100%")
+        table.table.user-list.table-hover(style="width:100%")
             {header}
             thead
-             tr
-                {cols}{col}
-                th
-                 span OutSource Parties 
-                th.text-center
-                 span Status
-                th.text-center
-                 span Panding Job-Card
-                 th
-                //- {/}
-                {/}{/}
+                tr
+                    {cols}
+                    th
+                      span Jobcard
+                    th
+                      span Duration
+                    th.text-center
+                      span Status
+                    th  
+                    {/}
             {/}
             {$subheader}
 
             tbody
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
-                    {cols}  
+                    {cols}
                     td
-                      img(alt='', src='img/samples/scarlet-159.png')
-                      a.user-link(href='{url}?page=xepan_production_outsourceprofile{/}'){name}outsource party{/}
-                         br
-                        span.user-subhead {address}Karauli / Rajasthan / India{/}
-                     
-                    td.text-center
-                        {status} InActive{/}
-                    td.text-center
-                        {panding_jobcard} 5{/}
-                   
+                          img(alt='' src='img/samples/scarlet-159.png')
+                          a.user-link(href='{url}?page=xepan_production_jobcarddetail{/}') {name}I.B printing corporates{/}
+                          span
+                            small| {order_id}F-4301{/}
+                            {order_name} Greeting Card{/}
+                        td
+                          span|{date}15-02-2016{/}
+                          div
+                            a.user-subhead|{day}3 days left{/}
+                    
                     td(style="width: 15%;")
-                        {edit}edit{/}
-                        {delete}delete{/}
-                    {/}
+                        {$edit}
+                        {$delete}
+                        {/}
                 {/}{/}
                 {not_found}
                 tr

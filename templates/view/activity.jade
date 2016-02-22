@@ -5,8 +5,8 @@
       tr
         td.text-center
           i.fa.fa-comment
-        td Approved invoice number 1001
-        td 2014/08/08 12:08
+        td Approved invoice number {order_no}1001{}
+        td {date}2014/08/08{/}  {time}12:08{/}
       tr
         td.text-center
           i.fa.fa-truck
@@ -26,7 +26,7 @@
           i.fa.fa-truck
         td
           | changed order status from 
-          span.label.label-primary Pending
+          span.label.label-primary {status}Pending{/}
           | to 
           span.label.label-success Completed
         td 2014/08/08 12:08

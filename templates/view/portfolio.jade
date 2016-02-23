@@ -1,4 +1,5 @@
 #tab-portfolio
+  {$portfolio}
   .row
     .panel.panel-default
       .panel-body
@@ -14,15 +15,15 @@
             .col-lg-4
               label Bank Name:
                 br
-                | state Bank of India
+                |{bank_name}state Bank of India{/}
             .col-lg-4
               label Account Type:
               br
-              | Current
+              | {account_type}  Current{/}
             .col-lg-4
               label Account No:
               br
-              |  153522
+              |  {account_no} 153522{/}
         .row
           .row
             header.main-box-header.clearfix
@@ -33,21 +34,21 @@
             .col-lg-4
               label Country:
                 br
-                | India
+                | {country} India{/}
             .col-lg-4
               label Type:
                .checkbox-nice
                   input#checkbox-1(type='checkbox')
-                  label(for='checkbox-0') TIN
+                  label(for='checkbox') TIN
                   
                 .checkbox-nice
-                  input#checkbox-2(type='checkbox')
-                  label(for='checkbox-1') PAN
+                  input#checkbox-1(type='checkbox')
+                  label(for='checkbox') PAN
             .col-lg-4
-              label TIN-NO:   215451321
+              label TIN-NO:   {tin_no}215451321{/}
               br
               br
-              label PAN-NO:    21566523
+              label PAN-NO:   {pan_it_no} 21566523{/}
 
         .row
           .col-lg-12
@@ -60,16 +61,16 @@
               .checkbox-nice
                 input#checkbox-1(type='checkbox')
                 span.col-sm-3
-                label(for='checkbox-2') HR
+                label(for='checkbox') HR
             .row
               .checkbox-nice
                 input#checkbox-1(type='checkbox')
                 span.col-sm-3
-                label(for='checkbox-3') Production
+                label(for='checkbox') Production
             .row
               .checkbox-nice
                 input#checkbox-1(type='checkbox')
                 span.col-sm-3
-                label(for='checkbox-4') Store
+                label(for='checkbox') Store
           .col-sm-4
-          .col-sm-4
+          .col-sm-4  }

@@ -8,11 +8,9 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		parent::init();
 
 		$job_j = $this->join('jobcard.document_id');
+		$this->hasOne('xepan\base\contact','contact_id');
 		$job_j->addField('name');
-		$job_j->addField('order_id');
-		$job_j->addField('order_name');
-		$job_j->addField('date');
-		$job_j->addField('day');
+		
 	
 	}
 }

@@ -1,5 +1,5 @@
 
-<div id="tab-portfolio">
+<div id="tab-portfolio">{$portfolio}
   <div class="row">
     <div class="panel panel-default">
       <div class="panel-body">
@@ -16,13 +16,13 @@
         <div class="row">
           <div class="row">
             <div class="col-lg-4">
-              <label>Bank Name:<br/>state Bank of India</label>
+              <label>Bank Name:<br/>{bank_name}state Bank of India{/}</label>
             </div>
             <div class="col-lg-4">
-              <label>Account Type:</label><br/>Current
+              <label>Account Type:</label><br/>{account_type}  Current{/}
             </div>
             <div class="col-lg-4">
-              <label>Account No:</label><br/> 153522
+              <label>Account No:</label><br/> {account_no} 153522{/}
             </div>
           </div>
         </div>
@@ -36,23 +36,23 @@
         <div class="row">
           <div class="row">
             <div class="col-lg-4">
-              <label>Country:<br/>India</label>
+              <label>Country:<br/>{country} India{/}</label>
             </div>
             <div class="col-lg-4">
               <label>Type:
                 <div class="checkbox-nice">
                   <input id="checkbox-1" type="checkbox"/>
-                  <label for="checkbox-0">TIN</label>
+                  <label for="checkbox">TIN</label>
                 </div>
                 <div class="checkbox-nice">
-                  <input id="checkbox-2" type="checkbox"/>
-                  <label for="checkbox-1">PAN</label>
+                  <input id="checkbox-1" type="checkbox"/>
+                  <label for="checkbox">PAN</label>
                 </div>
               </label>
             </div>
             <div class="col-lg-4">
-              <label>TIN-NO:   215451321</label><br/><br/>
-              <label>PAN-NO:    21566523</label>
+              <label>TIN-NO:   {tin_no}215451321{/}</label><br/><br/>
+              <label>PAN-NO:   {pan_it_no} 21566523{/}</label>
             </div>
           </div>
         </div>
@@ -68,24 +68,24 @@
             <div class="row">
               <div class="checkbox-nice">
                 <input id="checkbox-1" type="checkbox"/><span class="col-sm-3"></span>
-                <label for="checkbox-2">HR</label>
+                <label for="checkbox">HR</label>
               </div>
             </div>
             <div class="row">
               <div class="checkbox-nice">
                 <input id="checkbox-1" type="checkbox"/><span class="col-sm-3"></span>
-                <label for="checkbox-3">Production</label>
+                <label for="checkbox">Production</label>
               </div>
             </div>
             <div class="row">
               <div class="checkbox-nice">
                 <input id="checkbox-1" type="checkbox"/><span class="col-sm-3"></span>
-                <label for="checkbox-4">Store</label>
+                <label for="checkbox">Store</label>
               </div>
             </div>
           </div>
           <div class="col-sm-4"></div>
-          <div class="col-sm-4"></div>
+          <div class="col-sm-4"> }</div>
         </div>
       </div>
     </div>

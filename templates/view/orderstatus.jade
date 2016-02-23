@@ -25,17 +25,15 @@
           tr
             td
               img(alt='' src='img/samples/scarlet-159.png')
-              a.user-link(href='{url}?page=xepan_production_jobcarddetail{/}') I.B printing corporates
+              a.user-link(href='{url}?page=xepan_production_jobcarddetail{/}') {name}I.B printing corporates{/}
               span
-                small| F-4301 Greeting Card
+               small| {order_id}F-4301{/}
+                            {order_name} Greeting Card{/}
             td
-              span|15-02-2016
+              span|{date}15-02-2016{/}
               div
-                a.user-subhead|3 days left
-            td.text-center
-              span(style='width:10%;')
-                img(style='width:80%', src='/xepan2/vendor/xepan/production/templates//img/new.png')
-              span.btn.btn-success Next
+               a.user-subhead|{day}3 days left{/}          
+            
             td(style='width: 10%;')
               a.table-link.danger(href='#')
                 span.fa-stack

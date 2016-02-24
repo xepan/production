@@ -19,6 +19,6 @@ class page_outsourceparty extends \Page {
 						]);
 
 		$crud->setModel($os);
-		$crud->grid->addQuickSearch(['name']);
+		
 	}
 }

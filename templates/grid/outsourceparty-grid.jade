@@ -32,11 +32,11 @@
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}  
-                    td
+                    td(style="width: 30%;")
                       img(alt='', src='img/samples/scarlet-159.png')
                       a.user-link(href='{url}?page=xepan_production_outsourceprofile&contact_id={$id}{/}'){name}outsource party{/}
-                         br
-                        span.user-subhead {address}Karauli / Rajasthan / India{/}
+                        span
+                            small| {address}F-4301{/}
                      
                     td.text-center
                         {status} InActive{/}

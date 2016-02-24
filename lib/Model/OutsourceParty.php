@@ -13,11 +13,14 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 		
 		$osp_j->addField('pan_it_no')->caption('Pan / IT No.');
 		$osp_j->addField('tin_no')->caption('TIN / CST No.');
+		$osp_j->addField('account_no');
+		$osp_j->addField('account_type');
+		$osp_j->addField('time');
 		
 		$osp_j->hasMany('xepan\production\Jobcard');
 
 		$this->addCondition('type','OutsourceParty');
-		//$this->hasMany('xepan\production\Jobcard');
+		
 	}
 }
 

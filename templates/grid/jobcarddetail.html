@@ -1,0 +1,67 @@
+{$Content}
+<div class="row">
+  <div class="main-box no-header clearfix">
+    <header class="main-box-header clearfix">
+      <h2 class="pull-left"><a href="{url}?page=xepan_production_jobcard{/}" class="user-link">JobCard Detail : F-4301</a></h2>
+      <div class="filter-block pull-right">
+        <div class="form-group pull-left">
+          <input type="text" placeholder="Search..." class="form-control"/><i class="fa fa-search search-icon"></i>
+        </div><a href="{url}?page=production_jobcarddetail{/}" class="btn btn-primary pull-right"><i class="fa fa-pencil fa-lg"></i> Edit Jobcard</a><a href="{url}?page=production_jobcarddetail{/}" class="btn btn-primary pull-right"><i class="fa fa-plus-circle fa-lg"></i> Add JobCard Detail</a>
+      </div>
+    </header>
+    <div class="main-box-body clearfix">
+      <div id="invoice-companies" class="row">
+        <div class="col-sm-4 invoice-box">
+          <div class="invoice-icon hidden-sm"><i class="fa fa-home"></i> From</div>
+          <div class="invoice-company">
+            <h4>{address}Sushil Milkee</h4>
+            <p>54  Point Tower point,<br/>Karauli. 322219<br/>INDIA{/}</p>
+          </div>
+        </div>
+        <div class="col-sm-4 invoice-box">
+          <div>
+            <h4>Sale Order No.:  {sale_order_no}2513{/}</h4><br/>
+          </div>
+          <div><strong class="atk-col-3">Order Create:   {create_date}16/01/2016{/}</strong></div>
+        </div>
+        <div class="col-sm-4 invoice-box invoice-box-dates">
+          <div class="invoice-dates">
+            <div class="invoice-number clearfix"><strong>JobCard No.</strong><span class="pull-right">{order_no}F-4301{/}</span></div>
+            <div><strong>Next Department</strong><span class="pull-right">Design</span></div>
+            <div><strong>From Department</strong><span class="pull-right">Printing</span></div>
+            <div><strong>Current Department</strong><span class="pull-right">Lamination</span></div>
+            <div><strong>Current date:</strong><span class="pull-right">{date_create}26/01/2016{/}</span></div>
+            <div><strong>Due date:</strong><span class="pull-right">{date_create}12/02/2016{/}</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="text-center"><span>Sr-No.</span></th>
+              <th><span>Item Name</span></th>
+              <th class="text-center"><span>Specification</span></th>
+              <th class="text-center"><span>Quantity</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center">0011</td>
+              <td><a class="user-subhead"><strong class="h3">Business Card</strong></a>
+                <div><a class="user-link">Department</a></div>
+                <div><small>Design / Printing / Lamination</small></div>
+              </td>
+              <td class="text-center">
+                <div><strong>Paper Type:</strong><span class="pull-center">100 GSM</span></div>
+                <div><strong>Printing Side:</strong><span class="pull-center">Both Side</span></div>
+              </td>
+              <td class="text-center">99</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="clearfix"><a href="{url}?page=production_jobcarddetail{/}" class="btn btn-success pull-right"><i class="fa fa-mail-forward fa-lg"></i> Send invoice</a></div>
+    </div>
+  </div>
+</div>

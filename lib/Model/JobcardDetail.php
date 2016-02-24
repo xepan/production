@@ -7,16 +7,11 @@ class Model_JobcardDetail extends \xepan\base\Model_Table{
 	function init(){
 		parent::init();
 
-		$this->hasOne('xepan\base\Epan');
+		$jobd_j = $this->hasOne('xepan\base\Epan');
 
-		$this->hasOne('Outsourceparty','Outsourceparty_id');
+		$jobd_j = $this->hasOne('Outsourceparty','Outsourceparty_id');
 		
-		$this->addField('activity')->type('text');
-
-
-		$this->addField('is_active')->type('boolean')->defaultValue(true);
-
-		
+		$jobd_j=addField('order_no');
 
 	}
 }

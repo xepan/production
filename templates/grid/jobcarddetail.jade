@@ -1,0 +1,96 @@
+{$Content}
+.row
+  .main-box.no-header.clearfix
+    header.main-box-header.clearfix
+      h2.pull-left
+        a.user-link(href='{url}?page=xepan_production_jobcard{/}') JobCard Detail : F-4301
+      .filter-block.pull-right
+        .form-group.pull-left
+          input.form-control(type='text', placeholder='Search...')
+          i.fa.fa-search.search-icon
+        a.btn.btn-primary.pull-right(href='{url}?page=production_jobcarddetail{/}')
+          i.fa.fa-pencil.fa-lg
+          |  Edit Jobcard
+        a.btn.btn-primary.pull-right(href='{url}?page=production_jobcarddetail{/}')
+          i.fa.fa-plus-circle.fa-lg
+          |  Add JobCard Detail
+
+    .main-box-body.clearfix
+      #invoice-companies.row
+        .col-sm-4.invoice-box
+          .invoice-icon.hidden-sm
+            i.fa.fa-home
+            |  From
+          .invoice-company
+            h4 {address}Sushil Milkee
+            p
+              | 54  Point Tower point,
+              br
+              | Karauli. 322219
+              br
+              | INDIA{/}
+        .col-sm-4.invoice-box
+          div
+            h4 Sale Order No.:  {sale_order_no}2513{/}
+            br
+          div
+              strong.atk-col-3 Order Create:   {create_date}16/01/2016{/}
+    
+        .col-sm-4.invoice-box.invoice-box-dates
+          .invoice-dates
+            .invoice-number.clearfix
+              strong JobCard No.
+              span.pull-right {order_no}F-4301{/}
+            div
+              strong Next Department
+              span.pull-right Design
+            div
+              strong From Department
+              span.pull-right Printing
+            div
+              strong Current Department
+              span.pull-right Lamination
+            div
+              strong Current date:
+              span.pull-right {date_create}26/01/2016{/}
+            div
+              strong Due date:
+              span.pull-right {date_create}12/02/2016{/}
+      .table-responsive
+        table.table
+          thead
+            tr
+              th.text-center
+                span Sr-No.
+              th
+                span Item Name
+              th.text-center
+                span Specification
+              th.text-center
+                span Quantity
+          tbody
+            tr
+              td.text-center
+                | 0011
+              td
+                a.user-subhead
+                  strong.h3| Business Card
+                div
+                  a.user-link| Department
+                div
+                  small| Design / Printing / Lamination
+              td.text-center
+                div
+                  strong Paper Type:
+                  span.pull-center 100 GSM
+                div
+                  strong Printing Side:
+                  span.pull-center Both Side
+               
+              td.text-center
+                | 99
+            
+      .clearfix
+        a.btn.btn-success.pull-right(href='{url}?page=production_jobcarddetail{/}')
+          i.fa.fa-mail-forward.fa-lg
+          |  Send invoice

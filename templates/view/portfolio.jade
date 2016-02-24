@@ -19,11 +19,11 @@
             .col-lg-4
               label Account Type:
               br
-              | {account_type}  Current{/}
+              | {account_type}Current{/}
             .col-lg-4
               label Account No:
               br
-              |  {account_no} 153522{/}
+              |  {account_no}153522{/}
         .row
           .row
             header.main-box-header.clearfix
@@ -34,7 +34,7 @@
             .col-lg-4
               label Country:
                 br
-                | {country} India{/}
+                | {country}India{/}
             .col-lg-4
               label Type:
                .checkbox-nice
@@ -48,29 +48,36 @@
               label TIN-NO:   {tin_no}215451321{/}
               br
               br
-              label PAN-NO:   {pan_it_no} 21566523{/}
+              label PAN-NO:   {pan_it_no}21566523{/}
 
         .row
-          .col-lg-12
+          .col-lg-6
             header.main-box-header.clearfix
               h2 Department
 
-        .row
-          .col-sm-4
             .row
-              .checkbox-nice
-                input#checkbox-1(type='checkbox')
-                span.col-sm-3
-                label(for='checkbox') HR
-            .row
-              .checkbox-nice
-                input#checkbox-1(type='checkbox')
-                span.col-sm-3
-                label(for='checkbox') Production
-            .row
-              .checkbox-nice
-                input#checkbox-1(type='checkbox')
-                span.col-sm-3
-                label(for='checkbox') Store
-          .col-sm-4
-          .col-sm-4  }
+              .col-sm-4
+                .row
+                  .checkbox-nice
+                    input#checkbox-1(type='checkbox')
+                    span.col-sm-3
+                    label(for='checkbox') HR
+                .row
+                  .checkbox-nice
+                    input#checkbox-1(type='checkbox')
+                    span.col-sm-3
+                    label(for='checkbox') Production
+                .row
+                  .checkbox-nice
+                    input#checkbox-1(type='checkbox')
+                    span.col-sm-3
+                    label(for='checkbox') Store
+              .col-sm-4
+              .col-sm-4  
+          .col-lg-6
+            header.main-box-header.clearfix
+              h2 Address:
+               br
+              label| A-124 Ram Nagar, Sodala, Pink-City
+              //| {address}India{/}
+          

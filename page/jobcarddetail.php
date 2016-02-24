@@ -7,17 +7,10 @@ class page_jobcarddetail extends \Page {
 
 	function init(){
 		parent::init();
-		$job=$this->add('xepan\production\Model_Jobcard');
-		
-		$crud=$this->add('xepan\base\CRUD',
-						[
-							'action_page'=>'xepan_production_jobcard',
-							'grid_options'=>[
-											'defaultTemplate'=>['grid/jobcarddetail']
-											]
-						]);
+		 $job = $this->add('xepan\production\Model_Jobcard');
 
-		$crud->setModel($job);
-		$crud->grid->addQuickSearch(['name']);
+	}
+	function defaultTemplate(){
+		return ['page/jobcarddetail'];
 	}
 }

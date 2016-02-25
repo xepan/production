@@ -11,7 +11,7 @@ class page_jobcard extends \Page {
 
 		$job_j=$this->add('xepan\production\Model_Jobcard');
 		
-		$crud=$this->add('xepan\base\CRUD',
+		$crud=$this->add('xepan\hr\CRUD',
 						[
 							'action_page'=>'xepan_production_jobcarddetail',
 							'grid_options'=>[

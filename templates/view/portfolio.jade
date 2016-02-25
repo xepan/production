@@ -3,13 +3,19 @@
   .row
     .panel.panel-default
       .panel-body
+        .col-lg-12
+          .col-lg-5
+            | {$department}{$department_id}
+          .col-lg-5
+            | {$post}{$post_id}
+          .col-lg-2 
+            | {$FormButtons}      
         .row
           .col-lg-9
             header.main-box-header.clearfix
               h2 Banking Information
           .col-lg-3
-            button.btn.btn-success(type='submit') Edit Information   
-       
+          
         .row
           .row
             .col-lg-4
@@ -78,6 +84,6 @@
             header.main-box-header.clearfix
               h2 Address:
                br
-              label| A-124 Ram Nagar, Sodala, Pink-City
-              //| {address}India{/}
+              label| {address}A-124 Ram Nagar, Sodala, Pink-City{/}
+              
           

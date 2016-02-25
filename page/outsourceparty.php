@@ -10,7 +10,8 @@ class page_outsourceparty extends \Page {
 
 		$os=$this->add('xepan\production\Model_OutsourceParty');
 		
-		$crud=$this->add('xepan\base\CRUD',
+		
+		$crud=$this->add('xepan\hr\CRUD',
 						[
 							'action_page'=>'xepan_production_outsourceprofile',
 							'grid_options'=>[
@@ -19,6 +20,8 @@ class page_outsourceparty extends \Page {
 						]);
 
 		$crud->setModel($os);
+		$crud->grid->addQuickSearch(['name']);
+		
 		
 	}
 }

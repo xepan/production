@@ -1,4 +1,4 @@
-{$Content}
+ {$Content}
 <div class="row">
   <div class="main-box no-header clearfix">
     <header class="main-box-header clearfix">
@@ -14,8 +14,11 @@
         <div class="col-sm-4 invoice-box">
           <div class="invoice-icon hidden-sm"><i class="fa fa-home"></i> From</div>
           <div class="invoice-company">
-            <h4>{address}Sushil Milkee</h4>
-            <p>54  Point Tower point,<br/>Karauli. 322219<br/>INDIA{/}</p>
+            <h4>{name}Sushil Milkee{/}</h4>
+            <p>
+              {address}
+              54  Point Tower point,<br/>Karauli. 322219<br/>INDIA{/}
+            </p>
           </div>
         </div>
         <div class="col-sm-4 invoice-box">
@@ -30,7 +33,7 @@
             <div><strong>Next Department</strong><span class="pull-right">Design</span></div>
             <div><strong>From Department</strong><span class="pull-right">Printing</span></div>
             <div><strong>Current Department</strong><span class="pull-right">Lamination</span></div>
-            <div><strong>Current date:</strong><span class="pull-right">{date_create}26/01/2016{/}</span></div>
+            <div><strong>Created date:</strong><span class="pull-right">{date_create}26/01/2016{/}</span></div>
             <div><strong>Due date:</strong><span class="pull-right">{date_create}12/02/2016{/}</span></div>
           </div>
         </div>

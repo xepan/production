@@ -7,7 +7,7 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 		parent::init();
 
 		$osp_j = $this->join('outsource_party.contact_id');
-		$osp_j->hasOne('xepan\hr\Department');
+		$osp_j->hasOne('xepan\hr\Department','department_document_id');
 
 		$osp_j->addField('bank_name');
 		

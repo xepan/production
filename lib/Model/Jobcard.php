@@ -2,7 +2,24 @@
 
 namespace xepan\production;
 
-class Model_Jobcard extends \xepan\base\Model_Document{
+class Model_Jobcard extends \xepan\hr\Model_Document{
+
+	public $status=[
+	'Draft',
+	'Submitted',
+	'Approved',
+	'Reject'
+	];
+
+	public $action=[
+
+				// 'Draft'=>['view','edit','delete','submit'],
+				// 'Submitted'=>['view','edit','delete','reject'],
+				// 'Approved'=>['view','edit','delete','reject'],
+				// 'Reject'=>['view','edit','delete','submit']
+
+					'*'=>['view','edit','delete']
+	];
 	
 	function init(){
 		parent::init();

@@ -13,8 +13,10 @@ class page_outsourceprofile extends \Page {
 
 		$osp = $this->add('xepan\production\Model_OutsourceParty')->tryLoadBy('id',$this->api->stickyGET('contact_id'));
 		
+		$contact_view = $this->add('xepan\base\View_Contact',null,'contact_view');
+		$contact_view->setModel($osp);
 
-		if($osp->loaded()){
+		if($osp->loaded()){			
 			$portfolio_view = $this->add('xepan\hr\View_Document',
 				[
 					'action'=>$this->api->stickyGET('action')?:'view', // add/edit
@@ -26,21 +28,17 @@ class page_outsourceprofile extends \Page {
 				],
 				'portfolio'
 			);
-		
-		
-		$portfolio_view->setModel($osp,['department','post'],['department_id','post_id']);
+					
+			$portfolio_view->setModel($osp,['department'],['department_id']);
 
-		$ord = $this->add('xepan\hr\Grid',['defaultTemplate'=>['grid/jobcard-grid']],'orderstatus');
-		$ord->setModel($osp->ref('xepan\production\Jobcard'));
-
-	
-		
-		$contact_view = $this->add('xepan\hr\View_Contact',null,'contact_view');
-		$contact_view->setModel($osp);
+			// $ord = $this->add('xepan\hr\Grid',['defaultTemplate'=>['grid/jobcard-grid']],'orderstatus');
+			// $ord->setModel($osp->ref('xepan\production\Jobcard'));
 
 		
+			
+		}
 	}
-}
+	
 	function defaultTemplate(){
 		return ['page/outsourceprofile'];
 	}

@@ -17,6 +17,8 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 		$osp_j->addField('account_no');
 		$osp_j->addField('account_type');
 		$osp_j->addField('time');
+		$osp_j->addField('os_address');
+		$osp_j->addField('os_country');
 		
 		$osp_j->hasMany('xepan\production\Jobcard');
 

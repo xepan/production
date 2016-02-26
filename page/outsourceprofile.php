@@ -31,7 +31,10 @@ class page_outsourceprofile extends \Page {
 					
 			$portfolio_view->setModel($osp,['department'],['department_id']);
 
-			// $ord = $this->add('xepan\hr\Grid',['defaultTemplate'=>['grid/jobcard-grid']],'orderstatus');
+
+
+
+			// $ord = $this->add('xepan\hr\Grid',['defaultTemplate'=>['view/orderstatus']],'orderstatus');
 			// $ord->setModel($osp->ref('xepan\production\Jobcard'));
 
 		

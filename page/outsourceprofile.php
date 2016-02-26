@@ -15,7 +15,7 @@ class page_outsourceprofile extends \Page {
 		
 
 		if($osp->loaded()){
-			$portfolio_view = $this->add('xepan\base\View_Document',
+			$portfolio_view = $this->add('xepan\hr\View_Document',
 				[
 					'action'=>$this->api->stickyGET('action')?:'view', // add/edit
 						'id_fields_in_view'=>[],
@@ -35,7 +35,7 @@ class page_outsourceprofile extends \Page {
 
 	
 		
-		$contact_view = $this->add('xepan\base\View_Contact',null,'contact_view');
+		$contact_view = $this->add('xepan\hr\View_Contact',null,'contact_view');
 		$contact_view->setModel($osp);
 
 		

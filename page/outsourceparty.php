@@ -9,7 +9,7 @@ class page_outsourceparty extends \Page {
 		parent::init();
 
 		$os=$this->add('xepan\production\Model_OutsourceParty');
-		
+		// throw new \Exception($os->count());
 		
 		$crud=$this->add('xepan\hr\CRUD',
 						[
@@ -21,7 +21,11 @@ class page_outsourceparty extends \Page {
 
 		$crud->setModel($os);
 		$crud->grid->addQuickSearch(['name']);
-		
+
+	
 		
 	}
 }
+
+
+

@@ -11,6 +11,7 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 
 		$osp_j->addField('bank_name');
 		
+		//$osp_j->addField('outsourceparty');
 		$osp_j->addField('pan_it_no')->caption('Pan / IT No.');
 		$osp_j->addField('tin_no')->caption('TIN / CST No.');
 		$osp_j->addField('account_no');

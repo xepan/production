@@ -2,28 +2,23 @@
 <div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
   <header class="main-box-header clearfix atk-actions  {$class} ">
     <div style="100%" class="filter-block">
-      <div class="btnn btn-primaryy pull-right">{$grid_buttons} 
-      </div>
-      <div style="width:50%;margin:auto" class="form-group">
-        <div class="pull-right"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
-      </div>
+      <div class="pull-right">{$grid_buttons} </div>
+      <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
     </div>
   </header>{/Pannel}
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
-      <thead>
-        <tr>{cols}
-          <th><span>Jobcard</span></th>
-          <th><span>Duration</span></th>
-          <th class="text-center"><span>Status</span></th>
-          <th> </th>{/}
-        </tr>
+      <thead>{cols}{col}
+        <th><span>Jobcard</span></th>
+        <th><span>Duration</span></th>
+        <th class="text-center"><span>Status</span></th>
+        <th></th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td style="width: 30%;"><img alt="" src="img/samples/scarlet-159.png"/><a href="{url}?page=xepan_production_jobcarddetail{/}" class="user-link">{name}I.B printing corporates{/}</a><span><small>
-                {order_id}F-4301{/}
+          <td style="width: 30%;"><img alt="" src="img/samples/scarlet-159.png"/><a href="{url}?page=xepan_production_jobcarddetail&amp;document_id={$id}{/}" class="user-link">{name}I.B printing corporates{/}</a><span><small>
+                {jobcard_no}F-4301{/}
                 {order_name} Business Card{/}</small></span></td>
           <td><span>{date}15-02-2016{/}
               <div><a class="user-subhead">{day}3 daysleft{/}</a></div></span></td>
@@ -31,13 +26,12 @@
           <td style="width: 15%;">
             {$edit}
             {$delete}
-            {/}
-          </td>
+          </td>{/}
         </tr>{/}{/}
         {not_found}
-        <tr>
-          <td class="atk-padding-large atk-align-center"><span class="atk-label atk-effect-warning"><span class="icon-attention">&nbsp;{$not_found_message}</span></span></td>
-        </tr>{/}
+        <div class="row">
+          <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+        </div>{/}
       </tbody>{totals}
       <tfoot>
         <tr class="totals">

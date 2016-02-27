@@ -26,11 +26,17 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 
 		$job_j = $this->join('jobcard.document_id');
 		//$job_j->hasOne('xepan\base\contact','contact_id');
-		$job_j->hasOne('xepan\hr\Department');
-		$job_j->hasOne('xepan\production\OutsourceParty');
+		$job_j->hasOne('xepan\hr\Department','department_id');
+		$job_j->hasOne('xepan\production\OutsourceParty','outsourceparty_id');
 
 		$job_j->addField('name');
+		$job_j->addField('jobcard_no');
+		$job_j->addField('order_name');
+		$job_j->addField('day');
+		$job_j->addField('date');
 		
+
+		$this->addCondition('type','JobCard');		
 		
 	
 	}

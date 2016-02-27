@@ -1,20 +1,16 @@
 .xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
     {Pannel}
-    //- .atk-box-small(class="{$pannel_class}") 
     header.main-box-header.clearfix.atk-actions(class=" {$class} ")
         div.filter-block( style="100%")
-            .btnn.btn-primaryy.pull-right{$grid_buttons} 
-                //- i(class="fa fa-plus-circle fa-lg")
-            .form-group(style="width:50%;margin:auto")
-                .pull-right
-                    span(class="form-control pull-left")|{$quick_search}
-                        i(class="fa fa-search search-icon")
+            .pull-right {$grid_buttons} 
+            .form-group.pull-right.xepan-filter-form
+                span(class="form-control pull-left")|{$quick_search}
+                    i(class="fa fa-search search-icon")
     {/Pannel}
     .main-box-body.clearfix.table
-        table.user-list.table-hover(style="width:100%")
+        table.table.user-list.table-hover(style="width:100%")
             {header}
             thead
-             tr
                 {cols}{col}
                 th
                  span OutSource Parties 
@@ -22,8 +18,7 @@
                  span Status
                 th.text-center
                  span Panding Job-Card
-                 th
-                //- {/}
+                th
                 {/}{/}
             {/}
             {$subheader}
@@ -31,28 +26,27 @@
             tbody
                 {rows}{row}
                 tr(class="{$odd_even}" data-id="{$id}")
-                    {cols}  
+                    {cols}
                     td(style="width: 30%;")
-                      img(alt='', src='img/samples/scarlet-159.png')
-                      a.user-link(href='{url}?page=xepan_production_outsourceprofile&contact_id={$id}{/}'){name}outsource party{/}
-                        div
-                            small| {os_address}F-4301{/}
-                     
+                        img(alt='' src='img/samples/scarlet-159.png')
+                        a.user-link(href='{url}?page=xepan_production_profile&contact_id={$id}{/}') {name}outsource party{/}
+                        span
+                        small| {os_address}F-4301{/}
                     td.text-center
                         {status} InActive{/}
                     td.text-center
                         {panding_jobcard} 5{/}
                    
                     td(style="width: 15%;")
-                        {edit}edit{/}
-                        {delete}delete{/}
+                        {$edit}
+                        {$delete}
+                    
                     {/}
                 {/}{/}
                 {not_found}
-                tr
-                    td.atk-padding-large.atk-align-center
-                        span.atk-label.atk-effect-warning
-                            span.icon-attention &nbsp;{$not_found_message}
+                div.row
+                    .col-md-12.text-center.alert.alert-warning(role="alert")
+                        span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
                 {/}
 
             {totals}

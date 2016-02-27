@@ -1,29 +1,25 @@
 .xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
     {Pannel}
-    //- .atk-box-small(class="{$pannel_class}") 
     header.main-box-header.clearfix.atk-actions(class=" {$class} ")
         div.filter-block( style="100%")
-            .btnn.btn-primaryy.pull-right{$grid_buttons} 
-                //- i(class="fa fa-plus-circle fa-lg")
-            .form-group(style="width:50%;margin:auto")
-                .pull-right
-                    span(class="form-control pull-left")|{$quick_search}
-                        i(class="fa fa-search search-icon")
+            .pull-right {$grid_buttons} 
+            .form-group.pull-right.xepan-filter-form
+                span(class="form-control pull-left")|{$quick_search}
+                    i(class="fa fa-search search-icon")
     {/Pannel}
     .main-box-body.clearfix.table
         table.table.user-list.table-hover(style="width:100%")
             {header}
             thead
-                tr
-                    {cols}
-                    th
-                      span Jobcard
-                    th
-                      span Duration
-                    th.text-center
-                      span Status
-                    th  
-                    {/}
+                {cols}{col}
+                th
+                  span Jobcard
+                th
+                  span Duration
+                th.text-center
+                  span Status
+                th
+                {/}{/}
             {/}
             {$subheader}
 
@@ -33,9 +29,9 @@
                     {cols}
                     td(style="width: 30%;")
                           img(alt='' src='img/samples/scarlet-159.png')
-                          a.user-link(href='{url}?page=xepan_production_jobcarddetail{/}') {name}I.B printing corporates{/}
+                          a.user-link(href='{url}?page=xepan_production_jobcarddetail&document_id={$id}{/}') {name}I.B printing corporates{/}
                           span
-                            small| {order_id}F-4301{/}
+                            small| {jobcard_no}F-4301{/}
                                 {order_name} Business Card{/}
                     td
                         span|{date}15-02-2016{/}
@@ -48,13 +44,13 @@
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
-                        {/}
+                    
+                    {/}
                 {/}{/}
                 {not_found}
-                tr
-                    td.atk-padding-large.atk-align-center
-                        span.atk-label.atk-effect-warning
-                            span.icon-attention &nbsp;{$not_found_message}
+                div.row
+                    .col-md-12.text-center.alert.alert-warning(role="alert")
+                        span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
                 {/}
 
             {totals}

@@ -34,8 +34,10 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 		$job_j->addField('order_name');
 		$job_j->addField('day');
 		$job_j->addField('date');
+		$job_j->addField('create_date');
+		$job_j->addField('due_date');
+		$job_j->addField('current_department');
 		
-
 		$this->addCondition('type','JobCard');		
 		
 	

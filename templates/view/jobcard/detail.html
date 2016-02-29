@@ -1,12 +1,7 @@
  {$Content}
 <div class="main-box no-header clearfix">
   <header class="main-box-header clearfix">
-    <h2 class="pull-left">JobCard Detail : {jobcard_no}F-4301{/}</h2>
-    <div class="filter-block pull-right">
-      <div class="form-group pull-left">
-        <input type="text" placeholder="Search..." class="form-control"/><i class="fa fa-search search-icon"></i>
-      </div><a href="{url}?page=production_detail{/}" class="btn btn-primary pull-right"><i class="fa fa-pencil fa-lg"></i> Edit Jobcard</a><a href="{url}?page=production_detail{/}" class="btn btn-primary pull-right"><i class="fa fa-plus-circle fa-lg"></i> Add JobCard Detail</a>
-    </div>
+    <h2 class="pull-left">JobCard No : {jobcard_no}F-4301{/}</h2>
   </header>
   <div class="main-box-body clearfix">
     <div id="invoice-companies" class="row">
@@ -22,20 +17,21 @@
       </div>
       <div class="col-sm-4 invoice-box">
         <div>
-          <h4>Sale Order No.:  {sale_order_no}2513{/}</h4><br/>
+          <h4>Sale Order No.: {sale_order_no}2513{/}</h4><br/>
         </div>
-        <div><strong class="atk-col-3">Order Create:   16/01/2016</strong></div>
+        <div>
+          <div class="atk-col-3">Order Create:  {date}16/01/2016{/}</div>
+        </div>
       </div>
       <div class="col-sm-4 invoice-box invoice-box-dates">
         <div class="invoice-dates">
-          <div class="invoice-number clearfix"><strong>JobCard No.</strong>
-            <div class="pull-right">{jobcard_no}F-4301{/}</div>
-          </div>
-          <div><strong>Next Department</strong><span class="pull-right">{next_department}Design{/}</span></div>
-          <div><strong>From Department</strong><span class="pull-right">{from_department}Printing{/}</span></div>
-          <div><strong>Current Department</strong><span class="pull-right">{current_department}Lamination{/}</span></div>
-          <div><strong>Created date:</strong><span class="pull-right">{create_date}26/01/2016{/}</span></div>
-          <div><strong>Due date:</strong><span class="pull-right">{due_date}12/02/2016{/}</span></div>
+          <div class="invoice-number clearfix"></div>
+          <div>JobCard No.
+            <div class="pull-right"><a class="user-subhead"><strong class="h3">{jobcard_no}F-4301{/}</strong></a></div>
+          </div><br/>
+          <div>Created date:<span class="pull-right">{create_date}26/01/2016{/}</span></div>
+          <div>Delivery Date:<span class="pull-right">{due_date}12/02/2016{/}</span></div>
+          <div>Day:<span class="pull-right">{day}5 deysleft{/}</span></div>
         </div>
       </div>
     </div>
@@ -54,7 +50,7 @@
             <td class="text-center">{id}0011{/}</td>
             <td><a class="user-subhead"><strong class="h3">{order_name}Business Card{/}</strong></a>
               <div><a class="user-link">Department</a></div>
-              <div><small>Design / Printing / Lamination</small></div>
+              <div><small> {from_department}Design{/}/ {current_department}Printing{/}/ {next_department}Lamination{/}</small></div>
             </td>
             <td class="text-center">
               <div><strong>Paper Type:</strong><span class="pull-center">{sider}100 GSM{/}</span></div>
@@ -65,6 +61,30 @@
         </tbody>
       </table>
     </div>
-    <div class="clearfix"><a href="{url}?page=production_detail{/}" class="btn btn-primary pull-right"><i class="fa fa-mail-forward fa-lg"></i> Send invoice</a></div>
+  </div>
+  <div class="main-box-body clearfix">
+    <div id="invoice-companies" class="row">
+      <div class="col-sm-4 invoice-box">
+        <h1>{$action}Approved By-<br/></h1>
+        <div> Approved person
+          <div class="pull-right"><a class="user-subhead"><strong> {$personname}Sushil</strong></a></div>
+        </div>
+        <div> Approved date<span class="pull-right">{$create_date}</span></div>
+      </div>
+      <div class="col-sm-4 invoice-box">
+        <h1>Department<br/></h1>
+        <div>From Department<span class="pull-right">{form_department}Design{/}</span></div>
+        <div>Current Department<span class="pull-right">{current_department}printing{/}</span></div>
+        <div>Next Department<span class="pull-right">{next_department}Lamination{/}</span></div>
+      </div>
+      <div class="col-sm-4 invoice-box">
+        <h1> JobCard Create By<br/></h1>
+        <div> person
+          <div class="pull-right"><a class="user-subhead"><strong> {$personname}Anshu</strong></a></div>
+        </div>
+        <div> Department<span class="pull-right">{$current_depatment}printing</span></div>
+        <div> Create Date<span class="pull-right">{$create_date}</span></div>
+      </div>
+    </div>
   </div>
 </div>

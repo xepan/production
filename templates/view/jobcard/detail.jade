@@ -1,18 +1,7 @@
   {$Content}
 .main-box.no-header.clearfix
   header.main-box-header.clearfix
-    h2.pull-left JobCard Detail : {jobcard_no}F-4301{/}
-    .filter-block.pull-right
-      .form-group.pull-left
-        input.form-control(type='text', placeholder='Search...')
-        i.fa.fa-search.search-icon
-      a.btn.btn-primary.pull-right(href='{url}?page=production_detail{/}')
-        i.fa.fa-pencil.fa-lg
-        |  Edit Jobcard
-      a.btn.btn-primary.pull-right(href='{url}?page=production_detail{/}')
-        i.fa.fa-plus-circle.fa-lg
-        |  Add JobCard Detail
-
+    h2.pull-left JobCard No : {jobcard_no}F-4301{/}
   .main-box-body.clearfix
     #invoice-companies.row
       .col-sm-4.invoice-box
@@ -29,31 +18,26 @@
             | INDIA{/}
       .col-sm-4.invoice-box
         div
-          h4 Sale Order No.:  {sale_order_no}2513{/}
+          h4 Sale Order No.: {sale_order_no}2513{/}
           br
         div
-            strong.atk-col-3 Order Create:   16/01/2016
+            .atk-col-3 Order Create:  {date}16/01/2016{/}
   
       .col-sm-4.invoice-box.invoice-box-dates
         .invoice-dates
           .invoice-number.clearfix
-            strong JobCard No.
-            .pull-right {jobcard_no}F-4301{/}
-          div
-            strong Next Department
-            span.pull-right{next_department}Design{/}
-          div
-            strong From Department
-            span.pull-right {from_department}Printing{/}
-          div
-            strong Current Department
-            span.pull-right {current_department}Lamination{/}
-          div
-            strong Created date:
+          div|JobCard No.
+            .pull-right
+              a.user-subhead
+                strong.h3|{jobcard_no}F-4301{/}
+          br
+          div| Created date:
             span.pull-right {create_date}26/01/2016{/}
-          div
-            strong Due date:
+          div| Delivery Date:
             span.pull-right {due_date}12/02/2016{/}
+          div| Day:
+            span.pull-right {day}5 deysleft{/}
+          
     .table-responsive
       table.table
         thead
@@ -76,7 +60,7 @@
               div
                 a.user-link| Department
               div
-                small| Design / Printing / Lamination
+                small|  {from_department}Design{/}/ {current_department}Printing{/}/ {next_department}Lamination{/}
             td.text-center
               div
                 strong Paper Type:
@@ -87,8 +71,37 @@
              
             td.text-center
               |{percent}99{/}
-          
-    .clearfix
-      a.btn.btn-primary.pull-right(href='{url}?page=production_detail{/}')
-        i.fa.fa-mail-forward.fa-lg
-        |  Send invoice
+  .main-box-body.clearfix
+    #invoice-companies.row
+      .col-sm-4.invoice-box
+        h1|{$action}Approved By-
+            br
+          div|  Approved person
+            .pull-right
+              a.user-subhead
+                strong  {$personname}Sushil
+          div|  Approved date
+            span.pull-right {$create_date}
+        
+      .col-sm-4.invoice-box
+         h1|Department
+            br
+          div| From Department
+            span.pull-right{form_department}Design{/}
+          div| Current Department
+            span.pull-right {current_department}printing{/}
+          div| Next Department
+            span.pull-right {next_department}Lamination{/}
+  
+      .col-sm-4.invoice-box
+         h1|  JobCard Create By
+            br
+          div|  person
+            .pull-right
+              a.user-subhead
+                strong  {$personname}Anshu
+          div|  Department
+            span.pull-right {$current_depatment}printing
+          div|  Create Date
+            span.pull-right {$create_date}
+            

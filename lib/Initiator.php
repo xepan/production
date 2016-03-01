@@ -10,11 +10,13 @@ class Initiator extends \Controller_Addon {
 		parent::init();
 		
 		$this->routePages('xepan_production');
-
-		$m = $this->app->top_menu->addMenu('Production');
-		$m->addItem('outsourceparty','xepan_production_outsourceparties');
-		$m->addItem('Departments','xepan_production_jobcard');
-		
 		$this->addLocation(array('template'=>'templates'));
+
+		if($this->app->is_admin){
+			$m = $this->app->top_menu->addMenu('Production');
+			$m->addItem('outsourceparty','xepan_production_outsourceparties');
+			$m->addItem('Departments','xepan_production_jobcard');
+		}
+		
 	}
 }

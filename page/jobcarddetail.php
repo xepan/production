@@ -12,6 +12,7 @@ class page_jobcarddetail extends \Page {
 		$job_model = $this->add('xepan\production\Model_Jobcard')->tryLoadBy('id',$this->api->stickyGET('document_id'));
 		
 		$job_document = $this->add('xepan\hr\View_Document',['action'=> $action],null,['view/jobcard/detail']);
+		$job_document->setIdField('document_id');
 		$job_document->setModel($job_model,
 			['jobcard_no','name','create_date','due_date','date','order_name','current_department','day'],
 			['jobcard_no','name','create_date','due_date','date','order_name','current_department','day']

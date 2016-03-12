@@ -26,17 +26,18 @@
       .col-sm-4.invoice-box.invoice-box-dates
         .invoice-dates
           .invoice-number.clearfix
-          div|JobCard No.
-            .pull-right
-              a.user-subhead
-                strong.h3|{jobcard_no}F-4301{/}
-          br
-          div| Created date:
+            strong Jobcard no.
+            span.pull-right {jobcard_no}F-4301{/}
+          .invoice-date.clearfix
+            strong Create Date:
             span.pull-right {create_date}26/01/2016{/}
-          div| Delivery Date:
-            span.pull-right {due_date}12/02/2016{/}
-          div| Day:
+          .invoice-date.invoice-due-date.clearfix
+            strong Due Date:
+            span.pull-right 12/05/2014
+          .invoice-date.clearfix
+            strong Day:
             span.pull-right {day}5 deysleft{/}
+
           
     .table-responsive
       table.table
@@ -46,7 +47,7 @@
               span Sr-No.
             th
               span Item Name
-            th.text-center
+            th
               span Specification
             th.text-center
               span Quantity
@@ -61,7 +62,7 @@
                 a.user-link| Department
               div
                 small|  {from_department}Design{/}/ {current_department}Printing{/}/ {next_department}
-            td.text-center
+            td
               div
                 strong Paper Type:
                 span.pull-center {sider}100 GSM{/}
@@ -71,37 +72,37 @@
              
             td.text-center
               |{percent}99{/}
-  .main-box-body.clearfix
-    #invoice-companies.row
-      .col-sm-4.invoice-box
-        h1|{$action}Approved By-
-            br
-          div|  Approved person
-            .pull-right
-              a.user-subhead
-                strong  {$personname}Sushil
-          div|  Approved date
-            span.pull-right {$create_date}
-        
-      .col-sm-4.invoice-box
-         h1|Department
-            br
-          div| From Department
-            span.pull-right{form_department}Design{/}
-          div| Current Department
-            span.pull-right {current_department}printing{/}
-          div| Next Department
-            span.pull-right {next_department}Lamination{/}
-  
-      .col-sm-4.invoice-box
-         h1|  JobCard Create By
-            br
-          div|  person
-            .pull-right
-              a.user-subhead
-                strong  {$personname}Anshu
-          div|  Department
-            span.pull-right {$current_depatment}printing
-          div|  Create Date
-            span.pull-right {$create_date}
-            
+  .invoice-box-total.clearfix
+    .invoice-summary.row
+      .col-md-4.col-sm-6.col-xs-12
+        .invoice-summary-item
+          h1|{$action}Approved By-
+              br
+            div|  Approved person
+              .pull-right
+                a.user-subhead
+                  strong  {$personname}Sushil
+            div|  Approved date
+              span.pull-right {$create_date}
+      .col-md-4.col-sm-6.col-xs-12
+        .invoice-summary-item
+           h1|Department
+              br
+            div| From Department
+              span.pull-right{form_department}Design{/}
+            div| Current Department
+              span.pull-right {current_department}printing{/}
+            div| Next Department
+              span.pull-right {next_department}Lamination{/}
+      .col-md-4.col-sm-6.col-xs-12
+        .invoice-summary-item
+             h1|  JobCard Create By
+                br
+              div|  person
+                .pull-right
+                  a.user-subhead
+                    strong  {$personname}Anshu
+              div|  Department
+                span.pull-right {$current_depatment}printing
+              div|  Create Date
+                span.pull-right {$create_date}

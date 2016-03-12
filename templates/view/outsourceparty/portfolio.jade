@@ -4,86 +4,86 @@
     .panel.panel-default
       .panel-body
         .col-lg-12
-          .col-lg-5
-            | {$department}{$department_id}
-          .col-lg-5
-            
-          .col-lg-2 
-            | {$FormButtons}      
-        .row
-          .col-lg-9
-            header.main-box-header.clearfix
-              h2 Banking Information
-          .col-lg-3
-          
-        .row
-          .row
-            .col-lg-4
-              label Bank Name:
-                br
-                |{bank_name}state Bank of India{/}
-            .col-lg-4
-              label Account Type:
-              br
-              | {account_type}Current{/}
-            .col-lg-4
-              label Account No:
-              br
-              |  {account_no}153522{/}
-        .row
-          .row
-            header.main-box-header.clearfix
-              h2 TIN and PAN Information
+          .panel.panel-default
+            .panel-body
+              .col-lg-12.xepan-push
+                .col-md-12
+                  header.main-box-header.clearfix
+                  h2 Banking Information
+                  br
+                .col-md-12
+                .col-md-4
+                  .col-lg-5
+                  strong Bank Name:
+                  br
+                  |{bank_name}state Bank of India{/}
+                  .col-lg-5
+                .col-md-4 
+                  strong Account Type:
+                  br
+                  | {account_type}Current{/}
+                .col-lg-4.pull-right
+                  strong Account No:
+                  br
+                  |  {account_no}153522{/}
+        .col-lg-12
+          .panel.panel-default
+            .panel-body
+              .col-lg-12.xepan-push
+                .col-md-12
+                  header.main-box-header.clearfix
+                  h2 TIN and PAN Information
+                  br
+                .col-md-12
+                .col-md-4
+                  .col-lg-5
+                  strong Country:
+                  br
+                  | {os_country}India{/}
+                  .col-lg-5
+                .col-md-4 
+                  strong Type:
+                   .checkbox-nice
+                      input#checkbox-1(type='checkbox')
+                      label(for='checkbox') TIN
+                      
+                    .checkbox-nice
+                      input#checkbox-1(type='checkbox')
+                      label(for='checkbox') PAN
+                .col-lg-4.pull-right
+                  strong TIN-NO:   {tin_no}215451321{/}
+                  br
+                  br
+                  strong PAN-NO:   {pan_it_no}21566523{/}
+        .col-lg-12
+          .panel.panel-default
+            .panel-body
+              .col-lg-12.xepan-push
+                .col-md-12
+                  header.main-box-header.clearfix
+                  h2 Department
+                  br
+                .col-md-12
+                .col-md-2
+                .col-md-5
+                  .col-lg-6
+                    .row
+                      .checkbox-nice
+                        input#checkbox-1(type='checkbox')
+                        span.col-sm-3
+                        label(for='checkbox') HR
+                    .row
+                      .checkbox-nice
+                        input#checkbox-1(type='checkbox')
+                        span.col-sm-3
+                        label(for='checkbox') Production
+                    .row
+                      .checkbox-nice
+                        input#checkbox-1(type='checkbox')
+                        span.col-sm-3
+                        label(for='checkbox') Store
+                .col-md-5.pull-right
+                    strong Address:
+                     br
+                    label| {os_address}A-124 Ram Nagar, Sodala, Pink-City{/}
         
-        .row
-          .row
-            .col-lg-4
-              label Country:
-                br
-                | {os_country}India{/}
-            .col-lg-4
-              label Type:
-               .checkbox-nice
-                  input#checkbox-1(type='checkbox')
-                  label(for='checkbox') TIN
-                  
-                .checkbox-nice
-                  input#checkbox-1(type='checkbox')
-                  label(for='checkbox') PAN
-            .col-lg-4
-              label TIN-NO:   {tin_no}215451321{/}
-              br
-              br
-              label PAN-NO:   {pan_it_no}21566523{/}
-
-        .row
-          .col-lg-6
-            header.main-box-header.clearfix
-              h2 Department
-
-            .row
-              .col-sm-4
-                .row
-                  .checkbox-nice
-                    input#checkbox-1(type='checkbox')
-                    span.col-sm-3
-                    label(for='checkbox') HR
-                .row
-                  .checkbox-nice
-                    input#checkbox-1(type='checkbox')
-                    span.col-sm-3
-                    label(for='checkbox') Production
-                .row
-                  .checkbox-nice
-                    input#checkbox-1(type='checkbox')
-                    span.col-sm-3
-                    label(for='checkbox') Store
-              .col-sm-4
-              .col-sm-4  
-          .col-lg-6
-            header.main-box-header.clearfix
-              h2 Address:
-               br
-              label| {os_address}A-124 Ram Nagar, Sodala, Pink-City{/}
-              
-          

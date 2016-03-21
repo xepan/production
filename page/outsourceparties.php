@@ -16,6 +16,8 @@ class page_outsourceparties extends \Page {
 		$crud->grid->addQuickSearch(['name']);
 		//$crud->gird->addPaginator(10);
 
+		$crud->add('xepan\base\Controller_Avatar');
+
 		
 	}
 }

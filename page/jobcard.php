@@ -17,6 +17,8 @@ class page_jobcard extends \Page {
 		$crud->grid->addQuickSearch(['name']);
 
 		//$crud->gird->addPaginator(10);
+		
+		$crud->add('xepan\base\Controller_Avatar',['name_field'=>'name']);
 	}
 	
 }

@@ -28,10 +28,18 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td(style="width: 30%;")
-                          img(alt='' src='img/samples/scarlet-159.png')
-                          a.user-link(href='{url}?page=xepan_production_jobcarddetail&document_id={$id}{/}') {name}I.B printing corporates{/}
-                          span.user-subhead {jobcard_no}F-4301{/} /
-                               {order_name} Business Card{/}
+                        {avatar}
+                        img(src='img/samples/scarlet-159.png', alt='')
+                        {/}
+                        a.user-link(href = '{url}?page=xepan_production_jobcarddetail&qsp_master_id={$id}{/}')
+                            {$jobcard_no}
+                            small ({order_name} Business Card{/})
+                        a(href='{url}?page=xepan_production_profile&outsource_party_id={$id}{/}')
+                            span.user-subhead {$name}
+                          //- img(alt='' src='img/samples/scarlet-159.png')
+                          //- a.user-link(href='{url}?page=xepan_production_jobcarddetail&qsp_master_id={$id}{/}') {name}I.B printing corporates{/}
+                          //- span.user-subhead {jobcard_no}F-4301{/} /
+                          //-      {order_name} Business Card{/}
                     td
                         span|{date}15-02-2016{/}
                           div

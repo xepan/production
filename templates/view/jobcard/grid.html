@@ -17,9 +17,8 @@
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td style="width: 30%;"><img alt="" src="img/samples/scarlet-159.png"/><a href="{url}?page=xepan_production_jobcarddetail&amp;document_id={$id}{/}" class="user-link">{name}I.B printing corporates{/}</a><span class="user-subhead">
-              {jobcard_no}F-4301{/} /
-              {order_name} Business Card{/}</span></td>
+          <td style="width: 30%;">{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="{url}?page=xepan_production_jobcarddetail&amp;qsp_master_id={$id}{/}" class="user-link">{$jobcard_no}<small>({order_name} Business Card{/})</small></a><a href="{url}?page=xepan_production_profile&amp;outsource_party_id={$id}{/}"><span class="user-subhead">{$name}</span></a>
+          </td>
           <td><span>{date}15-02-2016{/}
               <div>{day}3 daysleft{/}</div></span></td>
           <td class="text-center"><span style="width:10%;"><img style="width:60%" src="/xepan2/vendor/xepan/production/templates//img/new.png"/><span class="btn btn-success">Next</span></span></td>

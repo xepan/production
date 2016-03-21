@@ -22,9 +22,16 @@ class page_profile extends \Page {
 			
 			$portfolio_view->setModel($osp,
 				['department','bank_name','account_type','account_no','os_country','tin_no','pan_it_no','os_address'],
-				['department_id','bank_name','account_type','account_no','os_country','tin_no','pan_it_no','os_address']
+				['bank_name','account_type','account_no','os_country','tin_no','pan_it_no','os_address']
 				);
 		}
+		if($osp->loaded()){
+				$orderstatus_view = $this->add('xepan\hr\View_Document',['action'=> $action],'orderstatus',['view/outsourceparty/orderstatus']);
+				
+				$orderstatus_view->setIdField('contact_id');
+				
+			}
+		
 	}
 	
 	function defaultTemplate(){

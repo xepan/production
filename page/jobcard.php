@@ -16,7 +16,7 @@ class page_jobcard extends \Page {
 		$crud->setModel($job_j);
 		$crud->grid->addQuickSearch(['name']);
 
-	
+		//$crud->gird->addPaginator(10);
 	}
 	
 }

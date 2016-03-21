@@ -14,7 +14,8 @@ class page_outsourceparties extends \Page {
 
 		$crud->setModel($os);
 		$crud->grid->addQuickSearch(['name']);
-		
+		//$crud->gird->addPaginator(10);
+
 		
 	}
 }

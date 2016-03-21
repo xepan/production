@@ -31,29 +31,31 @@
                   h2 TIN and PAN Information
                   br
                 .col-md-12
-                  .col-md-3
+                  .col-md-4
                     strong Country:
                     br
                     {os_country}India{/}
-                  .col-md-3 
-                    strong Type:
-                     .checkbox-nice
-                        input#checkbox-1(type='checkbox')
-                        span.col-sm-2
-                        label(for='checkbox') TIN
-                        
-                      .checkbox-nice
-                        input#checkbox-1(type='checkbox')
-                        span.col-sm-2
-                        label(for='checkbox') PAN
-                  .col-md-3
-                    strong TIN-NO:  
-                    br
-                    {tin_no}215451321{/}
-                  .col-md-3
-                    strong PAN-NO:  
-                    br
-                    {pan_it_no}21566523{/}
+                  .col-md-8
+                    .row
+                      .col-md-6
+                       .checkbox-nice.xepan-push 
+                          input#checkbox-1(type='checkbox')
+                          span.col-sm-2
+                          label(for='checkbox') TIN
+                      .col-md-3
+                          strong TIN-NO:
+                      .col-md-3  
+                          {tin_no}215451321{/}
+                    .row
+                      .col-md-6
+                          .checkbox-nice
+                            input#checkbox-1(type='checkbox')
+                            span.col-sm-2
+                            label(for='checkbox') PAN
+                      .col-md-3
+                        strong PAN-NO: 
+                      .col-md-3  
+                        {pan_it_no}21566523{/}
         .col-lg-12
           .panel.panel-default
             .panel-body

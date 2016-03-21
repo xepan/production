@@ -14,7 +14,7 @@ class Initiator extends \Controller_Addon {
 
 		if($this->app->is_admin){
 			$m = $this->app->top_menu->addMenu('Production');
-			$m->addItem('outsourceparty','xepan_production_outsourceparties');
+			$m->addItem('OutsourceParty','xepan_production_outsourceparties');
 			$m->addItem('Departments','xepan_production_jobcard');
 		}
 		

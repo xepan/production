@@ -40,9 +40,9 @@ class Model_Jobcard extends \xepan\base\Model_Table{
 		$this->addExpression('days_elapsed')->set(function($m,$q){
 			$date=$m->add('\xepan\base\xDate');
 			$diff = $date->diff(
-						date('Y-m-d H:i:s',$m['created_date']
-							),
-						date('Y-m-d H:i:s',$this->app->now),'Days'
+						date('Y-m-d H:i:s',strtotime($m['created_date'])),
+						date('Y-m-d H:i:s',strtotime($this->app->now)),
+						'Days'
 					);
 
 			return "'".$diff."'";

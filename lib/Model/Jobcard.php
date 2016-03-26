@@ -31,14 +31,22 @@ class Model_Jobcard extends \xepan\base\Model_Table{
 		
 		$this->addField('type')->defaultValue('Jobcard');
 		$this->addField('status')->setValueList($this->status)->defaultValue('Draft');
-		// $this->addExpression('order_number')->set(function($m,$q){
-		// 	return $m->ref('order_item_departmental_status_id')->ref('qsp_detail_id')->fieldQuery('qsp_master_id');
-		// });
-
-		$this->addExpression('order_item')->set(function($m,$q){
+                 $this->addExpression('order_item')->set(function($m,$q){
 			return $m->refSQL('order_item_departmental_status_id')->fieldQuery('qsp_detail_id');
+
+
 		});
 
+		$this->addExpression('days_elapsed')->set(function($m,$q){
+			$date=$m->add('\xepan\base\xDate');
+			$diff = $date->diff(
+						date('Y-m-d H:i:s',$m['created_date']
+							),
+						date('Y-m-d H:i:s',$this->app->now),'Days'
+					);
+
+			return "'".$diff."'";
+		});
 	}
 
 	function createFromOrder($order_item, $order_dept_status ){

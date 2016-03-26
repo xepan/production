@@ -8,7 +8,7 @@
           i.fa.fa-home
           |  From
         .invoice-company
-          h4  {name}Sushil Milkee{/}
+          h4  {jobcard_contact}Sushil Milkee{/}
           .xepan-push
           p {address}
             | 54  Point Tower point,
@@ -17,9 +17,9 @@
             .xepan-push
             | INDIA{/}
       .col-sm-4.invoice-box
-          h4 Sale Order No.: {$document_no}{document_no_id} 2513 {/}
+          h4 Sale Order No.: {sale_order_no}2513 {/}
           .xepan-push
-          .atk-col-3 Order Create:  {date}16/01/2016{/}
+          .atk-col-3 Order Create:  {created_at}16/01/2016{/}
   
       .col-sm-4.invoice-box.invoice-box-dates
           .invoice-dates
@@ -27,7 +27,7 @@
               .col-md-6.invoice-number
                 strong Jobcard No.
               .col-md-6.invoice-number.input-full-width
-                span.pull-right.atk-form-row.atk-form-field(style="margin:auto;") {$jobcard_no}
+                span.pull-right.atk-form-row.atk-form-field(style="margin:auto;") {$id}
             .invoice-date.clearfix
               strong Create Date:
               span.pull-right {$created_at}
@@ -58,9 +58,9 @@
               | {id}0011{/}
             td
               a.user-subhead
-                strong.h3| {order_name}Business Card{/}
+                strong.h3| {order_item}Business Card{/}
               div
-                a.user-link| Department
+                a.user-link| {$department}
               div
                 small|  {from_department}Design{/}/ {current_department}Printing{/}/ {next_department}Discard{/}
             td

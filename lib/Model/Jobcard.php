@@ -9,8 +9,14 @@ class Model_Jobcard extends \xepan\base\Model_Table{
 					'Forwarded','Completed','Cancelled'
 				];
 
-	public $action=[
-				'*'=>['view','edit','delete']
+	public $actions=[
+				'Draft'=>['view','edit','delete','submit'],
+				'Submitted'=>['view','edit','delete','approve','cancel'],
+				'Approved'=>['view','edit','delete','receive','cancel'],
+				'Received'=>['view','edit','delete','assign','mark_processing','cancel'],
+				'Assigned'=>['view','edit','delete','mark_processing'],
+				'Processing'=>['view','edit','delete','forward','complete'],
+				'Forwarded'=>['view','edit','delete','complete'],
 			];
 	
 	function init(){
@@ -24,7 +30,7 @@ class Model_Jobcard extends \xepan\base\Model_Table{
 		$this->addField('due_date')->type('datetime');
 		
 		$this->addField('type')->defaultValue('Jobcard');
-		
+		$this->addField('status')->setValueList($this->status)->defaultValue('Draft');
 		// $this->addExpression('order_number')->set(function($m,$q){
 		// 	return $m->ref('order_item_departmental_status_id')->ref('qsp_detail_id')->fieldQuery('qsp_master_id');
 		// });
@@ -50,35 +56,35 @@ class Model_Jobcard extends \xepan\base\Model_Table{
 		$new_job_card->save();
 	}
 
-	function Submitted(){
+	function submit(){
 		$this['status']='Submitted';
 		$this->saveAndUnload();
 	}
-	function Approved(){
+	function approve(){
 		$this['status']='Approved';
 		$this->saveAndUnload();
 	}
-	function Received(){
+	function receive(){
 		$this['status']='Received';
 		$this->saveAndUnload();
 	}
-	function Assigned(){
+	function assign(){
 		$this['status']='Assigned';
 		$this->saveAndUnload();
 	}
-	function Processing(){
+	function mark_processing(){
 		$this['status']='Processing';
 		$this->saveAndUnload();
 	}
-	function Forwarded(){
+	function forward(){
 		$this['status']='Forwarded';
 		$this->saveAndUnload();
 	}
-	function Completed(){
+	function complete(){
 		$this['status']='Completed';
 		$this->saveAndUnload();
 	}
-	function Cancelled(){
+	function cancel(){
 		$this['status']='Cancelled';
 		$this->saveAndUnload();
 	}

@@ -32,10 +32,10 @@
                         img(src='img/samples/scarlet-159.png', alt='')
                         {/}
                         a.user-link(href = '{url}?page=xepan_production_jobcarddetail&qsp_master_id={$id}{/}')
-                            {$jobcard_no}
-                            small {order_item} Business Card{/}
+                            {$id}
+                            //- small {$order_item} Business Card
                         a(href='{url}?page=xepan_production_profile&outsource_party_id={$id}{/}')
-                            span.user-subhead {$name}
+                            span.user-subhead {$order_item}
                     td
                         .row
                             span {$created_date} 

@@ -2,8 +2,7 @@
 
 namespace xepan\production;
 
-class Model_Jobcard extends \xepan\base\Model_Table{
-	public $table = "jobcard";
+class Model_Jobcard extends \xepan\base\Model_Document{
 	public $status=['Draft','Submitted','Approved',
 					'Received','Assigned','Processing',
 					'Forwarded','Completed','Cancelled'
@@ -21,17 +20,17 @@ class Model_Jobcard extends \xepan\base\Model_Table{
 	
 	function init(){
 		parent::init();
+		$job_j=$this->join('jobcard.document_id');
+		$job_j->hasOne('xepan\hr\Department','department_id'); //it show current department
+		$job_j->hasOne('xepan\commerce\OrderItemDepartmentalStatus','order_item_departmental_status_id')->sortable(true);
 
-		$this->hasOne('xepan\hr\Department','department_id'); //it show current department
-		$this->hasOne('xepan\commerce\OrderItemDepartmentalStatus','order_item_departmental_status_id')->sortable(true);
-
-		$this->addField('name')->caption('Job Number');
-		$this->addField('created_date')->type('datetime')->defaultValue(date('Y-m-d H:i:s'));
-		$this->addField('due_date')->type('datetime');
+		// $this->getElement('name')->caption('Job Number');
+		$job_j->addField('due_date')->type('datetime');
 		
-		$this->addField('type')->defaultValue('Jobcard');
-		$this->addField('status')->setValueList($this->status)->defaultValue('Draft');
-                 $this->addExpression('order_item')->set(function($m,$q){
+		$this->addCondition('type','Jobcard');
+		$this->getElement('status')->defaultValue('Draft');
+
+        $this->addExpression('order_item')->set(function($m,$q){
 			return $m->refSQL('order_item_departmental_status_id')->fieldQuery('qsp_detail_id');
 
 

@@ -22,6 +22,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		parent::init();
 		$job_j=$this->join('jobcard.document_id');
 		$job_j->hasOne('xepan\hr\Department','department_id'); //it show current department
+		$job_j->hasOne('xepan\production\OutsourceParty','outsourceparty_id'); //it show current department
 		$job_j->hasOne('xepan\commerce\OrderItemDepartmentalStatus','order_item_departmental_status_id')->sortable(true);
 
 		// $this->getElement('name')->caption('Job Number');
@@ -33,8 +34,14 @@ class Model_Jobcard extends \xepan\base\Model_Document{
         $this->addExpression('order_item')->set(function($m,$q){
 			return $m->refSQL('order_item_departmental_status_id')->fieldQuery('qsp_detail_id');
 
-
+		});	
+		$this->addExpression('sale_order_no')->set(function ($m,$q){
+			return $m->refSQL('order_item_departmental_status_id')->fieldQuery('order_no');
 		});
+		$this->addExpression('jobcard_contact')->set(function ($m,$q){
+			return $m->refSQL('order_item_departmental_status_id')->fieldQuery('qsp_order_contact');
+		});
+
 
 		$this->addExpression('days_elapsed')->set(function($m,$q){
 			$date=$m->add('\xepan\base\xDate');
@@ -46,6 +53,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 			return "'".$diff."'";
 		});
+
 	}
 
 	function createFromOrder($order_item, $order_dept_status ){

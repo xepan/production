@@ -33,11 +33,11 @@
                         {avatar}
                         img(src='img/samples/scarlet-159.png', alt='')
                         {/}
-                        a.user-link(href = '{url}?page=xepan_production_jobcarddetail&qsp_master_id={$id}{/}')
+                        a.user-link(href = '{url}?page=xepan_production_jobcarddetail&document_id={$id}{/}')
                             {$id}
                             //- small {$order_item} Business Card
-                        a(href='{url}?page=xepan_production_profile&outsource_party_id={$id}{/}')
-                            span.user-subhead {$order_item}
+                        a(href='{url}?page=xepan_commerce_salesorderdetail&document_id={$sale_order_no}{/}')
+                            span.user-subhead {$sale_order_no}
                     td
                         .row
                             span {$created_date} 

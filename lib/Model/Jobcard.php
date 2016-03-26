@@ -4,7 +4,10 @@ namespace xepan\production;
 
 class Model_Jobcard extends \xepan\base\Model_Table{
 	public $table = "jobcard";
-	public $status=['Draft', 'Submitted', 'Approved', 'Reject'];
+	public $status=['Draft','Submitted','Approved',
+					'Received','Assigned','Processing',
+					'Forwarded','Completed','Cancelled'
+				];
 
 	public $action=[
 				'*'=>['view','edit','delete']
@@ -45,5 +48,38 @@ class Model_Jobcard extends \xepan\base\Model_Table{
 		$new_job_card['department_id']=$order_dept_status['department_id'];
 		$new_job_card['status']='Approved';
 		$new_job_card->save();
+	}
+
+	function Submitted(){
+		$this['status']='Submitted';
+		$this->saveAndUnload();
+	}
+	function Approved(){
+		$this['status']='Approved';
+		$this->saveAndUnload();
+	}
+	function Received(){
+		$this['status']='Received';
+		$this->saveAndUnload();
+	}
+	function Assigned(){
+		$this['status']='Assigned';
+		$this->saveAndUnload();
+	}
+	function Processing(){
+		$this['status']='Processing';
+		$this->saveAndUnload();
+	}
+	function Forwarded(){
+		$this['status']='Forwarded';
+		$this->saveAndUnload();
+	}
+	function Completed(){
+		$this['status']='Completed';
+		$this->saveAndUnload();
+	}
+	function Cancelled(){
+		$this['status']='Cancelled';
+		$this->saveAndUnload();
 	}
 }

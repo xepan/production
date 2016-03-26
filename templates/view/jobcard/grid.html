@@ -11,7 +11,8 @@
       <thead>{cols}{col}
         <th><span>Jobcard</span></th>
         <th><span>Duration</span></th>
-        <th class="text-center"><span>Status</span></th>
+        <th><span>Department  </span></th>
+        <th><span>Status</span></th>
         <th></th>{/}{/}
       </thead>{/}
       {$subheader}
@@ -22,7 +23,8 @@
             <div class="row"><span>{$created_date} </span></div>
             <div class="row">       <span>{$days_elapsed} days elapsed</span></div>
           </td>
-          <td class="text-center"><span style="width:10%;"><img style="width:60%" src="/xepan2/vendor/xepan/production/templates//img/new.png"/>{$action}</span></td>
+          <td><span>{$department123}</span></td>
+          <td><span>{$action}</span></td>
           <td style="width: 15%;">
             {$edit}
             {$delete}

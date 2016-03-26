@@ -16,7 +16,9 @@
                   span Jobcard
                 th
                   span Duration
-                th.text-center
+                th
+                  span Department  
+                th
                   span Status
                 th
                 {/}{/}
@@ -41,12 +43,10 @@
                             span {$created_date} 
                         .row        
                             span {$days_elapsed} days elapsed
-                    td.text-center
-                        span(style='width:10%;')
-                            img(style='width:60%', src='/xepan2/vendor/xepan/production/templates//img/new.png')
-                            {$action}
-                    //- td(style="width: 15%;")
-                    //-     {$action}
+                    td
+                        span {$department123}
+                    td
+                        span {$action}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

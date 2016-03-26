@@ -19,13 +19,22 @@ class page_jobcard extends \Page {
 		
 
 		$crud=$this->add('xepan\hr\CRUD',['action_page'=>'xepan_production_jobcarddetail'],null,['view/jobcard/grid']);
+		$crud->grid->addColumn('department123');
 
 		$crud->setModel($jobcard_model);
 		$crud->grid->addQuickSearch(['name']);
 
-		//$crud->gird->addPaginator(10);
-		
-		// $crud->add('xepan\base\Controller_Avatar',['name_field'=>'name']);
+
+		$crud->grid->addMethod('format_department123',function($grid,$field){
+				$m = $grid->add('xepan\production\Model_Jobcard')->load($grid->model->id);
+				$m = $m->orderItem()->deptartmentalStatus();				
+				$v = $grid->add('xepan\production\View_Department',null,'department123');		
+				$v->setModel($m);
+				$grid->current_row_html[$field] = $v->getHtml();
+				// $grid->current_row_html[$field] = $v->getHtml();
+			});
+		$crud->grid->addFormatter('department123','department123');
+
 	}
 	
 }

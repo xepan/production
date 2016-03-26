@@ -95,4 +95,8 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$this['status']='Cancelled';
 		$this->saveAndUnload();
 	}
+	function orderItem(){
+		
+		return $this->add('xepan\commerce\Model_QSP_Detail')->load($this['order_item']);
+	}
 }

@@ -24,6 +24,9 @@ class Initiator extends \Controller_Addon {
 			}
 
 
+			$this->app->addHook('sales_order_approved',['xepan\production\Model_Jobcard','createFromOrder']);
+
+
 		}
 		
 	}

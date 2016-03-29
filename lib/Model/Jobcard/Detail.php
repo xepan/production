@@ -30,7 +30,7 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 
 	function complete(){
 		if(!$this->loaded())
-			throw $this->exception()
+			throw $this->exception();
 			
 		$this['status'] = "Completed";
 		$this->save();

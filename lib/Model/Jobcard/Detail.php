@@ -15,4 +15,25 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 		$this->addField('status');
 
 	}
+
+	function received(){
+		if(!$this->loaded())
+			throw $this->exception("model must be loaded ")
+				->addMoreInfo('jobcard Detail model for Completed');
+		
+		$this['status'] = "Received";
+		$this->save();
+
+		if($this['parent_detail_id'])
+			$this->add('xepan\production\Model_Jobcard_Detail')->load($this['parent_detail_id'])->complete();
+	}
+
+	function complete(){
+		if(!$this->loaded())
+			throw $this->exception()
+			
+		$this['status'] = "Completed";
+		$this->save();
+	}
+
 }

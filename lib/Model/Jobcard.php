@@ -6,13 +6,13 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	public $status=['ToReceived','Received','Processing','Forwarded','Completed','Cancelled','Rejected'];
 
 	public $actions=[
-				'ToReceived'=>['view','edit','delete','received','processing','forwarded','complete','cancel','reject'],
-				'Received'=>['view','edit','delete','processing','forwarded','complete','cancel'],
-				'Processing'=>['view','edit','delete','forwarded','complete','cancel'],
-				'Forwarded'=>['view','edit','delete','complete','cancel'],
-				'Completed'=>['view','edit','delete','cancel'],
-				'Cancelled'=>['view','edit','delete','processing'],
-				'Rejected'=>['view','edit','delete','processing']
+				'ToReceived'=>['view','edit','delete','receive','processing','forward','complete','cancel','reject'],
+				'receive'=>['view','edit','delete','processing','forwarded','complete','cancel'],
+				'processing'=>['view','edit','delete','forwarded','complete','cancel'],
+				'forward'=>['view','edit','delete','complete','cancel'],
+				'complete'=>['view','edit','delete','cancel'],
+				'cancel'=>['view','edit','delete','processing'],
+				'reject'=>['view','edit','delete','processing']
 			];
 	
 	function init(){
@@ -33,6 +33,18 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 
 		$this->addCondition('type','Jobcard');
+
+		// $this->addExpression('order_no')->set(function($m,$q){
+		// 	return $m->refSQL('order_item_id')->fieldQuery('qsp_master_id');
+		// });
+
+		// $this->addExpression('customer')->set(function($m,$q){
+		// 	return $m->add('xepan\commerce\Model_SalesOrder')->load($q->getFieldQuery('order_no'))->fieldQuery('contact_id');
+		// });
+
+		$this->addExpression('order_item_quantity')->set(function($m,$q){
+			return $m->refSQL('order_item_id')->fieldQuery('quantity');
+		});
 
 		$this->addExpression('toreceived')->set(function($m,$q){
 			return $m->refSQL('xepan\production\Jobcard_Detail')
@@ -99,40 +111,90 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		}
 	}
 
-	function submit(){
-		$this['status']='Submitted';
-		$this->saveAndUnload();
+	function page_receive($page){
+		$form = $page->add('Form');
+		$jobcard_field = $form->addField('text','jobcard_row');
+		$form->addSubmit('Receive Jobcard');
+
+		$grid_jobcard_row = $page->add('Grid');
+		$grid_jobcard_row->addSelectable($jobcard_field);
+
+		$jobcard = $this->ref('xepan\production\Jobcard_Detail');
+		$grid_jobcard_row->setModel($jobcard);
+
+		if($form->isSubmitted()){
+			//doing jobcard detail/row received
+			foreach ($form['jobcard_row'] as $transaction_row_id) {
+				$jobcard_row_model = $this->add('xepan\production\Model_Jobcard_Detail')->load($transaction_row_id);
+				$jobcard_row_model->received();
+			}
+			
+			// calling jobcard receive function 
+			$this->receive();
+
+		}
+		
+
 	}
-	function approve(){
-		$this['status']='Approved';
-		$this->saveAndUnload();
-	}
+
+
 	function receive(){
+		//Mark Complete the Previous Department Jobcard if exist
+		if($this['parent_jobcard_id'] and ($this['order_item_quantity'] == $this['toreceived'])){
+			$this->markParentComplete();
+		}
+
+        $this->app->employee
+	            ->addActivity("Jobcard Received", $this->id /* Related Document ID*/, $this['customer'] /*Related Contact ID*/)
+	            ->notifyWhoCan('reject,receive','Jobcard Received');
+
 		$this['status']='Received';
 		$this->saveAndUnload();
 	}
+
+	function markParentComplete(){
+		if(!$this->loaded()){
+			 throw $this->exception("model must be loaded ")
+				->addMoreInfo('jobcard model for mark Parent Complete');
+		}
+
+		$this->ref('parent_jobcard_id')->complete();
+
+	}
+	
 	function assign(){
 		$this['status']='Assigned';
 		$this->saveAndUnload();
 	}
+	
 	function mark_processing(){
 		$this['status']='Processing';
 		$this->saveAndUnload();
 	}
+	
 	function forward(){
 		$this['status']='Forwarded';
 		$this->saveAndUnload();
 	}
+	
 	function complete(){
 		$this['status']='Completed';
-		$this->saveAndUnload();
+		$this->save();
+
+		//check for the mark order complete
+		//if all jobcard of order are complete
+		//then mark sale order complete
+		//create activity
 	}
+
 	function cancel(){
 		$this['status']='Cancelled';
 		$this->saveAndUnload();
 	}
-	function orderItem(){
-		
+
+	function orderItem(){		
 		return $this->add('xepan\commerce\Model_QSP_Detail')->load($this['order_item']);
 	}
+
+
 }

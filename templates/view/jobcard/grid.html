@@ -11,6 +11,7 @@
       <thead>{cols}{col}
         <th><span>Jobcard</span></th>
         <th><span>Duration</span></th>
+        <th><span>Quantity</span></th>
         <th><span>Department</span></th>
         <th><span>toreceived</span></th>
         <th><span>processing</span></th>
@@ -27,6 +28,7 @@
             <div class="row"><span>{$created_date} </span></div>
             <div class="row">       <span>{$days_elapsed} days elapsed</span></div>
           </td>
+          <td><span>{$order_item_quantity}</span></td>
           <td><span>{$departmental_status}</span></td>
           <td><span>{$toreceived}</span></td>
           <td><span>{$processing}</span></td>

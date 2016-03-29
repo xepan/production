@@ -11,7 +11,11 @@
       <thead>{cols}{col}
         <th><span>Jobcard</span></th>
         <th><span>Duration</span></th>
-        <th><span>Department  </span></th>
+        <th><span>Department</span></th>
+        <th><span>toreceived</span></th>
+        <th><span>processing</span></th>
+        <th><span>forwarded</span></th>
+        <th><span>completed</span></th>
         <th><span>Status</span></th>
         <th></th>{/}{/}
       </thead>{/}
@@ -23,7 +27,11 @@
             <div class="row"><span>{$created_date} </span></div>
             <div class="row">       <span>{$days_elapsed} days elapsed</span></div>
           </td>
-          <td><span>{$department123}</span></td>
+          <td><span>{$departmental_status}</span></td>
+          <td><span>{$toreceived}</span></td>
+          <td><span>{$processing}</span></td>
+          <td><span>{$forwarded}</span></td>
+          <td><span>{$completed}</span></td>
           <td><span>{$action}</span></td>
           <td style="width: 15%;">
             {$edit}

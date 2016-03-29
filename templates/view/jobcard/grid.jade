@@ -17,7 +17,15 @@
                 th
                   span Duration
                 th
-                  span Department  
+                  span Department
+                th
+                  span toreceived
+                th
+                  span processing
+                th
+                  span forwarded
+                th
+                  span completed
                 th
                   span Status
                 th
@@ -44,7 +52,15 @@
                         .row        
                             span {$days_elapsed} days elapsed
                     td
-                        span {$department123}
+                        span {$departmental_status}
+                    td
+                        span {$toreceived}
+                    td
+                        span {$processing}
+                    td
+                        span {$forwarded}
+                    td
+                        span {$completed}
                     td
                         span {$action}
                     td(style="width: 15%;")

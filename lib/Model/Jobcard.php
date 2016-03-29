@@ -28,16 +28,35 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$job_j->addField('due_date')->type('datetime');
 		// $job_j->addField('status')->defaultValue('ToReceived');
 
-		$job_j->hasMany('xepan\production\Jobcard_detail','jobcard_id');
+		$job_j->hasMany('xepan\production\Jobcard_Detail','jobcard_id');
 		$job_j->hasMany('xepan\production\Jobcard','parent_jobcard_id',null,'SubJobcard');
 
 
 		$this->addCondition('type','Jobcard');
 
-		$this->addExpression('toreceived')->set("'Todo'");
-		$this->addExpression('processing')->set("'Todo'");
-		$this->addExpression('forwarded')->set("'Todo'");
-		$this->addExpression('completed')->set("'Todo'");
+		$this->addExpression('toreceived')->set(function($m,$q){
+			return $m->refSQL('xepan\production\Jobcard_Detail')
+					->addCondition('status','ToReceived')
+					->sum('quantity');
+		});
+
+		$this->addExpression('processing')->set(function($m,$q){
+			return $m->refSQL('xepan\production\Jobcard_Detail')
+					->addCondition('status','Received')
+					->sum('quantity');
+		});
+
+		$this->addExpression('forwarded')->set(function($m,$q){
+			return $m->refSQL('xepan\production\Jobcard_Detail')
+					->addCondition('status','Forwarded')
+					->sum('quantity');
+		});
+
+		$this->addExpression('completed')->set(function($m,$q){
+			return $m->refSQL('xepan\production\Jobcard_Detail')
+					->addCondition('status','Completed')
+					->sum('quantity');
+		});
 
 		$this->addExpression('days_elapsed')->set(function($m,$q){
 			return "'Todo'";

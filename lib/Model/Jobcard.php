@@ -7,12 +7,12 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 	public $actions=[
 				'ToReceived'=>['view','edit','delete','receive','processing','forward','complete','cancel','reject'],
-				'receive'=>['view','edit','delete','processing','forwarded','complete','cancel'],
-				'processing'=>['view','edit','delete','forwarded','complete','cancel'],
-				'forward'=>['view','edit','delete','complete','cancel'],
-				'complete'=>['view','edit','delete','cancel'],
-				'cancel'=>['view','edit','delete','processing'],
-				'reject'=>['view','edit','delete','processing']
+				'Received'=>['view','edit','delete','processing','forward','complete','cancel'],
+				'Processing'=>['view','edit','delete','forward','complete','cancel'],
+				'Forwarded'=>['view','edit','delete','complete','cancel'],
+				'Completed'=>['view','edit','delete','cancel'],
+				'Cancelled'=>['view','edit','delete','processing'],
+				'Rejected'=>['view','edit','delete','processing']
 			];
 	
 	function init(){
@@ -41,6 +41,10 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		// $this->addExpression('customer')->set(function($m,$q){
 		// 	return $m->add('xepan\commerce\Model_SalesOrder')->load($q->getFieldQuery('order_no'))->fieldQuery('contact_id');
 		// });
+
+		$this->addExpression('order_item_name')->set(function($m,$q){
+			return $m->refSQL('order_item_id')->fieldQuery('name');
+		});
 
 		$this->addExpression('order_item_quantity')->set(function($m,$q){
 			return $m->refSQL('order_item_id')->fieldQuery('quantity');
@@ -123,12 +127,13 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$grid_jobcard_row->setModel($jobcard);
 
 		if($form->isSubmitted()){
+			
 			//doing jobcard detail/row received
-			foreach ($form['jobcard_row'] as $transaction_row_id) {
+			foreach (json_decode($form['jobcard_row']) as $transaction_row_id) {
 				$jobcard_row_model = $this->add('xepan\production\Model_Jobcard_Detail')->load($transaction_row_id);
 				$jobcard_row_model->received();
 			}
-			
+
 			// calling jobcard receive function 
 			$this->receive();
 
@@ -137,11 +142,10 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 	}
 
-
 	function receive(){
 		//Mark Complete the Previous Department Jobcard if exist
-		if($this['parent_jobcard_id'] and ($this['order_item_quantity'] == $this['toreceived'])){
-			$this->markParentComplete();
+		if($this['parent_jobcard_id'] and $this->parentJobcard()->checkAllDetailComplete()){
+			$this->parentJobcard()->complete();
 		}
 
         $this->app->employee
@@ -152,30 +156,103 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$this->saveAndUnload();
 	}
 
-	function markParentComplete(){
-		if(!$this->loaded()){
-			 throw $this->exception("model must be loaded ")
-				->addMoreInfo('jobcard model for mark Parent Complete');
+	function parentJobcard(){
+		if(!$this->loaded())
+			throw new \Exception("Model Must Loaded", 1);
+		if(!$this['parent_jobcard_id'])
+			throw new \Exception("Parent Jobcard not found ", 1);
+
+		return $this->ref('parent_jobcard_id');
+			
+	}
+
+	//return true or false
+	//return true when all detail are complete else return fasle
+	function checkAllDetailComplete(){
+		if($this->loaded())
+
+		$all_complete = true;
+		foreach ($this->ref('xepan\production\Jobcard_Detail') as $jd) {
+			if($jd['status'] != "Completed"){
+				$all_complete = false;
+				continue;
+			}
 		}
 
-		$this->ref('parent_jobcard_id')->complete();
+		return $all_complete;
 
 	}
-	
-	function assign(){
-		$this['status']='Assigned';
-		$this->saveAndUnload();
-	}
-	
-	function mark_processing(){
+
+	function processing(){
 		$this['status']='Processing';
 		$this->saveAndUnload();
 	}
 	
-	function forward(){
-		$this['status']='Forwarded';
-		$this->saveAndUnload();
+
+	// Every Forward it create two transaction 
+	// one in same detail of forward amount and 
+	// other in next department with ToReceived
+	function page_forward($page){
+		
+		$page->add('View')->setElement('H4')->set($this['order_item_name']);
+		
+		$next_dept = $this->nextProductionDepartment();
+
+		$form = $page->add('Form');
+		$form->addField('line','total_quantity_to_forward')->set($this['processing']);
+		$form->addField('Number','quantity_to_forward')->set($this['processing']);
+		$form->addSubmit('forward to '.$next_dept['name']);
+
+		if($form->isSubmitted()){
+			// create One New Transaction row of forward in self jobcard
+			$jd = $this->createJobcardDetail("Forwarded",$form['quantity_to_forward']);
+			//create/Load Next Department Jobcard and create new received transactio
+			$this->forward($next_dept,$form['quantity_to_forward'],$jd->id);
+		}
+
 	}
+	
+	//$next_dept == it's the object of next department of current jobcard
+	//parent_detail ==  it's the object of the jobcardDetail newly created for forward Transaction row of current jobcard
+	function forward($next_dept,$qty,$parent_detail_id){
+
+		if($next_dept and ($next_dept instanceof \xepan\hr\Model_Department)){
+			
+			$new_jobcard = $this->add('xepan\production\Model_Jobcard');
+			$new_jobcard
+				->addCondition('department_id',$next_dept->id)
+				->addCondition('parent_jobcard_id',$this->id)
+				->addCondition('order_item_id',$this['order_item_id'])
+			;
+			$new_jobcard->tryLoadAny();
+			$new_jobcard['status'] = "ToReceived";
+			$new_jobcard->save()->createJobcardDetail('ToReceived',$qty,$parent_detail_id);
+
+		}
+
+		$this['status']='Forwarded';
+		$this->save();
+
+		$order_item = $this->orderItem();
+        $this->app->employee
+            ->addActivity("Jobcard ".$this['id']. "forwarded", $this->id /* Related Document ID*/,$order_item['customer'] /*Related Contact ID*/)
+            ->notifyWhoCan('reject,convert,open etc Actions perform on','Converted Any Status');
+
+        $this->unload();
+	}
+
+	function createJobcardDetail($status,$qty,$parent_detail_id=null){
+		if(!$this->loaded())
+			throw new \Exception("jobcard must loaded for creating it's detail");
+
+		$detail = $this->add('xepan\production\Model_Jobcard_Detail');
+		$detail['jobcard_id'] = $this->id;
+		$detail['quantity'] = $qty;
+		$detail['parent_detail_id'] = $parent_detail_id;
+		$detail['status'] = $status?:"ToReceived";
+		return $detail->save();
+	}
+
 	
 	function complete(){
 		$this['status']='Completed';
@@ -192,8 +269,33 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$this->saveAndUnload();
 	}
 
-	function orderItem(){		
-		return $this->add('xepan\commerce\Model_QSP_Detail')->load($this['order_item']);
+	function orderItem(){
+		return $this->add('xepan\commerce\Model_QSP_Detail')->load($this['order_item_id']);
+	}
+
+	function nextProductionDepartment(){
+		if(!$this->loaded())
+			throw new \Exception("model must loaded for next department");
+		
+		$dept_array = $this->orderItem()->getProductionDepartment();
+		$depts = $this->add('xepan\hr\Model_Department')
+							->addCondition('id',$dept_array)
+							->setOrder('production_level','asc');
+		
+		$find_current_dept = false;
+
+		foreach ($depts as $dept) {
+			//for next department
+			if($find_current_dept)
+				return $dept;
+
+			if($dept['id'] == $this['department_id']){
+				$find_current_dept = true;
+			}
+
+		}
+
+		return false;
 	}
 
 

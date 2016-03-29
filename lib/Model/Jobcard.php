@@ -232,7 +232,11 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 		}
 
-		$this['status']='Forwarded';
+		$this['status']='Processing';
+		
+		if($thi['processing'] === $qty)
+			$this['status']='Forwarded';
+
 		$this->save();
 
 		$order_item = $this->orderItem();

@@ -116,7 +116,9 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$jobcard_field = $form->addField('text','jobcard_row');
 		$form->addSubmit('Receive Jobcard');
 
-		$grid_jobcard_row = $page->add('Grid');
+		//$grid_jobcard_row = $page->add('Grid');
+		$grid_jobcard_row = $page->add('xepan\hr\Grid',['action_page'=>'xepan_production_jobcard'],null,['view/jobcard/transactionrow']);
+
 		$grid_jobcard_row->addSelectable($jobcard_field);
 
 		$jobcard = $this->ref('xepan\production\Jobcard_Detail');

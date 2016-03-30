@@ -30,13 +30,14 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 		$job_j->hasMany('xepan\production\Jobcard_Detail','jobcard_id');
 		$job_j->hasMany('xepan\production\Jobcard','parent_jobcard_id',null,'SubJobcard');
+		$job_j->hasMany('xepan\production\Store_Transaction','jobcard_id');
 
 
 		$this->addCondition('type','Jobcard');
 
-		// $this->addExpression('order_no')->set(function($m,$q){
-		// 	return $m->refSQL('order_item_id')->fieldQuery('qsp_master_id');
-		// });
+		$this->addExpression('order_no')->set(function($m,$q){
+			return $m->refSQL('order_item_id')->fieldQuery('qsp_master_id');
+		});
 
 		// $this->addExpression('customer')->set(function($m,$q){
 		// 	return $m->add('xepan\commerce\Model_SalesOrder')->load($q->getFieldQuery('order_no'))->fieldQuery('contact_id');
@@ -318,7 +319,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
         $page->add('View')->setElement('H4')->set($this['order_item_name']);
 		
 		// $next_dept = $this->nextProductionDepartment();
-
+        
 		//total item to forward =)
 		$qty_to_send = $this['processing'] - ($this['forwarded'] + $this['completed']) ;
 
@@ -333,31 +334,25 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
    
     	if($form->isSubmitted()){
+        // throw new \Exception($this['processing'], 1);
     		// throw new \Exception($this['order_item_id'], 1);
-    		
 	        $jd = $this->createJobcardDetail("Forwarded",$form['qty']);
-				//create/Load Next Department Jobcard and create new received transactio
-				$this->sendToDispatch($form['qty'],$form['warehouse']);
-				// $warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
-				// $transaction = $warehouse->newTransaction($this,'Dispatch');
-				// $transaction->addItem($this['order_item_id'],$form['qty'],null,null);
+	        // throw new \Exception($jd->id, 1);
+			$this->sendToDispatch($form['qty'],$form['warehouse'],$jd->id);
 
-					$form->js()->univ()->successMessage('Send To Dispatch Successfully')->execute();
+			$form->js()->univ()->successMessage('Send To Dispatch Successfully')->execute();
+
             return true;
-        	}
-        }	
+        }
+    }	
         
-    function sendToDispatch($qty,$warehouse){
-		// $new_jobcard = $this->add('xepan\production\Model_Jobcard');
-		// $new_jobcard
-		// 	->addCondition('parent_jobcard_id',$this->id)
-		// 	->addCondition('order_item_id',$this['order_item_id']);
-		// $new_jobcard->tryLoadAny();
-		// $new_jobcard['status'] = "Forwarded";
-		// $new_jobcard->save()->createJobcardDetail('Forwarded',$qty,$id);
+    function sendToDispatch($qty,$warehouse,$jobcard_detail){
+    	// throw new \Exception($jobcard_detail, 1);
+		
     	$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($warehouse);
-			$transaction = $warehouse->newTransaction($this->id,null,'Dispatch');
-			$transaction->addItem($this['order_item_id'],$qty,null,null);
+			$transaction = $warehouse->newTransaction($this['order_no'],$this,null,'Dispatch');
+
+			$transaction->addItem($this['order_item_id'],$qty,$jobcard_detail,null,null);
 
 		$this['status']='Processing';
 

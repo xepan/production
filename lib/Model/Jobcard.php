@@ -356,7 +356,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		// $new_jobcard['status'] = "Forwarded";
 		// $new_jobcard->save()->createJobcardDetail('Forwarded',$qty,$id);
     	$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($warehouse);
-			$transaction = $warehouse->newTransaction($this->id,'Dispatch');
+			$transaction = $warehouse->newTransaction($this->id,null,'Dispatch');
 			$transaction->addItem($this['order_item_id'],$qty,null,null);
 
 		$this['status']='Processing';

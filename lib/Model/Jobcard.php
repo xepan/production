@@ -106,12 +106,13 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			$jobcard['status'] = "ToReceived";
 			$new_jobcard = $jobcard->save();
 
-			//Create New Jobcard Detail /Transactin Row Entry
-			$j_detail = $app->add('xepan\production\Model_Jobcard_Detail')->addCondition('jobcard_id',$new_jobcard->id);
-			$j_detail['direction'] = "In";
-			$j_detail['quantity'] = $oi['quantity'];
-			$j_detail['status'] = "ToReceived";
-			$j_detail->save();
+			// //Create New Jobcard Detail /Transactin Row Entry
+			$new_jobcard->createJobcardDetail("ToReceived",$oi['quantity']);
+			// $j_detail = $app->add('xepan\production\Model_Jobcard_Detail')->addCondition('jobcard_id',$new_jobcard->id);
+			// $j_detail['direction'] = "In";
+			// $j_detail['quantity'] = $oi['quantity'];
+			// $j_detail['status'] = "ToReceived";
+			// $j_detail->save();
 		}
 	}
 
@@ -137,11 +138,11 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			}
 
 			// calling jobcard receive function 
-			$this->receive();
-
+			if($this->receive())
+				$form->js()->univ()->successMessage('Received Successfully')->execute();
+			else
+				$form->js()->univ()->errorMessage('Not Received')->execute();
 		}
-		
-
 	}
 
 	function receive(){
@@ -152,10 +153,11 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
         $this->app->employee
 	            ->addActivity("Jobcard Received", $this->id /* Related Document ID*/, $this['customer'] /*Related Contact ID*/)
-	            ->notifyWhoCan('reject,receive','Jobcard Received');
+	            ->notifyWhoCan('reject,receive,forward','Jobcard Received');
 
 		$this['status']='Received';
 		$this->saveAndUnload();
+		return true;
 	}
 
 	function parentJobcard(){
@@ -200,18 +202,25 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		
 		$next_dept = $this->nextProductionDepartment();
 
+		//total item to forward =)
+		$qty_to_forward = $this['processing'] - ($this['forwarded'] + $this['completed']) ;
+
 		$form = $page->add('Form');
-		$form->addField('line','total_quantity_to_forward')->set($this['processing']);
-		$form->addField('Number','quantity_to_forward')->set($this['processing']);
+		$form->addField('line','total_quantity_to_forward')->set($qty_to_forward);
+		$form->addField('Number','quantity_to_forward')->set($qty_to_forward);
 		$form->addSubmit('forward to '.$next_dept['name']);
 
 		if($form->isSubmitted()){
 			// create One New Transaction row of forward in self jobcard
 			$jd = $this->createJobcardDetail("Forwarded",$form['quantity_to_forward']);
 			//create/Load Next Department Jobcard and create new received transactio
-			$this->forward($next_dept,$form['quantity_to_forward'],$jd->id);
-		}
+			$result = $this->forward($next_dept,$form['quantity_to_forward'],$jd->id);
 
+			if($result)
+				$form->js()->univ()->successMessage('Forwarded Successfully')->execute();
+			else
+				$form->js()->univ()->successMessage('something wrong')->execute();
+		}
 	}
 	
 	//$next_dept == it's the object of next department of current jobcard
@@ -234,7 +243,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 		$this['status']='Processing';
 		
-		if($thi['processing'] === $qty)
+		if($this['processing'] === $qty)
 			$this['status']='Forwarded';
 
 		$this->save();
@@ -245,6 +254,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
             ->notifyWhoCan('reject,convert,open etc Actions perform on','Converted Any Status');
 
         $this->unload();
+        return true;
 	}
 
 	function createJobcardDetail($status,$qty,$parent_detail_id=null){

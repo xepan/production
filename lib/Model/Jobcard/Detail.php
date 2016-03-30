@@ -29,12 +29,23 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 			$this->add('xepan\production\Model_Jobcard_Detail')->load($this['parent_detail_id'])->complete();
 	}
 
+	function jobcard(){
+		$this->ref('jobcard_id');
+	}
+
 	function complete(){
 		if(!$this->loaded())
 			throw $this->exception();
 			
 		$this['status'] = "Completed";
 		$this->save();
+
+		if($this['jobcard_id'] and $this->jobcard()->checkAllDetailComplete()){
+			$this->jobcard()->complete();
+		}
+
+
+
 	}
 
 }

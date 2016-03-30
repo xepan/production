@@ -45,9 +45,13 @@
                         {/}
                         a.user-link(href = '{url}?page=xepan_production_jobcarddetail&document_id={$id}{/}')
                             {$id}
-                            //- small {$order_item} Business Card
-                        a(href='{url}?page=xepan_commerce_salesorderdetail&document_id={$sale_order_no}{/}')
-                            span.user-subhead {$sale_order_no}
+                        small
+                            a.user-link(href='{url}?page=xepan_commerce_salesorderdetail&document_id={$id{/}') 
+                                .user-subhead{document_no}sale order{/}
+                            a.user-link(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}')
+                               .user-subhead{customer_id}customer{/}
+                       
+
                     td
                         .row
                             span {$created_date} 

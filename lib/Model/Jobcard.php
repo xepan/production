@@ -40,7 +40,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		});
 
 		// $this->addExpression('customer')->set(function($m,$q){
-		// 	return $m->add('xepan\commerce\Model_SalesOrder')->load($q->getFieldQuery('order_no'))->fieldQuery('contact_id');
+		// 	// return $m->add('xepan\commerce\Model_SalesOrder')->load($q->getFieldQuery('order_no'))->fieldQuery('contact_id');
 		// });
 
 		$this->addExpression('order_item_name')->set(function($m,$q){
@@ -334,7 +334,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
    
     	if($form->isSubmitted()){
-        // throw new \Exception($this['processing'], 1);
+        // throw new \Exception($this->orderItem()->getElement('qsp_master_id'), 1);
     		// throw new \Exception($this['order_item_id'], 1);
 	        $jd = $this->createJobcardDetail("Forwarded",$form['qty']);
 	        // throw new \Exception($jd->id, 1);
@@ -347,10 +347,11 @@ class Model_Jobcard extends \xepan\base\Model_Document{
     }	
         
     function sendToDispatch($qty,$warehouse,$jobcard_detail){
-    	// throw new \Exception($jobcard_detail, 1);
+    	$master=$this->orderItem()->ref('qsp_master_id');
+    	// throw new \Exception($master['contact_id'], 1);
 		
     	$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($warehouse);
-			$transaction = $warehouse->newTransaction($this['order_no'],$this,null,'Dispatch');
+			$transaction = $warehouse->newTransaction($this['order_no'],$this,$master['contact_id'],'Dispatch');
 
 			$transaction->addItem($this['order_item_id'],$qty,$jobcard_detail,null,null);
 

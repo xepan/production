@@ -347,11 +347,11 @@ class Model_Jobcard extends \xepan\base\Model_Document{
     }	
         
     function sendToDispatch($qty,$warehouse,$jobcard_detail){
-    	$master=$this->orderItem()->ref('qsp_master_id');
-    	// throw new \Exception($master['contact_id'], 1);
+    	$order=$this->orderItem()->ref('qsp_master_id');
+    	// throw new \Exception($order['contact_id'], 1);
 		
     	$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($warehouse);
-			$transaction = $warehouse->newTransaction($this['order_no'],$this,$master['contact_id'],'Dispatch');
+			$transaction = $warehouse->newTransaction($this['order_no'],$this,$order['contact_id'],'Dispatch');
 
 			$transaction->addItem($this['order_item_id'],$qty,$jobcard_detail,null,null);
 

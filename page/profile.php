@@ -31,6 +31,14 @@ class page_profile extends \Page {
 				$orderstatus_view->setIdField('contact_id');
 				
 			}
+		if($osp->loaded()){
+			$activity_view = $this->add('xepan\base\Grid',null,'activity',['view/activity/activity-grid']);
+
+			$activity=$this->add('xepan\base\Model_Activity');
+			$activity->addCondition('contact_id',$_GET['contact_id']);
+			$activity->tryLoadAny();
+			$activity_view->setModel($activity);
+		}
 		
 	}
 	

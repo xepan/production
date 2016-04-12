@@ -5,19 +5,34 @@
       <table class="table user-list table-hover">
         <thead>
           <tr>
-            <th><span>Job Card</span></th>
+            <th><span>Jobcard</span></th>
             <th><span>Duration</span></th>
-            <th class="text-center"><span>Status</span></th>
-            <th> </th>
+            <th><span>Quantity</span></th>
+            <th><span>Department</span></th>
+            <th><span>toreceived</span></th>
+            <th><span>processing</span></th>
+            <th><span>forwarded</span></th>
+            <th><span>completed</span></th>
+            <th><span>Status</span></th>
             <th> </th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><img alt="" src="img/samples/scarlet-159.png"/><a href="{url}?page=xepan_production_jobcarddetail{/}" class="user-link">{order_id}F-4301{/}{order_name}( Greeting Card){/}</a><span>{name}I.B printing corporates{/}</span></td>
-            <td><span>{date}15-02-2016{/}</span>
-              <div><a class="user-subhead">{day}3 days left{/}          </a></div>
+            <td style="width: 30%;">{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="{url}?page=xepan_production_jobcarddetail&amp;document_id={$id}{/}" class="user-link">{$id}</a><small><a href="{url}?page=xepan_commerce_salesorderdetail&amp;document_id={$id{/}" class="user-link"> 
+                  <div class="user-subhead">{document_no}1111{/}</div></a></small><a href="{url}?page=xepan_commerce_customerdetail&amp;contact_id={$id}{/}" class="user-link">
+                <h6>{customer_id}Xavoctacnocratspvt.ltd{/}</h6></a></td>
+            <td>
+              <div class="row"><span>{$created_date} </span></div>
+              <div class="row">       <span>{days_elapsed} days elapsed{/}</span></div>
             </td>
+            <td><span>{$order_item_quantity}</span></td>
+            <td><span>{departmental_status}processing{/}</span></td>
+            <td><span>{$toreceived}</span></td>
+            <td><span>{$processing}</span></td>
+            <td><span>{$forwarded}</span></td>
+            <td><span>{$completed}</span></td>
+            <td><span>{$action}</span></td>
             <td style="width: 10%;"><a href="#" class="table-link danger"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></a><a href="#" class="table-link"><span class="fa-stack"><i class="fa fa-square fa-stack-2x"></i><i class="glyphicon glyphicon-remove-circle fa-stack-1x fa-inverse">     </i></span></a></td>
           </tr>
         </tbody>

@@ -6,24 +6,60 @@
         thead
           tr
             th
-              span Job Card
-            th
-              span Duration
-            th.text-center
-              span Status
-            th  
+                  span Jobcard
+                th
+                  span Duration
+                th
+                  span Quantity
+                th
+                  span Department
+                th
+                  span toreceived
+                th
+                  span processing
+                th
+                  span forwarded
+                th
+                  span completed
+                th
+                  span Status
+                th  
         tbody
           tr
-            td
-              img(alt='' src='img/samples/scarlet-159.png')
-              a.user-link(href='{url}?page=xepan_production_jobcarddetail{/}') {order_id}F-4301{/}{order_name}( Greeting Card){/}
-              span {name}I.B printing corporates{/}
-            td
-              span|{date}15-02-2016{/}
-              div
-               a.user-subhead|{day}3 days left{/}          
-            
-            td(style='width: 10%;')
+            td(style="width: 30%;")
+                        {avatar}
+                        img(src='img/samples/scarlet-159.png', alt='')
+                        {/}
+                        a.user-link(href = '{url}?page=xepan_production_jobcarddetail&document_id={$id}{/}')
+                            {$id}
+                        small
+                            a.user-link(href='{url}?page=xepan_commerce_salesorderdetail&document_id={$id{/}') 
+                                .user-subhead{document_no}1111{/}
+                           
+                        a.user-link(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}')
+                           h6 {customer_id}Xavoctacnocratspvt.ltd{/}
+                       
+
+                    td
+                        .row
+                            span {$created_date} 
+                        .row        
+                            span {days_elapsed} days elapsed{/}
+                    td
+                        span {$order_item_quantity}
+                    td
+                        span {departmental_status}processing{/}
+                    td
+                        span {$toreceived}
+                    td
+                        span {$processing}
+                    td
+                        span {$forwarded}
+                    td
+                        span {$completed}
+                    td
+                        span {$action}
+                    td(style="width: 10%;")
               a.table-link.danger(href='#')
                 span.fa-stack
                   i.fa.fa-square.fa-stack-2x

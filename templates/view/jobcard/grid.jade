@@ -47,20 +47,21 @@
                             {$id}
                         small
                             a.user-link(href='{url}?page=xepan_commerce_salesorderdetail&document_id={$id{/}') 
-                                .user-subhead{document_no}sale order{/}
-                            a.user-link(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}')
-                               .user-subhead{customer_id}customer{/}
+                                .user-subhead{document_no}1111{/}
+                           
+                        a.user-link(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}')
+                           h6 {customer_id}Xavoctacnocratspvt.ltd{/}
                        
 
                     td
                         .row
                             span {$created_date} 
                         .row        
-                            span {$days_elapsed} days elapsed
+                            span {days_elapsed} days elapsed{/}
                     td
                         span {$order_item_quantity}
                     td
-                        span {$departmental_status}
+                        span {departmental_status}processing{/}
                     td
                         span {$toreceived}
                     td
@@ -71,7 +72,7 @@
                         span {$completed}
                     td
                         span {$action}
-                    td(style="width: 15%;")
+                    td(style="width: 10%;")
                         {$edit}
                         {$delete}
                     

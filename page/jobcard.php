@@ -24,15 +24,14 @@ class page_jobcard extends \Page {
 		$crud->grid->addQuickSearch(['name']);
 
 
-		// $crud->grid->addMethod('format_department123',function($grid,$field){
-		// 		$m = $grid->add('xepan\production\Model_Jobcard')->load($grid->model->id);
-		// 		$m = $m->orderItem()->deptartmentalStatus();				
-		// 		$v = $grid->add('xepan\production\View_Department',null,'department123');		
-		// 		$v->setModel($m);
-		// 		$grid->current_row_html[$field] = $v->getHtml();
-		// 		// $grid->current_row_html[$field] = $v->getHtml();
-		// 	});
-		// $crud->grid->addFormatter('departmental_status','departmental_status');
+		$crud->grid->addMethod('format_department123',function($grid,$field){
+				$m = $grid->add('xepan\production\Model_Jobcard')->load($grid->model->id);
+				$m = $m->orderItem()->deptartmentalStatus();				
+				$v = $grid->add('xepan\production\View_Department',null,'department123');		
+				$v->setModel($m);
+				$grid->current_row_html[$field] = $v->getHtml();
+			});
+		//$crud->grid->addFormatter('departmental_status','departmental_status');
 
 	}
 	

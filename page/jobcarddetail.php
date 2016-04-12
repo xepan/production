@@ -2,8 +2,9 @@
 
 namespace xepan\production;
 
-class page_jobcarddetail extends \Page {
+class page_jobcarddetail extends \xepan\base\Page {
 	public $title='JobcardDetail';
+	public $breadcrumb=['Home'=>'index','Jobcard Detail'=>'xepan_production_jobcard','Detail'=>'#'];
 
 	function init(){
 		parent::init();

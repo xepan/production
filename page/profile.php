@@ -3,9 +3,9 @@
 
 namespace xepan\production;
 
-class page_profile extends \Page {
+class page_profile extends \xepan\base\Page{
 	public $title='OutsourcePartyProfile';
-	
+	public $breadcrumb=['Home'=>'index','Outsource Party'=>'xepan_production_outsourceparties','Profile'=>'#'];
 
 	function init(){
 		parent::init();

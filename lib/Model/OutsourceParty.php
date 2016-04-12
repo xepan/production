@@ -75,22 +75,22 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 		$this->save();
 	}
 
-	// function account(){
-	// 	$account = $this->add('xepan\accounts\Model_Ledger')
-	// 			->addCondition('contact_id',$this->id)
-	// 			->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadSundryDebtor()->fieldQuery('id'));
-	// 	$account->tryLoadAny();
-	// 	if(!$account->loaded()){
-	// 		$account['name'] = $this['name'];
-	// 		$account['AccountDisplayName'] = $this['name'];
-	// 		$account->save();
-	// 	}else{
-	// 		$account['name'] = $this['name'];
-	// 		$account['updated_at'] = $this->app->now;
-	// 		$account->save();
-	// 	}
+	function ledger(){
+		$account = $this->add('xepan\accounts\Model_Ledger')
+				->addCondition('contact_id',$this->id)
+				->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadSundryDebtor()->fieldQuery('id'));
+		$account->tryLoadAny();
+		if(!$account->loaded()){
+			$account['name'] = $this['name'];
+			$account['AccountDisplayName'] = $this['name'];
+			$account->save();
+		}else{
+			$account['name'] = $this['name'];
+			$account['updated_at'] = $this->app->now;
+			$account->save();
+		}
 
-	// 	return $account;
+		return $account;
 
-	// }
+	}
 }

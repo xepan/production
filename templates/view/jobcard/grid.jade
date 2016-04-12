@@ -40,18 +40,15 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td(style="width: 30%;")
-                        {avatar}
-                        img(src='img/samples/scarlet-159.png', alt='')
-                        {/}
-                        a.user-link(href = '{url}?page=xepan_production_jobcarddetail&document_id={$id}{/}')
+                      {avatar}
+                      img(src='img/samples/scarlet-159.png', alt='')
+                      {/}
+                      a.user-link(href = '{url}?page=xepan_production_jobcarddetail&document_id={$id}{/}')
                             {$id}
-                        small
-                            a.user-link(href='{url}?page=xepan_commerce_salesorderdetail&document_id={$id{/}') 
-                                .user-subhead{document_no}1111{/}
-                           
-                        a.user-link(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}')
-                           h6 {customer_id}Xavoctacnocratspvt.ltd{/}
-                       
+                      small
+                          a.user-subhead(href='{url}?page=xepan_commerce_salesorderdetail&document_id={$id{/}') {document_no}1111{/}
+                          br
+                          a.user-subhead(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}'){customer_id}Xavoctacnocratspvt.ltd{/}   
 
                     td
                         .row

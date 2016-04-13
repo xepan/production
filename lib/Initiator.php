@@ -15,12 +15,14 @@ class Initiator extends \Controller_Addon {
 
 		if($this->app->is_admin){
 			$m = $this->app->top_menu->addMenu('Production');
-			$m->addItem('OutsourceParty','xepan_production_outsourceparties');
+			$m->addItem(['OutsourceParty','icon'=>'fa fa-user'],'xepan_production_outsourceparties');
 			
 			$departments = $this->add('xepan\hr\Model_Department')->setOrder('production_level','asc');
 
 			foreach ($departments as $department) {
-				$m->addItem($department['name'],'xepan_production_jobcard&department_id='.$department->id);
+				// $m->addItem($department['name'],'xepan_production_jobcard&department_id='.$department->id);
+				$m->addItem(([$department['name'],'icon'=>'fa fa-empire
+']),'xepan_production_jobcard&department_id='.$department->id);
 			}
 
 

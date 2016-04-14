@@ -10,7 +10,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 				'Received'=>['view','edit','delete','processing','forward','complete','cancel'],
 				'Processing'=>['view','edit','delete','sendToDispatch','forward','complete','cancel'],
 				'Forwarded'=>['view','edit','delete','sendToDispatch','complete','cancel'],
-				'Completed'=>['view','edit','delete','sendToDispatch','cancel'],
+				'Completed'=>['view','edit','delete','forward','sendToDispatch','cancel'],
 				'Cancelled'=>['view','edit','delete','processing'],
 				'Rejected'=>['view','edit','delete','processing']
 			];

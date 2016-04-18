@@ -15,7 +15,14 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 		$this->addField('status');
 		$this->hasMany('xepan\commerce\Store_TransactionRow','jobcard_detail_id');
 
+		$this->addHook('beforeDelete',[$this,'checkExistingRelatedTransactionRow']);
+
 	}
+
+	function checkExistingRelatedTransactionRow($m){
+		$m->ref('xepan\commerce\Store_TransactionRow')->deleteAll();
+	}
+
 
 	function received(){
 		if(!$this->loaded())

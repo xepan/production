@@ -30,10 +30,11 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 		$job_j->hasMany('xepan\production\Jobcard_Detail','jobcard_id');
 		$job_j->hasMany('xepan\production\Jobcard','parent_jobcard_id',null,'SubJobcard');
-		$job_j->hasMany('xepan\production\Store_Transaction','jobcard_id');
+		$job_j->hasMany('xepan\commerce\Store_Transaction','jobcard_id');
 
 
 		$this->addCondition('type','Jobcard');
+		$this->addHook('beforeDelete',[$this,'checkExistingRelatedTransaction']);
 
 		$this->addExpression('order_no')->set(function($m,$q){
 			return $m->refSQL('order_item_id')->fieldQuery('qsp_master_id');
@@ -86,6 +87,10 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			return "'".$diff."'";
 		});
 
+	}
+
+	function checkExistingRelatedTransaction($m){
+		$m->ref('xepan\commerce\Store_Transaction')->deleteAll();
 	}
 
 	function createFromOrder($app,$order){

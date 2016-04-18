@@ -38,15 +38,12 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 		$this->getElement('status')->defaultValue('Active');
 		// $this->addHook('beforeSave',$this);		
 		$this->addHook('afterSave',$this);
-		$this->addHook('beforeDelete',$this);	
+		$this->addHook('beforeDelete',[$this,'checkExistingQSPMaster']);	
 		
 	}
 
-	function beforeDelete($m){
-		//throw new \Exception("Error Processing Request", 1);
-		
+	function checkExistingQSPMaster($m){
 		$outsource_party_qsp_count = $m->ref('QSPMaster')->count()->getOne();
-		
 		if($outsource_party_qsp_count){
 			throw new \Exception("First delete the invoice/order/.. of this outsource party");
 			

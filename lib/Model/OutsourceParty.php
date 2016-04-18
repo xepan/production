@@ -39,11 +39,14 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 		// $this->addHook('beforeSave',$this);		
 		$this->addHook('afterSave',$this);
 		$this->addHook('beforeDelete',[$this,'checkExistingQSPMaster']);	
+		$this->addHook('beforeDelete',[$this,'checkExistingJobCard']);	
 		
 	}
-
-	function checkExistingQSPMaster($m){
-		$outsource_party_qsp_count = $m->ref('QSPMaster')->count()->getOne();
+	function checkExistingJobCard(){
+		$this->ref('xepan\production\Jobcard')->each(function($m){$m->delete();}));
+	}
+	function checkExistingQSPMaster(){
+		$outsource_party_qsp_count = $this->ref('QSPMaster')->count()->getOne();
 		if($outsource_party_qsp_count){
 			throw new \Exception("First delete the invoice/order/.. of this outsource party");
 			

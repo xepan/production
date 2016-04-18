@@ -89,8 +89,8 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 	}
 
-	function checkExistingRelatedTransaction($m){
-		$m->ref('xepan\commerce\Store_Transaction')->deleteAll();
+	function checkExistingRelatedTransaction(){
+		$this->ref('xepan\commerce\Store_Transaction')->each(function($m){$m->delete();});
 	}
 
 	function createFromOrder($app,$order){

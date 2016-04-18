@@ -19,8 +19,8 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 
 	}
 
-	function checkExistingRelatedTransactionRow($m){
-		$m->ref('xepan\commerce\Store_TransactionRow')->deleteAll();
+	function checkExistingRelatedTransactionRow(){
+		$this->ref('xepan\commerce\Store_TransactionRow')->each(function($m){$m->delete();});
 	}
 
 

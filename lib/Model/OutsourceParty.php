@@ -29,7 +29,7 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 		$osp_j->addField('os_country');
 		$osp_j->addField('os_pincode');
 		
-		$osp_j->hasMany('xepan\production\Jobcard');
+		$osp_j->hasMany('xepan\production\Jobcard','outsourceparty_id');
 
 		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');
 		$this->addCondition('type','OutsourceParty');
@@ -43,14 +43,14 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 		
 	}
 	function checkExistingJobCard(){
-		$this->ref('xepan\production\Jobcard')->each(function($m){$m->delete();}));
+		$this->ref('xepan\production\Jobcard')->each(function($m){$m->delete();});
 	}
 	function checkExistingQSPMaster(){
 		$outsource_party_qsp_count = $this->ref('QSPMaster')->count()->getOne();
-		if($outsource_party_qsp_count){
-			throw new \Exception("First delete the invoice/order/.. of this outsource party");
+		// if($outsource_party_qsp_count){
+		// 	throw new \Exception("First delete the invoice/order/.. of this outsource party");
 			
-		}	
+		// }	
 	}
 
 	function afterSave(){

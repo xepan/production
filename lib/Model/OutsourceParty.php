@@ -47,10 +47,10 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 	}
 	function checkExistingQSPMaster(){
 		$outsource_party_qsp_count = $this->ref('QSPMaster')->count()->getOne();
-		// if($outsource_party_qsp_count){
-		// 	throw new \Exception("First delete the invoice/order/.. of this outsource party");
+		if($outsource_party_qsp_count){
+			throw new \Exception("First delete the invoice/order/.. of this outsource party");
 			
-		// }	
+		}	
 	}
 
 	function afterSave(){

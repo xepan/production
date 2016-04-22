@@ -2,7 +2,7 @@
     {Pannel}
     header.main-box-header.clearfix.atk-actions(class=" {$class} ")
         div.filter-block( style="100%")
-            .pull-right {$grid_buttons} 
+            .pull-right {$grid_buttons}
             .form-group.pull-right.xepan-filter-form
                 span(class="form-control pull-left")|{$quick_search}
                     i(class="fa fa-search search-icon")
@@ -44,21 +44,17 @@
                       img(src='img/samples/scarlet-159.png', alt='')
                       {/}
                       a.user-link(href = '{url}?page=xepan_production_jobcarddetail&document_id={$id}{/}')
-                            {$id}
+                        {$id}
                       small
-                          a.user-subhead(href='{url}?page=xepan_commerce_salesorderdetail&document_id={$id{/}') {document_no}1111{/}
-                          br
-                          a.user-subhead(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}'){customer_id}Xavoctacnocratspvt.ltd{/}   
-
+                          a.user-subhead(href='{url}?page=xepan_commerce_saleorderdetail&document_id={$order_no}{/}'){order_no}order not found{/}
+                          div.user-subhead(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}'){customer_name}Not Found{/}
                     td
-                        .row
-                            span {$created_date} 
-                        .row        
-                            span {days_elapsed} days elapsed{/}
+                        div {days_elapsed}{/} Days
+                        small created at: {$created_at}
                     td
                         span {$order_item_quantity}
                     td
-                        span {departmental_status}processing{/}
+                        span {department}{/}
                     td
                         span {$toreceived}
                     td

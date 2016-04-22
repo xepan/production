@@ -40,9 +40,13 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			return $m->refSQL('order_item_id')->fieldQuery('qsp_master_id');
 		});
 
-		// $this->addExpression('customer')->set(function($m,$q){
-		// 	// return $m->add('xepan\commerce\Model_SalesOrder')->load($q->getFieldQuery('order_no'))->fieldQuery('contact_id');
-		// });
+		$this->addExpression('customer_id')->set(function($m,$q){
+			return $m->refSQL('order_item_id')->fieldQuery('customer_id');
+		});
+
+		$this->addExpression('customer_name')->set(function($m,$q){
+			return $m->refSQL('order_item_id')->fieldQuery('customer');
+		});
 
 		$this->addExpression('order_item_name')->set(function($m,$q){
 			return $m->refSQL('order_item_id')->fieldQuery('name');
@@ -77,13 +81,14 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		});
 
 		$this->addExpression('days_elapsed')->set(function($m,$q){
-			return "'Todo'";
+			// return "'Todo'";
 			$date=$m->add('\xepan\base\xDate');
 			$diff = $date->diff(
-						date('Y-m-d H:i:s',strtotime($m['created_date'])),
-						date('Y-m-d H:i:s',strtotime($this->app->now)),
-						'Days'
+						date('Y-m-d H:i:s',strtotime($m['created_at'])
+							),
+						date('Y-m-d H:i:s',strtotime($m['due_date'])),'Days'
 					);
+
 			return "'".$diff."'";
 		});
 
@@ -110,8 +115,9 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$ois = $app->add('xepan\commerce\Model_QSP_Detail');
 		$ois->addCondition('qsp_master_id',$order->id);
 		//create jobcard of each item in associated first department
+		$jobcard = $app->add('xepan\production\Model_Jobcard');
 		foreach ($ois as $oi) {
-			$this->createFromOrderItem($oi);
+			$jobcard->createFromOrderItem($oi);
 		}
 	}
 
@@ -120,7 +126,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			$first_department = $oi->firstProductionDepartment();
 
 			//Creating new Jobcard
-			$jobcard = $app->add('xepan\production\Model_Jobcard');
+			$jobcard = $this->add('xepan\production\Model_Jobcard');
 
 			$jobcard['department_id'] = $first_department->id;
 			$jobcard['order_item_id'] = $oi->id;
@@ -388,28 +394,31 @@ class Model_Jobcard extends \xepan\base\Model_Document{
     	$old_oi = $app->add('xepan\commerce\Model_QSP_Detail')->load($orderItem->id);
     	$old_qty = $old_oi['quantity'];
 
-		$jobcard = $this->add('xepan\production\Model_Jobcard')
+		$jobcard = $app->add('xepan\production\Model_Jobcard')
 					->addCondition('order_item_id',$old_oi->id)
-					->addCondition('parent_detail_id',null)
+					->addCondition('parent_jobcard_id',null)
 					->setOrder('id','asc')
 					->setLimit(1)
 					->tryLoadAny()
 					;
 
-		if($jobcard->count()->getOne()!=1)
-			throw new \Exception("Jobcard not found");
-			
+		if($jobcard->count()->getOne()!=1){
+			$jobcard->save();			
+			// throw new \Exception("Jobcard not found");
+		}
 
-		$qty = $orderItem['quantity'] - $old_qty['quantity'];
+		$qty = $orderItem['quantity'] - $old_qty;
 		$jobcard->createJobcardDetail("ToReceived",$qty);
     }
 
     //Catch Hook:: qsp_detail_insert
     function createJobcard($app,$orderItem){
+
     	if(!in_array($orderItem['qsp_status'], ['Approved','InProgress','Completed']))
     		return false;
 
-    	$this->createFromOrderItem($orderItem);
+    	$jobcard = $app->add('xepan\production\Model_Jobcard');
+    	$jobcard->createFromOrderItem($orderItem);
     }
 
     //Catch Hook:: qsp_detail_delete
@@ -420,7 +429,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
     	if(!in_array($orderItem['qsp_status'], ['Approved','InProgress','Completed']))
     		return false;
     		
-    	$jobcards = $this->add('xepan\production\Model_Jobcard')->addCondition('order_item_id',$orderItem->id);
+    	$jobcards = $app->add('xepan\production\Model_Jobcard')->addCondition('order_item_id',$orderItem->id);
     	foreach ($jobcards as $jobcard) {
  			$jobcard->delete();   		
     	}

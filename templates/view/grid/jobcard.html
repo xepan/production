@@ -2,7 +2,7 @@
 <div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
   <header class="main-box-header clearfix atk-actions  {$class} ">
     <div style="100%" class="filter-block">
-      <div class="pull-right">{$grid_buttons} </div>
+      <div class="pull-right">{$grid_buttons}</div>
       <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
     </div>
   </header>{/Pannel}
@@ -23,13 +23,13 @@
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td style="width: 30%;">{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="{url}?page=xepan_production_jobcarddetail&amp;document_id={$id}{/}" class="user-link">{$id}</a><small><a href="{url}?page=xepan_commerce_salesorderdetail&amp;document_id={$id{/}" class="user-subhead">{document_no}1111{/}</a><br/><a href="{url}?page=xepan_commerce_customerdetail&amp;contact_id={$id}{/}" class="user-subhead">{customer_id}Xavoctacnocratspvt.ltd{/}   </a></small></td>
+          <td style="width: 30%;">{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="{url}?page=xepan_production_jobcarddetail&amp;document_id={$id}{/}" class="user-link">{$id}</a><small><a href="{url}?page=xepan_commerce_saleorderdetail&amp;document_id={$order_no}{/}" class="user-subhead">{order_no}order not found{/}</a>
+              <div href="{url}?page=xepan_commerce_customerdetail&amp;contact_id={$id}{/}" class="user-subhead">{customer_name}Not Found{/}</div></small></td>
           <td>
-            <div class="row"><span>{$created_date} </span></div>
-            <div class="row">       <span>{days_elapsed} days elapsed{/}</span></div>
+            <div>{days_elapsed}{/} Days</div><small>created at: {$created_at}</small>
           </td>
           <td><span>{$order_item_quantity}</span></td>
-          <td><span>{departmental_status}processing{/}</span></td>
+          <td><span>{department}{/}</span></td>
           <td><span>{$toreceived}</span></td>
           <td><span>{$processing}</span></td>
           <td><span>{$forwarded}</span></td>

@@ -87,6 +87,16 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			return "'".$diff."'";
 		});
 
+		$this->addHook('beforeDelete',$this);
+
+	}
+
+	function beforeDelete(){
+
+		$job_details = $this->add('xepan\production\Model_Jobcard_Detail')->addCondition('jobcard_id',$this->id);
+		foreach ($job_details as $job_detail) {
+			$job_details->delete();
+		}
 	}
 
 	function checkExistingRelatedTransaction(){
@@ -101,7 +111,12 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$ois->addCondition('qsp_master_id',$order->id);
 		//create jobcard of each item in associated first department
 		foreach ($ois as $oi) {
-			//get first department
+			$this->createFromOrderItem($oi);
+		}
+	}
+
+	function createFromOrderItem($oi){
+		//get first department
 			$first_department = $oi->firstProductionDepartment();
 
 			//Creating new Jobcard
@@ -112,14 +127,8 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			$jobcard['status'] = "ToReceived";
 			$new_jobcard = $jobcard->save();
 
-			// //Create New Jobcard Detail /Transactin Row Entry
+			//Create New Jobcard Detail /Transactin Row Entry
 			$new_jobcard->createJobcardDetail("ToReceived",$oi['quantity']);
-			// $j_detail = $app->add('xepan\production\Model_Jobcard_Detail')->addCondition('jobcard_id',$new_jobcard->id);
-			// $j_detail['direction'] = "In";
-			// $j_detail['quantity'] = $oi['quantity'];
-			// $j_detail['status'] = "ToReceived";
-			// $j_detail->save();
-		}
 	}
 
 	function page_receive($page){
@@ -370,5 +379,38 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	    return true;
     }
 
+    function updateJobcard($app,$orderItem){
+    	$old_oi = $app->add('xepan\commerce\Model_QSP_Detail')->load($orderItem->id);
+    	$old_qty = $old_oi['quantity'];
+
+		$jobcard = $this->add('xepan\production\Model_Jobcard')
+					->addCondition('order_item_id',$old_oi->id)
+					->addCondition('parent_detail_id',null)
+					->setOrder('id','asc')
+					->setLimit(1)
+					->tryLoadAny()
+					;
+
+		if($jobcard->count()->getOne()!=1)
+			throw new \Exception("Jobcard not found");
+			
+
+		$qty = $orderItem['quantity'] - $old_qty['quantity'];
+		$jobcard->createJobcardDetail("ToReceived",$qty);
+    }
+
+    function createJobcard($app,$orderItem){
+    	$this->createFromOrderItem($orderItem);
+    }
+
+    function deleteJobcard($app,$orderItem){
+    	if(!$orderItem->loaded())
+    		throw new \Exception("order item must defined");
+    		
+    	$jobcards = $this->add('xepan\production\Model_Jobcard')->addCondition('order_item_id',$orderItem->id);
+    	foreach ($jobcards as $jobcard) {
+ 			$jobcard->delete();   		
+    	}
+    }
 
 }

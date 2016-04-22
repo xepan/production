@@ -379,7 +379,12 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	    return true;
     }
 
+    //Catch Hook:: qsp_detail_qty_changed
     function updateJobcard($app,$orderItem){
+    	
+    	if(!in_array($orderItem['qsp_status'], ['Approved','InProgress','Completed']))
+    		return false;
+
     	$old_oi = $app->add('xepan\commerce\Model_QSP_Detail')->load($orderItem->id);
     	$old_qty = $old_oi['quantity'];
 
@@ -399,13 +404,21 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$jobcard->createJobcardDetail("ToReceived",$qty);
     }
 
+    //Catch Hook:: qsp_detail_insert
     function createJobcard($app,$orderItem){
+    	if(!in_array($orderItem['qsp_status'], ['Approved','InProgress','Completed']))
+    		return false;
+
     	$this->createFromOrderItem($orderItem);
     }
 
+    //Catch Hook:: qsp_detail_delete
     function deleteJobcard($app,$orderItem){
     	if(!$orderItem->loaded())
     		throw new \Exception("order item must defined");
+    	
+    	if(!in_array($orderItem['qsp_status'], ['Approved','InProgress','Completed']))
+    		return false;
     		
     	$jobcards = $this->add('xepan\production\Model_Jobcard')->addCondition('order_item_id',$orderItem->id);
     	foreach ($jobcards as $jobcard) {

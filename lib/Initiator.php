@@ -25,9 +25,13 @@ class Initiator extends \Controller_Addon {
 			$this->app->addHook('sales_order_approved',['xepan\production\Model_Jobcard','createFromOrder']);
 
 			//Order Item Modification related Jobcard
-			$this->app->addHook('qsp_detail_insert',['xepan\production\Model_Jobcard','createJobcard']);
-			$this->app->addHook('qsp_detail_qty_changed',['xepan\production\Model_Jobcard','updateJobcard']);
-			$this->app->addHook('qsp_detail_delete',['xepan\production\Model_Jobcard','deleteJobcard']);
+			$jobcard_m=$this->add('xepan\production\Model_Jobcard');
+			$this->app->addHook('qsp_detail_insert',[$jobcard_m,'createJobcard']);
+			$jobcard_m->unload();
+			$this->app->addHook('qsp_detail_qty_changed',[$jobcard_m,'updateJobcard']);
+			$jobcard_m->unload();
+			$this->app->addHook('qsp_detail_delete',[$jobcard_m,'deleteJobcard']);
+			$jobcard_m->unload();
 
 		// }
 		

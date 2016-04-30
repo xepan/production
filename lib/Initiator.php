@@ -6,14 +6,11 @@ class Initiator extends \Controller_Addon {
 	
 	public $addon_name = 'xepan_production';
 
-	function init(){
-		parent::init();
+	function setup_admin(){
 		
 		$this->routePages('xepan_production');
 		$this->addLocation(array('template'=>'templates'));
-
-
-		if($this->app->is_admin){
+		// if($this->app->is_admin){
 			$m = $this->app->top_menu->addMenu('Production');
 			$m->addItem(['OutsourceParty','icon'=>'fa fa-user'],'xepan_production_outsourceparties');
 			
@@ -25,7 +22,6 @@ class Initiator extends \Controller_Addon {
 ']),'xepan_production_jobcard&department_id='.$department->id);
 			}
 
-
 			$this->app->addHook('sales_order_approved',['xepan\production\Model_Jobcard','createFromOrder']);
 
 			//Order Item Modification related Jobcard
@@ -33,9 +29,12 @@ class Initiator extends \Controller_Addon {
 			$this->app->addHook('qsp_detail_qty_changed',['xepan\production\Model_Jobcard','updateJobcard']);
 			$this->app->addHook('qsp_detail_delete',['xepan\production\Model_Jobcard','deleteJobcard']);
 
-
-		}
+		// }
 		
+	}
+	function setup_frontend(){
+		$this->routePages('xepan_production');
+		$this->addLocation(array('template'=>'templates'));
 	}
 
 	function resetDB(){

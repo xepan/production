@@ -33,12 +33,15 @@ class Initiator extends \Controller_Addon {
 			$this->app->addHook('qsp_detail_delete',[$jobcard_m,'deleteJobcard']);
 			$jobcard_m->unload();
 
+			return $this;
+
 		// }
 		
 	}
 	function setup_frontend(){
 		$this->routePages('xepan_production');
 		$this->addLocation(array('template'=>'templates'));
+		return $this;
 	}
 
 	function resetDB(){

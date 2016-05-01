@@ -81,7 +81,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		});
 
 		$this->addExpression('days_elapsed')->set(function($m,$q){
-			// return "'Todo'";
+			return "'Todo'";
 			$date=$m->add('\xepan\base\xDate');
 			$diff = $date->diff(
 						date('Y-m-d H:i:s',strtotime($m['created_at'])

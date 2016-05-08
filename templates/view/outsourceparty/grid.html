@@ -8,18 +8,18 @@
   </header>{/Pannel}
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
-      <thead>{cols}{col}
-        <th><span>OutSource Parties </span></th>
-        <th class="text-center"><span>Status</span></th>
-        <th class="text-center"><span>Panding Job-Card</span></th>
+      <thead class="xepan-hover-hand">{cols}{col}
+        <th id="{$name_sortid}"><span>OutSource Parties {$name_sort} </span></th>
+        <th id="{$status_sortid}">{$status_sort}<span>Status</span></th>
+        <th id="{$panding_jobcard_sortid}">{$panding_jobcard_sort}<span>Panding Job-Card</span></th>
         <th></th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td style="width: 30%;">{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="{url}?page=xepan_production_outsourcepartiesdetails&amp;contact_id={$id}{/}" class="user-link">{name}outsource party{/}</a><span class="user-subhead">{os_address}F-4301{/}</span></td>
-          <td class="text-center">{status} InActive{/}</td>
-          <td class="text-center">{panding_jobcard} 5{/}</td>
+          <td>{status} InActive{/}</td>
+          <td>{panding_jobcard} 5{/}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}

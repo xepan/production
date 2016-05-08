@@ -10,13 +10,13 @@
     .main-box-body.clearfix.table
         table.table.user-list.table-hover(style="width:100%")
             {header}
-            thead
+            thead.xepan-hover-hand
                 {cols}{col}
-                th
-                 span OutSource Parties 
-                th.text-center
+                th(id="{$name_sortid}")
+                 span OutSource Parties {$name_sort} 
+                th(id="{$status_sortid}") {$status_sort}
                  span Status
-                th.text-center
+                th(id="{$panding_jobcard_sortid}") {$panding_jobcard_sort}
                  span Panding Job-Card
                 th
                 {/}{/}
@@ -33,9 +33,9 @@
                         {/}
                         a.user-link(href='{url}?page=xepan_production_outsourcepartiesdetails&contact_id={$id}{/}') {name}outsource party{/}
                         span.user-subhead| {os_address}F-4301{/}
-                    td.text-center
+                    td
                         {status} InActive{/}
-                    td.text-center
+                    td
                         {panding_jobcard} 5{/}
                    
                     td(style="width: 15%;")

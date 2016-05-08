@@ -8,16 +8,16 @@
   </header>{/Pannel}
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
-      <thead>{cols}{col}
-        <th><span>Jobcard</span></th>
-        <th><span>Duration</span></th>
-        <th><span>Quantity</span></th>
-        <th><span>Department</span></th>
-        <th><span>toreceived</span></th>
-        <th><span>processing</span></th>
-        <th><span>forwarded</span></th>
-        <th><span>completed</span></th>
-        <th><span>Status</span></th>
+      <thead class="xepan-hover-hand">{cols}{col}
+        <th id="{$order_no_sortid}"><span>Jobcard {$order_no_sort} </span></th>
+        <th id="{$days_elapsed_sortid}"><span>Duration {$name_sort} </span></th>
+        <th id="{$order_item_quantity_sortid}"><span>Quantity {$order_item_quantity_sort} </span></th>
+        <th id="{$department_sortid}"><span>Department {$department_sort} </span></th>
+        <th id="{$toreceived_sortid}"><span>toreceived {$toreceived_sort} </span></th>
+        <th id="{$processing_sortid}"><span>processing {$processing_sort} </span></th>
+        <th id="{$forwarded_sortid}"><span>forwarded {$forwarded_sort} </span></th>
+        <th id="{$completed_sortid}"><span>completed {$completed_sort} </span></th>
+        <th id="{$name_sortid}"><span>Status</span></th>
         <th></th>{/}{/}
       </thead>{/}
       {$subheader}

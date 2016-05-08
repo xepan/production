@@ -10,25 +10,25 @@
     .main-box-body.clearfix.table
         table.table.user-list.table-hover(style="width:100%")
             {header}
-            thead
+            thead.xepan-hover-hand
                 {cols}{col}
-                th
-                  span Jobcard
-                th
-                  span Duration
-                th
-                  span Quantity
-                th
-                  span Department
-                th
-                  span toreceived
-                th
-                  span processing
-                th
-                  span forwarded
-                th
-                  span completed
-                th
+                th(id="{$order_no_sortid}")
+                  span Jobcard {$order_no_sort} 
+                th(id="{$days_elapsed_sortid}")
+                  span Duration {$name_sort} 
+                th(id="{$order_item_quantity_sortid}")
+                  span Quantity {$order_item_quantity_sort} 
+                th(id="{$department_sortid}")
+                  span Department {$department_sort} 
+                th(id="{$toreceived_sortid}")
+                  span toreceived {$toreceived_sort} 
+                th(id="{$processing_sortid}")
+                  span processing {$processing_sort} 
+                th(id="{$forwarded_sortid}")
+                  span forwarded {$forwarded_sort} 
+                th(id="{$completed_sortid}")
+                  span completed {$completed_sort} 
+                th(id="{$name_sortid}")
                   span Status
                 th
                 {/}{/}

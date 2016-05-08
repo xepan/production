@@ -19,13 +19,13 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		parent::init();
 		
 		$job_j=$this->join('jobcard.document_id');
-		$job_j->hasOne('xepan\hr\Department','department_id');
-		$job_j->hasOne('xepan\production\ParentJobcard','parent_jobcard_id')->defaultValue(0);
+		$job_j->hasOne('xepan\hr\Department','department_id')->sortable(true);
+		$job_j->hasOne('xepan\production\ParentJobcard','parent_jobcard_id')->defaultValue(0)->sortable(true);
 
-		$job_j->hasOne('xepan\production\OutsourceParty','outsourceparty_id'); //it show current department
+		$job_j->hasOne('xepan\production\OutsourceParty','outsourceparty_id')->sortable(true); //it show current department
 		$job_j->hasOne('xepan\commerce\QSP_Detail','order_item_id')->sortable(true);
 
-		$job_j->addField('due_date')->type('datetime');
+		$job_j->addField('due_date')->type('datetime')->sortable(true);
 		// $job_j->addField('status')->defaultValue('ToReceived');
 
 		$job_j->hasMany('xepan\production\Jobcard_Detail','jobcard_id');
@@ -38,47 +38,47 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 		$this->addExpression('order_no')->set(function($m,$q){
 			return $m->refSQL('order_item_id')->fieldQuery('qsp_master_id');
-		});
+		})->sortable(true);
 
 		$this->addExpression('customer_id')->set(function($m,$q){
 			return $m->refSQL('order_item_id')->fieldQuery('customer_id');
-		});
+		})->sortable(true);
 
 		$this->addExpression('customer_name')->set(function($m,$q){
 			return $m->refSQL('order_item_id')->fieldQuery('customer');
-		});
+		})->sortable(true);
 
 		$this->addExpression('order_item_name')->set(function($m,$q){
 			return $m->refSQL('order_item_id')->fieldQuery('name');
-		});
+		})->sortable(true);
 
 		$this->addExpression('order_item_quantity')->set(function($m,$q){
 			return $m->refSQL('order_item_id')->fieldQuery('quantity');
-		});
+		})->sortable(true);
 
 		$this->addExpression('toreceived')->set(function($m,$q){
 			return $m->refSQL('xepan\production\Jobcard_Detail')
 					->addCondition('status','ToReceived')
 					->sum('quantity');
-		});
+		})->sortable(true);
 
 		$this->addExpression('processing')->set(function($m,$q){
 			return $m->refSQL('xepan\production\Jobcard_Detail')
 					->addCondition('status','Received')
 					->sum('quantity');
-		});
+		})->sortable(true);
 
 		$this->addExpression('forwarded')->set(function($m,$q){
 			return $m->refSQL('xepan\production\Jobcard_Detail')
 					->addCondition('status','Forwarded')
 					->sum('quantity');
-		});
+		})->sortable(true);
 
 		$this->addExpression('completed')->set(function($m,$q){
 			return $m->refSQL('xepan\production\Jobcard_Detail')
 					->addCondition('status','Completed')
 					->sum('quantity');
-		});
+		})->sortable(true);
 
 		$this->addExpression('days_elapsed')->set(function($m,$q){
 			return "'Todo'";
@@ -90,7 +90,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 					);
 
 			return "'".$diff."'";
-		});
+		})->sortable(true);
 
 		$this->addHook('beforeDelete',$this);
 

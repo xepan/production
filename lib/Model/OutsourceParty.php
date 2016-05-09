@@ -61,8 +61,8 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 	function activate(){
 		$this['status']='Active';
 		$this->app->employee
-            ->addActivity("InActive OutsourceParty", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('activate','InActive');
+            ->addActivity("OutsourceParty '".$this['contact']."' now active", null/* Related Document ID*/, $this->id /*Related Contact ID*/)
+            ->notifyWhoCan('activate','InActive',$this);
 		$this->save();
 	}
 
@@ -70,8 +70,8 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 	function deactivate(){
 		$this['status']='InActive';
 		$this->app->employee
-            ->addActivity("Active OutsourceParty", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/)
-            ->notifyWhoCan('deactivate','Active');
+            ->addActivity("OutsourceParty '".$this['contact']."' has deactivated", null/* Related Document ID*/, $this->id /*Related Contact ID*/)
+            ->notifyWhoCan('deactivate','Active',$this);
 		$this->save();
 	}
 

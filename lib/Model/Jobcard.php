@@ -160,9 +160,9 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 			// calling jobcard receive function 
 			if($this->receive())
-				$form->js()->univ()->successMessage('Received Successfully')->execute();
+				return $form->js()->univ()->successMessage('Received Successfully');
 			else
-				$form->js()->univ()->errorMessage('Not Received')->execute();
+				return $form->js()->univ()->errorMessage('Not Received');//->execute();
 		}
 	}
 

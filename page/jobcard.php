@@ -2,7 +2,7 @@
 
 namespace xepan\production;
 
-class page_jobcard extends \Page {
+class page_jobcard extends \xepan\base\Page {
 	
 	public $title='Jobcard';
 	public $department_id;

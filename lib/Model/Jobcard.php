@@ -360,9 +360,9 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	        // throw new \Exception($jd->id, 1);
 			$this->sendToDispatch($form['qty'],$form['warehouse'],$jd->id);
 
-			$form->js()->univ()->successMessage('Send To Dispatch Successfully')->execute();
+			return $form->js()->univ()->successMessage('Send To Dispatch Successfully');
 
-            return true;
+            // return true;
         }
     }	
         
@@ -371,7 +371,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
     	// throw new \Exception($order['contact_id'], 1);
 		
     	$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($warehouse);
-			$transaction = $warehouse->newTransaction($this['order_no'],$this,$order['contact_id'],'Dispatch');
+			$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$order['contact_id'],'Dispatch');
 
 			$transaction->addItem($this['order_item_id'],$qty,$jobcard_detail,null,null);
 

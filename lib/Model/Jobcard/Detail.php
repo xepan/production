@@ -9,7 +9,7 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 	function init(){
 		parent::init();
 
-		$this->hasOne('xepan\production\Model_Jobcard','jobcard_id');
+		$this->hasOne('xepan\production\Jobcard','jobcard_id');
 		$this->addField('quantity'); 
 		$this->addField('parent_detail_id')->defaultValue(0); //parent jobcard detail id
 		$this->addField('status');
@@ -46,8 +46,9 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 			
 		$this['status'] = "Completed";
 		$this->save();
-
-		if($this['jobcard_id'] and $this->jobcard()->checkAllDetailComplete()){
+		$jobcard=$this->add('xepan\production\Model_Jobcard')
+				->load($this['jobcard_id']);
+		if($this['jobcard_id'] and $jobcard->checkAllDetailComplete()){
 			$this->jobcard()->complete();
 		}
 

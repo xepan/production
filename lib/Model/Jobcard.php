@@ -162,7 +162,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			if($this->receive())
 				return $form->js()->univ()->successMessage('Received Successfully');
 			else
-				return $form->js()->univ()->errorMessage('Not Received');//->execute();
+				return $form->js()->univ()->errorMessage('Not Received');
 		}
 	}
 
@@ -238,9 +238,9 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			$result = $this->forward($next_dept,$form['quantity_to_forward'],$jd->id);
 
 			if($result)
-				$form->js()->univ()->successMessage('Forwarded Successfully')->execute();
+				return $form->js()->univ()->successMessage('Forwarded Successfully');
 			else
-				$form->js()->univ()->successMessage('something wrong')->execute();
+				return $form->js()->univ()->successMessage('something wrong');
 		}
 	}
 	

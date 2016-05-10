@@ -98,41 +98,41 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 	function updateSearchString($m){
 
 		$search_string = ' ';
-		$search_string .= $this['outsource_party_id'];
-		$search_string .= $this['bank_name'];
-		$search_string .= $this['pan_it_no'];
-		$search_string .= $this['tin_no'];
-		$search_string .= $this['account_no'];
-		$search_string .= $this['os_address'];
-		$search_string .= $this['os_city'];
-		$search_string .= $this['os_state'];
-		$search_string .= $this['os_country'];
-		$search_string .= $this['os_pincode'];
-		$search_string .= $this['pan_no'];
-		$search_string .= $this['tin_no'];
+		$search_string .=" ". $this['outsource_party_id'];
+		$search_string .=" ". $this['bank_name'];
+		$search_string .=" ". $this['pan_it_no'];
+		$search_string .=" ". $this['tin_no'];
+		$search_string .=" ". $this['account_no'];
+		$search_string .=" ". $this['os_address'];
+		$search_string .=" ". $this['os_city'];
+		$search_string .=" ". $this['os_state'];
+		$search_string .=" ". $this['os_country'];
+		$search_string .=" ". $this['os_pincode'];
+		$search_string .=" ". $this['pan_no'];
+		$search_string .=" ". $this['tin_no'];
 
 		$qsp_master = $this->ref('QSPMaster');
 		foreach ($qsp_master as $all_qsp_detail) {
-			$search_string .= $all_qsp_detail['qsp_master_id'];
-			$search_string .= $all_qsp_detail['document_no'];
-			$search_string .= $all_qsp_detail['from'];
-			$search_string .= $all_qsp_detail['total_amount'];
-			$search_string .= $all_qsp_detail['gross_amount'];
-			$search_string .= $all_qsp_detail['net_amount'];
-			$search_string .= $all_qsp_detail['narration'];
-			$search_string .= $all_qsp_detail['exchange_rate'];
-			$search_string .= $all_qsp_detail['tnc_text'];
+			$search_string .=" ". $all_qsp_detail['qsp_master_id'];
+			$search_string .=" ". $all_qsp_detail['document_no'];
+			$search_string .=" ". $all_qsp_detail['from'];
+			$search_string .=" ". $all_qsp_detail['total_amount'];
+			$search_string .=" ". $all_qsp_detail['gross_amount'];
+			$search_string .=" ". $all_qsp_detail['net_amount'];
+			$search_string .=" ". $all_qsp_detail['narration'];
+			$search_string .=" ". $all_qsp_detail['exchange_rate'];
+			$search_string .=" ". $all_qsp_detail['tnc_text'];
 		}
 
 		$jobcard = $this->ref('xepan\production\Jobcard');
 		foreach ($jobcard as $jobcard_detail) {
-			$search_string .= $jobcard_detail['order_no'];
-			$search_string .= $jobcard_detail['customer_id'];
-			$search_string .= $jobcard_detail['customer_name'];
-			$search_string .= $jobcard_detail['order_item_name'];
-			$search_string .= $jobcard_detail['order_item_quantity'];
-			$search_string .= $jobcard_detail['days_elapsed'];
-			$search_string .= $jobcard_detail['forwarded'];
+			$search_string .=" ". $jobcard_detail['order_no'];
+			$search_string .=" ". $jobcard_detail['customer_id'];
+			$search_string .=" ". $jobcard_detail['customer_name'];
+			$search_string .=" ". $jobcard_detail['order_item_name'];
+			$search_string .=" ". $jobcard_detail['order_item_quantity'];
+			$search_string .=" ". $jobcard_detail['days_elapsed'];
+			$search_string .=" ". $jobcard_detail['forwarded'];
 
 		}
 

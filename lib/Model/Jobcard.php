@@ -439,16 +439,16 @@ class Model_Jobcard extends \xepan\base\Model_Document{
     function updateSearchString($m){
 
 		$search_string = ' ';
-		$search_string .= $this['order_no'];
-		$search_string .= $this['customer_id'];
-		$search_string .= $this['customer_name'];
-		$search_string .= $this['order_item_name'];
-		$search_string .= $this['order_item_quantity'];
-		$search_string .= $this['days_elapsed'];
-		$search_string .= $this['toreceived'];
-		$search_string .= $this['processing'];
-		$search_string .= $this['forwarded'];
-		$search_string .= $this['completed'];
+		$search_string .=" ". $this['order_no'];
+		$search_string .=" ". $this['customer_id'];
+		$search_string .=" ". $this['customer_name'];
+		$search_string .=" ". $this['order_item_name'];
+		$search_string .=" ". $this['order_item_quantity'];
+		$search_string .=" ". $this['days_elapsed'];
+		$search_string .=" ". $this['toreceived'];
+		$search_string .=" ". $this['processing'];
+		$search_string .=" ". $this['forwarded'];
+		$search_string .=" ". $this['completed'];
 
 		$this['search_string'] = $search_string;
 	}

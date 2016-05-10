@@ -2,7 +2,7 @@
 
 namespace xepan\production;
 
-class page_outsourceparties extends \Page {
+class page_outsourceparties extends \xepan\base\Page {
 	public $title='OutsourceParties';
 
 	function init(){

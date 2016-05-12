@@ -48,8 +48,9 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 		$this->save();
 		$jobcard=$this->add('xepan\production\Model_Jobcard')
 				->load($this['jobcard_id']);
-		if($this['jobcard_id'] and $jobcard->checkAllDetailComplete()){
-			$this->jobcard()->complete();
+		if($this['jobcard_id']){
+			$jobcard->checkAllDetailComplete();
+			$jobcard->complete();
 		}
 
 

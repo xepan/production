@@ -12,9 +12,13 @@ class page_jobcard extends \xepan\base\Page {
 		$this->department_id = $this->api->stickyGET('department_id');
 
 		$jobcard_model = $this->add('xepan\production\Model_Jobcard');
-		
+		$jobcard_model->addExpression('department_name')->set($jobcard_model->refSQL('department_id')->fieldQuery('name'));
+
 		if($this->department_id){
 			$jobcard_model->addCondition('department_id',$this->department_id);
+			$jobcard_model->tryLoadAny();
+
+			$this->title = "Jobcard / Department :: ".$jobcard_model['department_name'];
 		}
 
 		$crud=$this->add('xepan\hr\CRUD',['action_page'=>'xepan_production_jobcarddetail'],null,['view/grid/jobcard']);

@@ -140,7 +140,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 	function page_receive($page){
 		$form = $page->add('Form');
-		$jobcard_field = $form->addField('text','jobcard_row');
+		$jobcard_field = $form->addField('hidden','jobcard_row');
 		$form->addSubmit('Receive Jobcard');
 
 		//$grid_jobcard_row = $page->add('Grid');
@@ -223,6 +223,12 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$page->add('View')->setElement('H4')->set($this['order_item_name']);
 		
 		$next_dept = $this->nextProductionDepartment();
+		if(!$next_dept){
+			$this->add('View_Warning')->set('hello');
+			throw new \Exception("Error Processing Request", 1);
+			
+			return;
+		}
 
 		//total item to forward =)
 		$qty_to_forward = $this['processing'] - ($this['forwarded'] + $this['completed']) ;

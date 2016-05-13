@@ -14,7 +14,7 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 		$this->addField('parent_detail_id')->defaultValue(0); //parent jobcard detail id
 		$this->addField('status');
 		$this->hasMany('xepan\commerce\Store_TransactionRow','jobcard_detail_id');
-
+		
 		$this->addHook('beforeDelete',[$this,'checkExistingRelatedTransactionRow']);
 
 	}
@@ -48,13 +48,11 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 		$this->save();
 		$jobcard=$this->add('xepan\production\Model_Jobcard')
 				->load($this['jobcard_id']);
-		if($this['jobcard_id']){
-			$jobcard->checkAllDetailComplete();
+		
+		if($jobcard->checkAllDetailComplete()){
 			$jobcard->complete();
 		}
-
-
-
+		
 	}
 
 }

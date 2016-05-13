@@ -6,7 +6,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	public $status=['ToReceived','Received','Processing','Forwarded','Completed','Cancelled','Rejected'];
 
 	public $actions=[
-				'ToReceived'=>['view','edit','delete','receive','processing','forward','complete','cancel','reject'],
+				'ToReceived'=>['view','edit','delete','receive','reject'],
 				'Received'=>['view','edit','delete','processing','forward','complete','cancel'],
 				'Processing'=>['view','edit','delete','sendToDispatch','forward','complete','cancel'],
 				'Forwarded'=>['view','edit','delete','sendToDispatch','complete','cancel'],
@@ -57,36 +57,43 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		})->sortable(true);
 
 		$this->addExpression('toreceived')->set(function($m,$q){
-			return $m->refSQL('xepan\production\Jobcard_Detail')
+			$to_received = $m->refSQL('xepan\production\Jobcard_Detail')
 					->addCondition('status','ToReceived')
 					->sum('quantity');
+			return $q->expr("IFNULL ([0], 0)",[$to_received]);
+		})->sortable(true);
+
+
+		$this->addExpression('forwarded')->set(function($m,$q){
+			$forwarded = $m->refSQL('xepan\production\Jobcard_Detail')
+					->addCondition('status','Forwarded')
+					->sum('quantity');
+			return $q->expr("IFNULL([0],0)",[$forwarded]);
+		})->sortable(true);
+
+
+		$this->addExpression('completed')->set(function($m,$q){
+			$completed  = $m->refSQL('xepan\production\Jobcard_Detail')
+					->addCondition('status','Completed')
+					->sum('quantity');
+			return $q->expr("IFNULL( [0], 0)",[$completed]);
 		})->sortable(true);
 
 		$this->addExpression('processing')->set(function($m,$q){
-			return $m->refSQL('xepan\production\Jobcard_Detail')
+			$processing = $m->refSQL('xepan\production\Jobcard_Detail')
 					->addCondition('status','Received')
 					->sum('quantity');
-		})->sortable(true);
 
-		$this->addExpression('forwarded')->set(function($m,$q){
-			return $m->refSQL('xepan\production\Jobcard_Detail')
-					->addCondition('status','Forwarded')
-					->sum('quantity');
-		})->sortable(true);
-
-		$this->addExpression('completed')->set(function($m,$q){
-			return $m->refSQL('xepan\production\Jobcard_Detail')
-					->addCondition('status','Completed')
-					->sum('quantity');
+			return $q->expr("IFNULL( ([0]- IFNULL([1],0) - IFNULL([2],0) ),0)",[$processing,$m->getElement('forwarded'),$m->getElement('completed')]);
 		})->sortable(true);
 
 		$this->addExpression('days_elapsed')->set(function($m,$q){
-			return "'Todo'";
+			// return "'Todo'";
 			$date=$m->add('\xepan\base\xDate');
 			$diff = $date->diff(
 						date('Y-m-d H:i:s',strtotime($m['created_at'])
 							),
-						date('Y-m-d H:i:s',strtotime($m['due_date'])),'Days'
+						date('Y-m-d H:i:s',strtotime($m['due_date']?$m['due_date']:$this->app->today)),'Days'
 					);
 
 			return "'".$diff."'";
@@ -149,6 +156,8 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$grid_jobcard_row->addSelectable($jobcard_field);
 
 		$jobcard = $this->ref('xepan\production\Jobcard_Detail');
+		$jobcard->addCondition('status','ToReceived');
+
 		$grid_jobcard_row->setModel($jobcard);
 
 		if($form->isSubmitted()){
@@ -168,7 +177,9 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	}
 
 	function receive(){
+		
 		//Mark Complete the Previous Department Jobcard if exist
+		// throw new \Exception($this['parent_jobcard_id']);
 		if($this['parent_jobcard_id'] and $this->parentJobcard()->checkAllDetailComplete()){
 			$this->parentJobcard()->complete();
 		}
@@ -195,14 +206,26 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	//return true or false
 	//return true when all detail are complete else return fasle
 	function checkAllDetailComplete(){
-		if($this->loaded())
+		if(!$this->loaded())
+			throw new \Exception("jobcrad model must loaded");
+				
+		$all_complete = false;
+		
+		$jd_detail = $this->add('xepan\production\Model_Jobcard_Detail')
+			->addCondition('jobcard_id',$this->id)->getRows();
 
-		$all_complete = true;
-		foreach ($this->ref('xepan\production\Jobcard_Detail') as $jd) {
-			if($jd['status'] != "Completed"){
-				$all_complete = false;
-				continue;
-			}
+		$total_received_qty = 0;
+		$total_complete_qty = 0;
+		foreach ($jd_detail as $temp) {
+			if($temp['status'] == "Received")
+				$total_received_qty += $temp['quantity'];
+			 
+			if($temp['status'] == "Completed")
+				$total_complete_qty += $temp['quantity'];
+		}
+				
+		if($total_received_qty == $total_complete_qty ){
+			$all_complete = true;
 		}
 
 		return $all_complete;
@@ -224,21 +247,22 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		
 		$next_dept = $this->nextProductionDepartment();
 		if(!$next_dept){
-			$this->add('View_Warning')->set('hello');
-			throw new \Exception("Error Processing Request", 1);
-			
+			$this->add('View_Warning')->set('next department not found');			
 			return;
 		}
 
 		//total item to forward =)
-		$qty_to_forward = $this['processing'] - ($this['forwarded'] + $this['completed']) ;
+		$qty_to_forward = $this['processing'];
 
 		$form = $page->add('Form');
-		$form->addField('line','total_quantity_to_forward')->set($qty_to_forward);
+		$form->addField('line','total_quantity_to_forward')->setAttr('readonly','true')->set($qty_to_forward);
 		$form->addField('Number','quantity_to_forward')->set($qty_to_forward);
 		$form->addSubmit('forward to '.$next_dept['name']);
 
 		if($form->isSubmitted()){
+			if($form['quantity_to_forward'] > $form['total_quantity_to_forward'])
+				$form->displayError('quantity_to_forward',"qty cannot be more than ".$form['total_quantity_to_forward']);
+
 			// create One New Transaction row of forward in self jobcard
 			$jd = $this->createJobcardDetail("Forwarded",$form['quantity_to_forward']);
 			//create/Load Next Department Jobcard and create new received transactio
@@ -297,19 +321,63 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		return $detail->save();
 	}
 
+	function page_complete($page){
+		if(!$this->nextProductionDepartment()){
+			
+			$qty_to_complete = $this['processing'];
+
+			$form = $page->add('Form');
+			$form->addField('line','total_qty_to_complete')->setAttr('readonly','true')->set($qty_to_complete);
+			$form->addField('Number','qty_to_complete')->set($qty_to_complete);
+			$form->addSubmit('mark completed');
+
+			if($form->isSubmitted()){
+				if($form['qty_to_complete'] > $form['total_qty_to_complete'])
+					$form->displayError('qty_to_complete',"qty cannot be more than ".$form['total_qty_to_complete']);
+				// create One New Transaction row of Completed in self jobcard
+				$jd = $this->createJobcardDetail("Completed",$form['qty_to_complete']);
+				$this->complete();
+				return $form->js()->univ()->successMessage($form['qty_to_complete']." Completed");		
+			}
+		}else{
+			return $this->complete();		
+		}
+	}
 	
 	function complete(){
-		$this['status']='Completed';
-		$this->save();
 
+		$this['status']="Processing";			
+		if($this->checkAllDetailComplete()){
+			$this['status']='Completed';
+		}
+		$this->save();
+		//create activity of jobcrad complete
+		$this->app->employee
+			->addActivity("Jobcard no. ".$this['document_no']." has been completed", $this->id/* Related Document ID*/, $this['customer_id'] /*Related Contact ID*/)
+			->notifyWhoCan('edit,delete',"Jobcard ".$this['document_no']." Completed",$this);
+
+
+		$sale_order_model = $this->add('xepan\commerce\Model_SalesOrder')->load($this['order_no']);
 		//check for the mark order complete
-		//if all jobcard of order are complete
-		//then mark sale order complete
-		//create activity
+		if(!$sale_order_model->isCompleted()){
+			//if all jobcard of order are complete
+			if($this->checkAllDetailComplete()){
+				//then mark sale order complete
+				$sale_order_model->complete();
+			}
+		}
+		
+		$this->saveAndUnload();
+
 	}
 
 	function cancel(){
 		$this['status']='Cancelled';
+		$this->saveAndUnload();
+	}
+
+	function reject(){
+		$this['status'] = 'Rejected';
 		$this->saveAndUnload();
 	}
 

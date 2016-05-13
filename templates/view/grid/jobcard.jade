@@ -18,8 +18,8 @@
                   span Duration {$name_sort} 
                 th(id="{$order_item_quantity_sortid}")
                   span Quantity {$order_item_quantity_sort} 
-                th(id="{$department_sortid}")
-                  span Department {$department_sort} 
+                //- th(id="{$department_sortid}")
+                //-   span Department {$department_sort} 
                 th(id="{$toreceived_sortid}")
                   span toreceived {$toreceived_sort} 
                 th(id="{$processing_sortid}")
@@ -53,8 +53,8 @@
                         small created at: {$created_at}
                     td
                         span {$order_item_quantity}
-                    td
-                        span {department}{/}
+                    //- td
+                    //-     span {department}{/}
                     td
                         span {$toreceived}
                     td

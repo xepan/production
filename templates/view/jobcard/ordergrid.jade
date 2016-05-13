@@ -1,23 +1,26 @@
 .xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
     {Pannel}
     header.main-box-header.clearfix.atk-actions(class=" {$class} ")
-        
+        div.filter-block( style="100%")
+            .pull-right {$grid_buttons} 
+            .form-group.pull-right.xepan-filter-form
+                span(class="form-control pull-left")|{$quick_search}
+                    i(class="fa fa-search search-icon")
     {/Pannel}
     .main-box-body.clearfix.table
         table.table.user-list.table-hover(style="width:100%")
             {header}
-            thead
+            thead.xepan-hover-hand
                 {cols}{col}
+                th(id="{$document_no_number_sortid}")
+                    span Name 
+                    span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$document_no_number_sort}
                 th
-                    a(href='#')
-                    span Select
+                    span Created
                 th
-                    a(href='#')
-                    span Jobcard No
-                th.text-right
-                    a.asc(href='#')
-                    span Quantity
-                th 
+                    span Amount
+                th
+                th  
                 {/}{/}
             {/}
             {$subheader}
@@ -27,13 +30,22 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td
-                      | {$selected}
+                        {avatar}
+                        img(src='img/samples/scarlet-159.png', alt='')
+                        {/}
+                        a.user-link
+                            {$document_no}
+                        a(href='?page=xepan_commerce_customerdetail&contact_id={$contact_id}')
+                            span.user-subhead{$contact}
                     td
-                      | {$jobcard_id}
-                    td.text-right
-                      | {$quantity}
-                    //- td
-                        //- | {action}Action Here{/}
+                        .row
+                            span {$created_at}
+                        .row
+                            span {$days_left} days left
+
+                    td
+                        | {$net_amount_self_currency}
+                        div.user-subhead{$net_amount_client_currency}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

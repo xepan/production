@@ -26,14 +26,13 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$job_j->hasOne('xepan\commerce\QSP_Detail','order_item_id')->sortable(true);
 
 		$job_j->addField('due_date')->type('datetime')->sortable(true);
-		// $job_j->addField('status')->defaultValue('ToReceived');
 
 		$job_j->hasMany('xepan\production\Jobcard_Detail','jobcard_id');
 		$job_j->hasMany('xepan\production\Jobcard','parent_jobcard_id',null,'SubJobcard');
 		$job_j->hasMany('xepan\commerce\Store_Transaction','jobcard_id');
 
-
 		$this->addCondition('type','Jobcard');
+		$this->addCondition('created_by_id',$this->app->employee->id);
 		$this->addHook('beforeDelete',[$this,'checkExistingRelatedTransaction']);
 
 		$this->addExpression('order_no')->set(function($m,$q){
@@ -551,6 +550,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$search_string .=" ". $this['processing'];
 		$search_string .=" ". $this['forwarded'];
 		$search_string .=" ". $this['completed'];
+		$search_string .=" ". $this['type'];
 
 		$this['search_string'] = $search_string;
 	}

@@ -33,6 +33,9 @@ class Initiator extends \Controller_Addon {
 			$this->app->addHook('qsp_detail_delete',[$jobcard_m,'deleteJobcard']);
 			$jobcard_m->unload();
 
+			$search_outsourceparty = $this->add('xepan\production\Model_OutsourceParty');
+        	$this->app->addHook('quick_searched',[$search_outsourceparty,'quickSearch']);
+
 			return $this;
 
 		// }

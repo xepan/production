@@ -55,6 +55,10 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			return $m->refSQL('order_item_id')->fieldQuery('quantity');
 		})->sortable(true);
 
+		$this->addExpression('item_id')->set(function($m,$q){
+			return $m->refSQL('order_item_id')->fieldQuery('item_id');
+		})->sortable(true);
+
 		$this->addExpression('toreceived')->set(function($m,$q){
 			$to_received = $m->refSQL('xepan\production\Jobcard_Detail')
 					->addCondition('status','ToReceived')
@@ -124,6 +128,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			return "'".$diff."'";
 		})->sortable(true);
 
+		
 		$this->addHook('beforeDelete',$this);
 		$this->addHook('beforeSave',[$this,'updateSearchString']);
 
@@ -142,6 +147,8 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	}
 
 	function createFromOrder($app,$order){
+		throw new \Exception("order create ", 1);
+		
 		if(!$order->loaded())
 			throw new \Exception("sale order must be loaded");
 
@@ -378,10 +385,10 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 		//check for the mark order complete
 		if($this['status'] == "Completed"){
-			$sale_order_model = $this->add('xepan\commerce\Model_SalesOrder')->load($this['order_no']);
 
-			if($this->orderItemJobcardComplete($sale_order_model)){
-				$sale_order_model->complete()
+			$sale_order_model = $this->add('xepan\commerce\Model_SalesOrder')->load($this['order_no']);
+			if($this->checkOrderComplete($sale_order_model)){
+				$sale_order_model->complete();
 			}
 
 		}
@@ -394,11 +401,47 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 	}
 
-	function orderItemJobcardComplete($sale_order){
+	function checkOrderComplete($sale_order){
 		if(!$sale_order->loaded())
 			throw new \Exception("jobcard order not found");
 
-		return false;
+		$all_complete = true;
+		
+		$jd_detail_model = $this->add('xepan\production\Model_Jobcard_Detail');
+		$jd_detail_model->addExpression('order_no')->set($jd_detail_model->refSQL('jobcard_id')->fieldQuery('order_no'));
+		$jd_detail_model->addExpression('item_id')->set($jd_detail_model->refSQL('jobcard_id')->fieldQuery('item_id'));
+		$jd_detail_model->addExpression('department_id')->set($jd_detail_model->refSQL('jobcard_id')->fieldQuery('department_id'));
+		$jd_detail_model->addExpression('order_item_id')->set($jd_detail_model->refSQL('jobcard_id')->fieldQuery('order_item_id'));
+
+		$jd_detail_model->addCondition('order_no',$sale_order->id);
+
+		$order_detail_model->addExpression('completed_count')->set(function($m,$q)use($last_dept_id){
+			$completed = $m->addCondition('status','Completed')
+							->sum('quantity');
+			return $q->expr("IFNULL([0],0)",[$completed]);
+		});
+		
+		$order_detail_model->addExpression('dispatched_count')->set(function($m,$q){
+			$dispatched = $m->addCondition('status','Completed')
+							->sum('quantity');
+			return $q->expr("IFNULL([0],0)",[$dispatched]);
+		});
+
+		$order_detail_model->addExpression('is_item_complete')->set(function($m,$q){
+			return false;
+		});
+
+		$group_field = $q->expr('[0]',[$order_detail_model->getElement('order_item_id')]);
+		$order_detail_model->_dsql()->group($group_field);
+
+		foreach ($order_detail_model as $temp) {
+			if(!$temp['is_item_complete']){
+				$all_complete = false;
+				return false;
+			}
+		}
+
+		return $all_complete;
 	}
 
 	function cancel(){

@@ -4,7 +4,7 @@ namespace xepan\production;
 
 class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 	public $table = "jobcard_detail";
-	public $status = ['ToReceived','Received','Forwarded','Completed'];
+	public $status = ['ToReceived','Received','Forwarded','Completed','Dispatched','ReceivedByDispatch','ReceivedByNext'];
 
 	function init(){
 		parent::init();
@@ -33,7 +33,7 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 		$this->save();
 
 		if($this['parent_detail_id'])
-			$this->add('xepan\production\Model_Jobcard_Detail')->load($this['parent_detail_id'])->complete();
+			$this->add('xepan\production\Model_Jobcard_Detail')->load($this['parent_detail_id'])->receivedByNext();
 	}
 
 	function jobcard(){
@@ -53,6 +53,19 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 			$jobcard->complete();
 		}
 		
+	}
+
+	function receivedByNext(){
+		if(!$this->loaded())
+			throw $this->exception();
+
+		$new_jd = $this->add('xepan\production\Model_Jobcard_Detail');
+		$new_jd['quantity'] = $this['quantity']; 
+		$new_jd['parent_detail_id'] = $this['parent_detail_id']; 
+		$new_jd['jobcard_id'] = $this['jobcard_id'];
+		$new_jd['status'] = "ReceivedByNext";
+		$new_jd->save();
+		return $new_jd;
 	}
 
 }

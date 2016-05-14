@@ -13,9 +13,10 @@
         <th id="{$days_elapsed_sortid}"><span>Duration {$name_sort} </span></th>
         <th id="{$order_item_quantity_sortid}"><span>Quantity {$order_item_quantity_sort} </span></th>
         <th id="{$toreceived_sortid}"><span>toreceived {$toreceived_sort} </span></th>
-        <th id="{$processing_sortid}"><span>processing {$processing_sort} </span></th>
-        <th id="{$forwarded_sortid}"><span>forwarded {$forwarded_sort} </span></th>
-        <th id="{$completed_sortid}"><span>completed {$completed_sort} </span></th>
+        <th id="{$processing_sortid}"><span>Received/ processing {$processing_sort} </span></th>
+        <th id="{$completed_sortid}"><span>Completed {$completed_sort} </span></th>
+        <th id="{$forwarded_sortid}"><span>forwarded {$forwarded_sort}</span>Received \ Pending  </th>
+        <th id="{$completed_sortid}"><span>dispatched {$dispatched_sort}</span>Received \ Pending  </th>
         <th id="{$name_sortid}"><span>Status</span></th>
         <th></th>{/}{/}
       </thead>{/}
@@ -30,8 +31,9 @@
           <td><span>{$order_item_quantity}</span></td>
           <td><span>{$toreceived}</span></td>
           <td><span>{$processing}</span></td>
-          <td><span>{$forwarded}</span></td>
           <td><span>{$completed}</span></td>
+          <td><span>{$forwarded}</span><br/><small class="label label-success">{$receivedbynext} </small>/<small class="label label-danger">{pendingbynext}0{/}</small></td>
+          <td><span>{$dispatched}  </span><br/><small class="label label-success">{receivedbydispatch}0{/} </small>/<small class="label label-danger">{pendingbydispatch}0{/}</small></td>
           <td><span>{$action}</span></td>
           <td style="width: 10%;">
             {$edit}

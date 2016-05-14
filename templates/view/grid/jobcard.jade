@@ -18,16 +18,18 @@
                   span Duration {$name_sort} 
                 th(id="{$order_item_quantity_sortid}")
                   span Quantity {$order_item_quantity_sort} 
-                //- th(id="{$department_sortid}")
-                //-   span Department {$department_sort} 
                 th(id="{$toreceived_sortid}")
                   span toreceived {$toreceived_sort} 
                 th(id="{$processing_sortid}")
-                  span processing {$processing_sort} 
-                th(id="{$forwarded_sortid}")
-                  span forwarded {$forwarded_sort} 
+                  span Received/ processing {$processing_sort} 
                 th(id="{$completed_sortid}")
-                  span completed {$completed_sort} 
+                  span Completed {$completed_sort} 
+                th(id="{$forwarded_sortid}")
+                    span forwarded {$forwarded_sort}
+                    | Received \ Pending  
+                th(id="{$completed_sortid}")
+                    span dispatched {$dispatched_sort}
+                    | Received \ Pending  
                 th(id="{$name_sortid}")
                   span Status
                 th
@@ -60,9 +62,19 @@
                     td
                         span {$processing}
                     td
-                        span {$forwarded}
-                    td
                         span {$completed}
+                    td
+                        span {$forwarded}
+                        br
+                        small.label.label-success {$receivedbynext} 
+                        | /
+                        small.label.label-danger {pendingbynext}0{/}
+                    td
+                        span {$dispatched}  
+                        br
+                        small.label.label-success {receivedbydispatch}0{/} 
+                        | /
+                        small.label.label-danger {pendingbydispatch}0{/}
                     td
                         span {$action}
                     td(style="width: 10%;")

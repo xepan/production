@@ -110,34 +110,69 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 		$search_string .=" ". $this['os_pincode'];
 		$search_string .=" ". $this['pan_no'];
 		$search_string .=" ". $this['tin_no'];
+		$search_string .=" ". $this['name'];
+		$search_string .=" ". str_replace("<br/>", " ", $this['contacts_str']);
+		$search_string .=" ". str_replace("<br/>", " ", $this['emails_str']);
+		$search_string .=" ". $this['source'];
+		$search_string .=" ". $this['type'];
+		$search_string .=" ". $this['city'];
+		$search_string .=" ". $this['state'];
+		$search_string .=" ". $this['pin_code'];
+		$search_string .=" ". $this['organization'];
+		$search_string .=" ". $this['post'];
+		$search_string .=" ". $this['website'];
 
-		$qsp_master = $this->ref('QSPMaster');
-		foreach ($qsp_master as $all_qsp_detail) {
-			$search_string .=" ". $all_qsp_detail['qsp_master_id'];
-			$search_string .=" ". $all_qsp_detail['document_no'];
-			$search_string .=" ". $all_qsp_detail['from'];
-			$search_string .=" ". $all_qsp_detail['total_amount'];
-			$search_string .=" ". $all_qsp_detail['gross_amount'];
-			$search_string .=" ". $all_qsp_detail['net_amount'];
-			$search_string .=" ". $all_qsp_detail['narration'];
-			$search_string .=" ". $all_qsp_detail['exchange_rate'];
-			$search_string .=" ". $all_qsp_detail['tnc_text'];
-		}
+		if($this->loaded()){
+			$qsp_master = $this->ref('QSPMaster');
+			foreach ($qsp_master as $all_qsp_detail) {
+				$search_string .=" ". $all_qsp_detail['qsp_master_id'];
+				$search_string .=" ". $all_qsp_detail['document_no'];
+				$search_string .=" ". $all_qsp_detail['from'];
+				$search_string .=" ". $all_qsp_detail['total_amount'];
+				$search_string .=" ". $all_qsp_detail['gross_amount'];
+				$search_string .=" ". $all_qsp_detail['net_amount'];
+				$search_string .=" ". $all_qsp_detail['narration'];
+				$search_string .=" ". $all_qsp_detail['exchange_rate'];
+				$search_string .=" ". $all_qsp_detail['tnc_text'];
+			}
 
-		$jobcard = $this->ref('xepan\production\Jobcard');
-		foreach ($jobcard as $jobcard_detail) {
-			$search_string .=" ". $jobcard_detail['order_no'];
-			$search_string .=" ". $jobcard_detail['customer_id'];
-			$search_string .=" ". $jobcard_detail['customer_name'];
-			$search_string .=" ". $jobcard_detail['order_item_name'];
-			$search_string .=" ". $jobcard_detail['order_item_quantity'];
-			$search_string .=" ". $jobcard_detail['days_elapsed'];
-			$search_string .=" ". $jobcard_detail['forwarded'];
-
+			$jobcard = $this->ref('xepan\production\Jobcard');
+			foreach ($jobcard as $jobcard_detail) {
+				$search_string .=" ". $jobcard_detail['order_no'];
+				$search_string .=" ". $jobcard_detail['customer_id'];
+				$search_string .=" ". $jobcard_detail['customer_name'];
+				$search_string .=" ". $jobcard_detail['order_item_name'];
+				$search_string .=" ". $jobcard_detail['order_item_quantity'];
+				$search_string .=" ". $jobcard_detail['days_elapsed'];
+				$search_string .=" ". $jobcard_detail['forwarded'];
+			}
 		}
 
 		$this['search_string'] = $search_string;
-		
+	}
 
+	function quickSearch($app,$search_string,$view){		
+		$this->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" IN NATURAL LANGUAGE MODE)');
+		$this->addCondition('Relevance','>',0);
+ 		$this->setOrder('Relevance','Desc');
+ 		if($this->count()->getOne()){
+ 			$oc = $view->add('Completelister',null,null,['view/grid/quicksearch-production-grid']);
+ 			$oc->setModel($this);
+    		$oc->addHook('formatRow',function($g){
+    			$g->current_row_html['url'] = $this->app->url('xepan_production_outsourcepartiesdetails',['contact_id'=>$g->model->id]);	
+     		});	
+		}
+
+		$jobcard = $this->add('xepan\production\jobcard');
+		$jobcard->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" IN NATURAL LANGUAGE MODE)');
+		$jobcard->addCondition('Relevance','>',0);
+ 		$jobcard->setOrder('Relevance','Desc');
+ 		if($jobcard->count()->getOne()){
+ 			$jc = $view->add('Completelister',null,null,['view/grid/quicksearch-production-grid']);
+ 			$jc->setModel($jobcard);
+    		$jc->addHook('formatRow',function($g){
+    			$g->current_row_html['url'] = $this->app->url('xepan_production_jobcardorder');	
+     		});	
+		}
 	}
 }

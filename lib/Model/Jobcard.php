@@ -146,9 +146,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$this->ref('xepan\commerce\Store_Transaction')->each(function($m){$m->delete();});
 	}
 
-	function createFromOrder($app,$order){
-		throw new \Exception("order create ", 1);
-		
+	function createFromOrder($app,$order){		
 		if(!$order->loaded())
 			throw new \Exception("sale order must be loaded");
 
@@ -201,7 +199,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			}
 			// calling jobcard receive function 
 			if($this->receive())
-				return $form->js()->univ()->successMessage('Received Successfully');
+				return $form->js()->univ()->successMessage('Received Successfully')->closeDialog();
 			else
 				return $form->js()->univ()->errorMessage('Not Received');
 		}
@@ -210,7 +208,12 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	function receive(){
 		
 		//Mark Complete the Previous Department Jobcard if exist
-		// throw new \Exception($this['parent_jobcard_id']);		
+		// throw new \Exception($this['parent_jobcard_id']);
+
+		$this->add('xepan\commerce\Model_SalesOrder')
+			->load($this['order_no'])
+			->inprogress();
+
 		if($this['parent_jobcard_id'] and $this->parentJobcard()->checkAllDetailComplete()){
 			$this->parentJobcard()->complete();
 		}
@@ -305,7 +308,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			$result = $this->forward($next_dept,$form['quantity_to_forward'],$jd->id);
 
 			if($result)
-				return $form->js()->univ()->successMessage('Forwarded Successfully');
+				return $form->js()->univ()->successMessage('Forwarded Successfully')->closeDialog();
 			else
 				return $form->js()->univ()->successMessage('something wrong');
 		}
@@ -370,7 +373,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			// create One New Transaction row of Completed in self jobcard
 			$jd = $this->createJobcardDetail("Completed",$form['qty_to_complete']);
 			$this->complete();
-			return $form->js()->univ()->successMessage($form['qty_to_complete']." Completed");
+			return $form->js()->univ()->successMessage($form['qty_to_complete']." Completed")->closeDialog();
 		}
 	}
 	
@@ -382,12 +385,11 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		
 		$this->save();
 
-
 		//check for the mark order complete
 		if($this['status'] == "Completed"){
 
 			$sale_order_model = $this->add('xepan\commerce\Model_SalesOrder')->load($this['order_no']);
-			if($this->checkOrderComplete($sale_order_model)){
+			if($is_complete = $this->checkOrderComplete($sale_order_model)){
 				$sale_order_model->complete();
 			}
 
@@ -402,46 +404,70 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	}
 
 	function checkOrderComplete($sale_order){
+		// This is loaded JobCard Btw
+
 		if(!$sale_order->loaded())
 			throw new \Exception("jobcard order not found");
 
-		$all_complete = true;
+		/*
+		For all order_items(qsp_detail)(where order_no is {sales_order_no})
+			{
+				if(item is dispachable){
+					if (total item order quantity > total_dispatched ) return false;
+				}else{
+					if (total item order quantity > completed_in_last_department ) return false;
+				}
+			}
+		return true;
+		*/
+
+		$order_items = $this->add('xepan\commerce\Model_QSP_Detail');
+		$order_items->addExpression('is_dispatchable')->set($order_items->refSQL('item_id')->fieldQuery('is_dispatchable'));
 		
-		$jd_detail_model = $this->add('xepan\production\Model_Jobcard_Detail');
-		$jd_detail_model->addExpression('order_no')->set($jd_detail_model->refSQL('jobcard_id')->fieldQuery('order_no'));
-		$jd_detail_model->addExpression('item_id')->set($jd_detail_model->refSQL('jobcard_id')->fieldQuery('item_id'));
-		$jd_detail_model->addExpression('department_id')->set($jd_detail_model->refSQL('jobcard_id')->fieldQuery('department_id'));
-		$jd_detail_model->addExpression('order_item_id')->set($jd_detail_model->refSQL('jobcard_id')->fieldQuery('order_item_id'));
-
-		$jd_detail_model->addCondition('order_no',$sale_order->id);
-
-		$order_detail_model->addExpression('completed_count')->set(function($m,$q)use($last_dept_id){
-			$completed = $m->addCondition('status','Completed')
-							->sum('quantity');
-			return $q->expr("IFNULL([0],0)",[$completed]);
-		});
-		
-		$order_detail_model->addExpression('dispatched_count')->set(function($m,$q){
-			$dispatched = $m->addCondition('status','Completed')
-							->sum('quantity');
-			return $q->expr("IFNULL([0],0)",[$dispatched]);
+		$order_items->addExpression('total_dispacthed')->set(function ($m,$q){
+			$jd_detail_model = $m->add('xepan\production\Model_Jobcard_Detail');
+			$jd_detail_model->addExpression('for_order_detail_id')->set($jd_detail_model->refSQL('jobcard_id')->fieldQuery('order_item_id'));
+			$jd_detail_model->addCondition('for_order_detail_id',$q->getField('id'));
+			$jd_detail_model->addCondition('status','Dispatched');
+			return $jd_detail_model->sum('quantity');
 		});
 
-		$order_detail_model->addExpression('is_item_complete')->set(function($m,$q){
-			return false;
-		});
+		$order_items->addCondition('qsp_master_id',$sale_order->id);
 
-		$group_field = $q->expr('[0]',[$order_detail_model->getElement('order_item_id')]);
-		$order_detail_model->_dsql()->group($group_field);
+		foreach ($order_items->getRows() as $oi) {
+			if($oi['is_dispatchable']){
+				// echo "is Dispatchable ";
+				// echo $oi['item']. '<pre>';
+				// echo $oi['quantity'] .' > '. $oi['total_dispacthed'].'<br/>';
+				if ($oi['quantity'] > $oi['total_dispacthed'] ) return false;
+			}else{
 
-		foreach ($order_detail_model as $temp) {
-			if(!$temp['is_item_complete']){
-				$all_complete = false;
-				return false;
+				$last_dept = array_pop(array_keys(json_decode($oi['extra_info'],true)));
+				$order_items2 = $this->add('xepan\commerce\Model_QSP_Detail');
+
+				$order_items2->addExpression('completed_in_last_department')->set(function($m,$q)use($last_dept){
+					$item_m = $m->add('xepan\commerce\Model_Item');
+					$jd_detail_model = $m->add('xepan\production\Model_Jobcard_Detail');
+					$jd_detail_model->addExpression('for_order_detail_id')->set($jd_detail_model->refSQL('jobcard_id')->fieldQuery('order_item_id'));
+					$jd_detail_model->addExpression('department_id')->set($jd_detail_model->refSQL('jobcard_id')->fieldQuery('department_id'));
+					
+					$jd_detail_model->addCondition('for_order_detail_id',$q->getField('id'));
+					$jd_detail_model->addCondition('status','Completed');
+					$jd_detail_model->addCondition('department_id',$last_dept);
+
+					return $jd_detail_model->sum('quantity');
+				});
+
+				$order_items2->load($oi['id']);
+				
+				// echo "<br/>is not Dispatchable ";
+				// echo $oi['item']. '<pre>';
+				// echo $oi['quantity'] .' > '. $order_items2['completed_in_last_department'].'<br/>';
+				if ($oi['quantity'] > $order_items2['completed_in_last_department'] ) return false;
 			}
 		}
 
-		return $all_complete;
+		return true;
 	}
 
 	function cancel(){

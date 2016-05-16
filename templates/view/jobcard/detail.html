@@ -1,26 +1,22 @@
 
 <div class="main-box no-header clearfix">
   <header class="main-box-header clearfix">
+    <h2 style="text-align:center;">Staus: {$status}</h2>
   </header>
   <div class="main-box-body clearfix">
     <div id="invoice-companies" class="row">
       <div class="col-sm-4 invoice-box">
         <div class="invoice-icon hidden-sm"><i class="fa fa-home"></i> From</div>
-        <div class="invoice-company">
-          <h4> {jobcard_contact}Sushil Milkee{/}</h4>
+        <div>
+          <h4> {customer_name}customer name{/}</h4>
           <div class="xepan-push"></div>
-          <p>
-            {address}
-            54  Point Tower point,
-            <div class="xepan-push"></div>Karauli. 322219
-            <div class="xepan-push"></div>INDIA{/}
-          </p>
+          <p>{address}{/}</p>
+          <p>{city}{/},&nbsp;{state}{/},&nbsp;{country}{/}</p>
         </div>
       </div>
       <div class="col-sm-4 invoice-box">
-        <h4>Sale Order No.: {sale_order_no}2513 {/}</h4>
-        <div class="xepan-push"></div>
-        <div class="atk-col-3">Order Create:  {created_at}16/01/2016{/}</div>
+        <h4>Order No.: {order_no}{/}</h4>
+        <div class="xepan-push"></div>Create at:  {order_created_at}{/}
       </div>
       <div class="col-sm-4 invoice-box invoice-box-dates">
         <div class="invoice-dates">
@@ -29,8 +25,7 @@
             <div class="col-md-6 invoice-number input-full-width"><span style="margin:auto;" class="pull-right atk-form-row atk-form-field">{$id}</span></div>
           </div>
           <div class="invoice-date clearfix"><strong>Create Date:</strong><span class="pull-right">{$created_at}</span></div>
-          <div class="clearfix"><strong>Due Date:</strong><span class="pull-right">{$due_date}</span></div>
-          <div class="clearfix"><strong>Day:</strong><span class="pull-right">{day}5 days left{/}</span></div>
+          <div class="clearfix"><strong>Due Date: </strong><span class="pull-right">{$due_date}</span></div>
         </div>
       </div>
     </div>
@@ -39,24 +34,18 @@
       <table class="table">
         <thead>
           <tr>
-            <th class="text-center"><span>Sr-No.</span></th>
-            <th><span>Item Name</span></th>
-            <th><span>Specification</span></th>
-            <th class="text-center"><span>Quantity</span></th>
+            <th><span>Item</span></th>
+            <th><span>to</span></th>
+            <th><span>Quantity</span></th>
+            <th><span>Progress/Detail</span></th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td class="text-center">{id}0011{/}</td>
-            <td><a class="user-subhead"><strong class="h3">{order_item}Business Card{/}</strong></a>
-              <div><a class="user-link">{$department}</a></div>
-              <div><small> {from_department}Design{/}/ {current_department}Printing{/}/ {next_department}Discard{/}</small></div>
+            <td><strong class="h4">{$order_item}</strong>
+              <div>{$extra_info}</div>
             </td>
-            <td>
-              <div><strong>Paper Type:</strong><span class="pull-center">{sider}100 GSM{/}</span></div>
-              <div class="xepan-push"><strong>Printing Side:</strong><span class="pull-center">Both Side</span></div>
-            </td>
-            <td class="text-center">{percent}99{/}</td>
+            <td></td>
           </tr>
         </tbody>
       </table>

@@ -21,8 +21,8 @@ class page_outsourcepartiesdetails extends \xepan\base\Page{
 			$portfolio_view->setIdField('contact_id');
 			
 			$portfolio_view->setModel($osp,
-				['department','bank_name','account_type','account_no','os_country','tin_no','pan_it_no','os_address'],
-				['bank_name','account_type','account_no','os_country','tin_no','pan_it_no','os_address']
+				['department','bank_name','account_type','account_no','os_country','tin_no','pan_it_no','os_address','remark'],
+				['bank_name','account_type','account_no','os_country','tin_no','pan_it_no','os_address','remark']
 				);
 		}
 		if($osp->loaded()){

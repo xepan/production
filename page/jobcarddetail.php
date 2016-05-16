@@ -27,8 +27,43 @@ class page_jobcarddetail extends \xepan\base\Page {
 		$job_document->template->trySet('city',$customer_model['city']);
 		$job_document->template->trySet('state',$customer_model['state']);
 		$job_document->template->trySet('country',$customer_model['country']);
+		// throw new \Exception($job_model['department'], 1);
+		
+		$order_item_detail=$this->add('xepan\commerce\Model_QSP_Detail');
+		$order_item_detail->tryLoadBy('id',$job_model['order_item_id']);
 
+		$array = json_decode($order_item_detail['extra_info']?:"[]",true);
+		$cf_html = "";
+
+		foreach ($array as $department_id => &$details) {
+			$department_name = $details['department_name'];
+			$cf_list = $job_document->add('CompleteLister',null,'extra_info',['view\qsp\extrainfo']);
+			$cf_list->template->trySet('department_name',$department_name);
+			unset($details['department_name']);
+			
+			$cf_list->setSource($details);
+
+			$cf_html  .= $cf_list->getHtml();	
+		}		
+
+		$job_document->template->trySetHtml('extra_info',$cf_html);
 		$job_document->template->trySet('order_created_at',$order_model['created_at']);
+		if($job_model['parent_jobcard_id']){
+			$job_document->template->trySet('form_department',$job_model->parentJobcard()->get("department"));
+		}else{
+			$job_document->template->tryDel('from_dept_row');
+		}
+		
+		$job_document->template->trySet('current_department',$job_model['department']);
+		
+		if($job_model->nextProductionDepartment()){
+			$job_document->template->trySet('next_department',$job_model->nextProductionDepartment()->get('name'));
+		}else{
+			$job_document->template->tryDel('next_dept_row');
+		}
+
+
+
 
 	}
 }

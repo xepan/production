@@ -1,6 +1,12 @@
 .main-box.no-header.clearfix
   header.main-box-header.clearfix
-      h2(style="text-align:center;") Staus: {$status}
+    .row 
+      .col-md-4
+        span.pull-right{from_dept_row}From Department : {form_department}Design{/}{/}
+      .col-md-4
+        h2(style="text-align:center;") Staus: {$status}
+      .col-md-4
+        span.pull-right {next_dept_row} Next Department : {next_department} Discard{/}{/}
   .main-box-body.clearfix
     #invoice-companies.row
       .col-sm-4.invoice-box
@@ -41,45 +47,30 @@
               span Quantity
             th
               span Progress/Detail
+            th
+              span Completed
+            th
+              span Forwarded
+            th
+              span Dispatched
+            th
         tbody
           tr
-            td
+            td(style="vertical-align:top")
               a.user-subhead
                 strong.h4| {$order_item}
-              div {$extra_info}
-            td {quantity}
-
-  .invoice-box-total.clearfix
-    .invoice-summary.row
-      .col-md-4.col-sm-6.col-xs-12
-        .invoice-summary-item
-          h1|{$action}Approved By-
-              .xepan-push
-            div|  Approved person
-              .pull-right
-                a.user-subhead
-                  strong  {$contact}Sushil
-            div|  Approved date
-              span.pull-right {$create_date}
-      .col-md-4.col-sm-6.col-xs-12
-        .invoice-summary-item
-           h1|Department
-              .xepan-push
-            div| From Department
-              span.pull-right{form_department}Design{/}
-            div| Current Department
-              span.pull-right {current_department}printing{/}
-            div| Next Department
-              span.pull-right {next_department} Discard{/}
-      .col-md-4.col-sm-6.col-xs-12
-        .invoice-summary-item
-             h1|  JobCard Create By
-                .xepan-push
-              div|  person
-                .pull-right
-                  a.user-subhead
-                    strong  {$personname}Anshu
-              div|  Department
-                span.pull-right {$current_depatment}printing
-              div|  Create Date
-                span.pull-right {$create_date}
+              div 
+                small
+                  {$extra_info}
+            td(style="vertical-align:top") {$order_item_quantity}
+            td(style="vertical-align:top")
+              |To Received : {$toreceived}
+              br
+              |Processing : {$processing}
+            td(style="vertical-align:top")
+              {$completed}  
+            td(style="vertical-align:top")
+              {$forwarded}
+            td(style="vertical-align:top")
+              {$dispatched}
+            td(style="vertical-align:top")

@@ -208,8 +208,6 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	function receive(){
 		
 		//Mark Complete the Previous Department Jobcard if exist
-		// throw new \Exception($this['parent_jobcard_id']);
-
 		$this->add('xepan\commerce\Model_SalesOrder')
 			->load($this['order_no'])
 			->inprogress();
@@ -281,7 +279,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		
 		$next_dept = $this->nextProductionDepartment();
 		if(!$next_dept){
-			$this->add('View_Warning')->set('next department not found');			
+			$page->add('View_Warning')->set('next department not found');
 			return;
 		}
 
@@ -538,7 +536,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	        $jd = $this->createJobcardDetail("Dispatched",$form['qty_to_dispatch']);
 
 			$this->sendToDispatch($form['qty_to_dispatch'],$form['warehouse'],$jd);
-			return $form->js()->univ()->successMessage('Send To Dispatch Successfully');
+			return $form->js()->univ()->successMessage('Send To Dispatch Successfully')->closeDialog();
         }
     }	
         

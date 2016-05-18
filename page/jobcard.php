@@ -12,6 +12,7 @@ class page_jobcard extends \xepan\base\Page {
 		$this->department_id = $this->api->stickyGET('department_id');
 
 		$jobcard_model = $this->add('xepan\production\Model_Jobcard')->setOrder('id','desc');
+		$jobcard_model->add('xepan\production\Controller_SideBarStatusFilter');
 		$jobcard_model->addExpression('department_name')->set($jobcard_model->refSQL('department_id')->fieldQuery('name'));
 
 		if($this->department_id){

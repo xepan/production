@@ -5,7 +5,7 @@
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
         <th><a href="#"></a><span>Select</span></th>
-        <th><a href="#"></a><span>Jobcard No</span></th>
+        <th><a href="#"></a><span>item</span></th>
         <th class="text-right"><a href="#" class="asc"></a><span>Quantity</span></th>
         <th> </th>{/}{/}
       </thead>{/}
@@ -13,7 +13,7 @@
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{$selected}</td>
-          <td>{$jobcard_id}</td>
+          <td>{$item_name}</td>
           <td class="text-right">{$quantity}</td>
           <td style="width: 15%;">
             {$edit}

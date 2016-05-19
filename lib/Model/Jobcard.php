@@ -162,7 +162,6 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	function createFromOrderItem($oi){
 		//get first department
 			$first_department = $oi->firstProductionDepartment();
-
 			//Creating new Jobcard
 			$jobcard = $this->add('xepan\production\Model_Jobcard');
 
@@ -584,6 +583,9 @@ class Model_Jobcard extends \xepan\base\Model_Document{
     function createJobcard($app,$orderItem){
 
     	if(!in_array($orderItem['qsp_status'], ['Approved','InProgress','Completed']))
+    		return false;
+
+    	if(!count($orderItem->getProductionDepartment()))
     		return false;
 
     	$jobcard = $app->add('xepan\production\Model_Jobcard');

@@ -21,7 +21,7 @@
       .col-sm-4.invoice-box
           h4 Order No.: {order_no}{/}
           .xepan-push
-          | Create at:  {order_created_at}{/}
+          | Created at:  {order_created_at}{/}
 
       .col-sm-4.invoice-box.invoice-box-dates
           .invoice-dates
@@ -33,7 +33,7 @@
             .invoice-date.clearfix
               strong Create Date:
               span.pull-right {$created_at}
-            .clearfix
+            .invoice-date.clearfix
               strong Due Date: 
               span.pull-right {$due_date}
     .invoice-box.clearfix     

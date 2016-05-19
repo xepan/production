@@ -22,7 +22,7 @@ class page_jobcard extends \xepan\base\Page {
 			$this->title = "Jobcard / Department :: ".$jobcard_model['department_name'];
 		}
 
-		$crud=$this->add('xepan\hr\CRUD',['action_page'=>'xepan_production_jobcarddetail'],null,['view/grid/jobcard']);
+		$crud=$this->add('xepan\hr\CRUD',['allow_add'=>false],null,['view/grid/jobcard']);
 		$crud->grid->addColumn('departmental_status');
 
 		$crud->setModel($jobcard_model);

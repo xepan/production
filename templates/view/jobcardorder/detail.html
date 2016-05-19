@@ -1,0 +1,22 @@
+
+<div id="{$_name}" class="main-box no-header clearfix">{all_info}
+  <div class="invoice-box clearfix">    </div>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th><span>Item</span></th>
+          <th><span>Quantity</span></th>
+          <th><span>Completed</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="vertical-align:top"><a class="user-subhead"><strong class="h4">{$order_item}</strong>{document_id}</a></td>
+          <td style="vertical-align:top">{$order_item_quantity}</td>
+          <td style="vertical-align:top">{$completed}  </td>
+        </tr>
+      </tbody>{/}
+    </table>
+  </div>
+</div>{$Content}

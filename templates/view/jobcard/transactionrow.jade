@@ -13,7 +13,7 @@
                     span Select
                 th
                     a(href='#')
-                    span Jobcard No
+                    span item
                 th.text-right
                     a.asc(href='#')
                     span Quantity
@@ -29,11 +29,9 @@
                     td
                       | {$selected}
                     td
-                      | {$jobcard_id}
+                      | {$item_name}
                     td.text-right
                       | {$quantity}
-                    //- td
-                        //- | {action}Action Here{/}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}

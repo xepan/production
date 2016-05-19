@@ -9,6 +9,7 @@ class page_outsourceparties extends \xepan\base\Page {
 		parent::init();
 
 		$os=$this->add('xepan\production\Model_OutsourceParty');
+		$os->add('xepan\production\Controller_SideBarStatusFilter');
 
 		$crud=$this->add('xepan\hr\CRUD',['action_page'=>'xepan_production_outsourcepartiesdetails'],null,['view/outsourceparty/grid']);
 

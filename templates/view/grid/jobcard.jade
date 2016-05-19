@@ -45,10 +45,10 @@
                       {avatar}
                       img(src='img/samples/scarlet-159.png', alt='')
                       {/}
-                      a.user-link(href = '{url}?page=xepan_production_jobcarddetail&document_id={$id}{/}')
+                      a.user-link(href = '{url}?page=xepan_production_jobcarddetail&document_id={$id}{/}' title="Jobcard No. {$id} ")
                         {$id}
                       small
-                          a.user-subhead(href='{url}?page=xepan_commerce_salesorderdetail&document_id={$order_no}{/}'){order_no}order not found{/}
+                          a.user-subhead(href='{url}?page=xepan_commerce_salesorderdetail&document_id={$order_no}{/}' title="Order No. {$order_no}"){order_no}order not found{/}
                           div.user-subhead(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}'){customer_name}Not Found{/}
                     td
                         div {days_elapsed}{/} Days

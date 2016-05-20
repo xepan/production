@@ -9,7 +9,7 @@
               i.fa.fa-home
               |  From
             div
-              h4  {contact}customer name{/}
+              h4  {customer_name}customer name{/}
               .xepan-push
               p {address}{/}
               p {city}{/},&nbsp;{state}{/},&nbsp;{country}{/}
@@ -51,7 +51,7 @@
                         | Total JobCard Count: {$job_crd_cnt}
                   div
                     small
-                        | {id} {$status}
+                        | {job_id} {$status}
                 td(style="vertical-align:top") {$order_item_quantity}
                 td(style="vertical-align:top")
                   {$completed}    

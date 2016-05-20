@@ -2,26 +2,20 @@
 
 namespace xepan\production;
 
-/**
-* 
-*/
 class page_jobcardorderdetail extends \xepan\base\Page{
 	public $title="Jobcard Orders Detail";
 	function init(){
 		parent::init();
 
-		// $order_id = $this->api->stickyGET('document_id');
-		// $jobcard_m=$this->add('xepan\production\Model_Jobcard')->addCondition('order_no',$order_id);
 		$doc_id=$this->api->stickyGET('document_id');
 
 		$action = $this->api->stickyGET('action')?'view':'view';
 
-		$job_crd_dtl_mdl = $this->add('xepan\commerce\Model_QSP_Master')->tryLoadBy('id',$doc_id);
-		$job_model = $this->add('xepan\production\Model_Jobcard')->tryLoadBy('id',$job_crd_dtl_mdl['qsp_master_id']);
-		$customer_model = $this->add('xepan\base\Model_Contact')->tryLoadBy('id',$job_crd_dtl_mdl['contact_id']);
+		$job_crd_dtl_mdl = $this->add('xepan\production\Model_Jobcard')->tryLoadBy('order_no',$doc_id);
+		$customer_model = $this->add('xepan\base\Model_Contact')->tryLoadBy('id',$job_crd_dtl_mdl['customer_id']);
 	
 		$dtl_view = $this->add('xepan\hr\View_Document',null,null,['view/jobcard/orderdetail']);
-		$dtl_view->setIdField('document_id');
+		$dtl_view->setIdField('order_no');
 		$dtl_view->setModel($job_crd_dtl_mdl);
 
 		$dtl_view->template->trySet('address',$customer_model['address']);
@@ -33,7 +27,7 @@ class page_jobcardorderdetail extends \xepan\base\Page{
 		$c = $order_item_detail->tryLoadBy('id',$job_crd_dtl_mdl['order_item_id']);
 		$dtl_view->template->trySet('job_crd_cnt',$c->count()->getOne());
 
-		$dtl_view->template->trySet('job_id',$job_model['jobcard_id']);
+		$dtl_view->template->trySet('job_id',$job_crd_dtl_mdl['order_no']);
 
 		// $array = json_decode($order_item_detail['extra_info']?:"[]",true);
 		// $cf_html = "";

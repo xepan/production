@@ -7,7 +7,7 @@
         <div class="col-sm-4 invoice-box">
           <div class="invoice-icon hidden-sm"><i class="fa fa-home"></i> From</div>
           <div>
-            <h4> {contact}customer name{/}</h4>
+            <h4> {customer_name}customer name{/}</h4>
             <div class="xepan-push"></div>
             <p>{address}{/}</p>
             <p>{city}{/},&nbsp;{state}{/},&nbsp;{country}{/}</p>
@@ -40,7 +40,7 @@
               <td style="vertical-align:top"><a class="user-subhead"><strong class="h4">{$order_item}</strong></a>
                 <div> <small>{$extra_info}</small></div>
                 <div><small>Total JobCard Count: {$job_crd_cnt}</small></div>
-                <div><small>{id} {$status}</small></div>
+                <div><small>{job_id} {$status}</small></div>
               </td>
               <td style="vertical-align:top">{$order_item_quantity}</td>
               <td style="vertical-align:top">{$completed}    </td>

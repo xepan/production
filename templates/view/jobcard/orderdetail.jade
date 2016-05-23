@@ -1,0 +1,58 @@
+.col-lg-12(id="{$_name}")
+    {all_info}
+    .main-box.no-header.clearfix
+      header.main-box-header.clearfix
+      .main-box-body.clearfix
+        #invoice-companies.row
+          .col-sm-4.invoice-box
+            .invoice-icon.hidden-sm
+              i.fa.fa-home
+              |  From
+            div
+              h4  {customer_name}customer name{/}
+              .xepan-push
+              p {address}{/}
+              p {city}{/},&nbsp;{state}{/},&nbsp;{country}{/}
+          .col-sm-4.invoice-box
+          .col-sm-4.invoice-box.invoice-box-dates
+              .invoice-dates
+                .row.clearfix
+                  .col-md-6.invoice-number
+                    strong Order No.:
+                  .col-md-6.invoice-number.input-full-width
+                    span.pull-right.atk-form-row.atk-form-field(style="margin:auto;") {id}{/}
+                .invoice-date.clearfix
+                  strong Create Date:
+                  span.pull-right {created_at}{/}
+                .invoice-date.clearfix
+                  strong Due Date: 
+                  span.pull-right {$due_date}
+        .invoice-box.clearfix     
+        .table-responsive
+          table.table
+            thead
+              tr
+                th
+                  span Item
+                th
+                  span Quantity
+                th
+                  span Completed
+            tbody
+              tr
+                td(style="vertical-align:top")
+                  a.user-subhead
+                    strong.h4| {$order_item}
+                  div 
+                    small
+                      {$extra_info}
+                  div
+                    small
+                        | Total JobCard Count: {$job_crd_cnt}
+                  div
+                    small
+                        | {job_id} {$status}
+                td(style="vertical-align:top") {$order_item_quantity}
+                td(style="vertical-align:top")
+                  {$completed}    
+        {/}

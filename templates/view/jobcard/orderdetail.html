@@ -1,0 +1,53 @@
+
+<div id="{$_name}" class="col-lg-12">{all_info}
+  <div class="main-box no-header clearfix">
+    <header class="main-box-header clearfix"></header>
+    <div class="main-box-body clearfix">
+      <div id="invoice-companies" class="row">
+        <div class="col-sm-4 invoice-box">
+          <div class="invoice-icon hidden-sm"><i class="fa fa-home"></i> From</div>
+          <div>
+            <h4> {customer_name}customer name{/}</h4>
+            <div class="xepan-push"></div>
+            <p>{address}{/}</p>
+            <p>{city}{/},&nbsp;{state}{/},&nbsp;{country}{/}</p>
+          </div>
+        </div>
+        <div class="col-sm-4 invoice-box"></div>
+        <div class="col-sm-4 invoice-box invoice-box-dates">
+          <div class="invoice-dates">
+            <div class="row clearfix">
+              <div class="col-md-6 invoice-number"><strong>Order No.:</strong></div>
+              <div class="col-md-6 invoice-number input-full-width"><span style="margin:auto;" class="pull-right atk-form-row atk-form-field">{id}{/}</span></div>
+            </div>
+            <div class="invoice-date clearfix"><strong>Create Date:</strong><span class="pull-right">{created_at}{/}</span></div>
+            <div class="invoice-date clearfix"><strong>Due Date: </strong><span class="pull-right">{$due_date}</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="invoice-box clearfix">    </div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th><span>Item</span></th>
+              <th><span>Quantity</span></th>
+              <th><span>Completed</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="vertical-align:top"><a class="user-subhead"><strong class="h4">{$order_item}</strong></a>
+                <div> <small>{$extra_info}</small></div>
+                <div><small>Total JobCard Count: {$job_crd_cnt}</small></div>
+                <div><small>{job_id} {$status}</small></div>
+              </td>
+              <td style="vertical-align:top">{$order_item_quantity}</td>
+              <td style="vertical-align:top">{$completed}    </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>{/}
+    </div>
+  </div>
+</div>

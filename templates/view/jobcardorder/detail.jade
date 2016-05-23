@@ -1,0 +1,24 @@
+.main-box.no-header.clearfix(id="{$_name}")
+  {all_info}
+  .invoice-box.clearfix     
+  .table-responsive
+    table.table
+      thead
+        tr
+          th
+            span Item
+          th
+            span Quantity
+          th
+            span Completed
+      tbody
+        tr
+          td(style="vertical-align:top")
+            a.user-subhead
+              strong.h4| {$order_item}
+              {document_id}
+          td(style="vertical-align:top") {$order_item_quantity}
+          td(style="vertical-align:top")
+            {$completed}  
+      {/}
+{$Content}

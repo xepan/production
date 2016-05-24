@@ -438,8 +438,9 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 				// echo $oi['quantity'] .' > '. $oi['total_dispacthed'].'<br/>';
 				if ($oi['quantity'] > $oi['total_dispacthed'] ) return false;
 			}else{
-
-				$last_dept = array_pop(array_keys(json_decode($oi['extra_info'],true)));
+				$io_json=json_decode($oi['extra_info'],true);
+				$io_key=array_keys($io_json);
+				$last_dept = array_pop($io_key);
 				$order_items2 = $this->add('xepan\commerce\Model_QSP_Detail');
 
 				$order_items2->addExpression('completed_in_last_department')->set(function($m,$q)use($last_dept){
@@ -542,7 +543,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
     function sendToDispatch($qty,$warehouse_id,$jobcard_detail){
     	
     	$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($warehouse_id);
-		$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$this['customer_id'],'Dispatch');
+		$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$this['customer_id'],'Store_DispatchRequest');
 		$transaction->addItem($this['order_item_id'],$qty,$jobcard_detail->id,null,null,'ToReceived');
 
 		if($this['status'] != "Completed")

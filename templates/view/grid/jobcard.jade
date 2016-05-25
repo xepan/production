@@ -7,27 +7,27 @@
                 span(class="form-control pull-left")|{$quick_search}
                     i(class="fa fa-search search-icon")
     {/Pannel}
-    .main-box-body.clearfix.table
-        table.table.user-list.table-hover(style="width:100%")
+    .main-box-body.clearfix.table-responsive
+        table.table.user-list.table-hover.footable.toggle-circle-filled(style="width:100%")
             {header}
             thead.xepan-hover-hand
                 {cols}{col}
                 th(id="{$order_no_sortid}")
                   span Jobcard {$order_no_sort} 
-                th(id="{$days_elapsed_sortid}")
+                th(id="{$days_elapsed_sortid}" data-hide="phone")
                   span Duration {$name_sort} 
                 th(id="{$order_item_quantity_sortid}")
                   span Quantity {$order_item_quantity_sort} 
-                th(id="{$toreceived_sortid}")
+                th(id="{$toreceived_sortid}" data-hide="phone")
                   span toreceived {$toreceived_sort} 
-                th(id="{$processing_sortid}")
+                th(id="{$processing_sortid}" data-hide="phone")
                   span Received/ processing {$processing_sort} 
-                th(id="{$completed_sortid}")
+                th(id="{$completed_sortid}" data-hide="phone")
                   span Completed {$completed_sort} 
-                th(id="{$forwarded_sortid}")
+                th(id="{$forwarded_sortid}" data-hide="phone")
                     span forwarded {$forwarded_sort}
                     | Received \ Pending  
-                th(id="{$completed_sortid}")
+                th(id="{$completed_sortid}" data-hide="phone")
                     span dispatched {$dispatched_sort}
                     | Received \ Pending  
                 th(id="{$name_sortid}")

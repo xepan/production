@@ -7,35 +7,38 @@
     </div>
   </header>{/Pannel}
   <div class="main-box-body clearfix table">
-    <table style="width:100%" class="table user-list table-hover">{header}
-      <thead class="xepan-hover-hand">{cols}{col}
-        <th id="{$document_no_number_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$document_no_number_sort}</span></th>
-        <th><span>Created</span></th>
-        <th><span>Amount</span></th>
-        <th></th>
-        <th> </th>{/}{/}
-      </thead>{/}
-      {$subheader}
-      <tbody>{rows}{row}
-        <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="{url}?page=xepan_production_jobcardorderdetail&amp;document_id={$document_no}{/}" class="user-link">{$document_no}</a><a href="?page=xepan_commerce_customerdetail&amp;contact_id={$contact_id}"><span class="user-subhead">{$contact}</span></a></td>
-          <td>
-            <div class="row"><span>{$created_at}</span></div>
-            <div class="row"><span>{$days_left} days left</span></div>
-          </td>
-          <td>{$net_amount_self_currency}
-            <div class="user-subhead">{$net_amount_client_currency}</div>
-          </td>
-          <td style="width: 15%;">
-            {$edit}
-            {$delete}
-          </td>{/}
-        </tr>{/}{/}
-        {not_found}
+    <div class="table-responsive">
+      <table style="width:100%" class="table user-list table-hover footable toggle-circle-filled">{header}
+        <thead class="xepan-hover-hand">{cols}{col}
+          <th id="{$document_no_number_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$document_no_number_sort}</span></th>
+          <th><span>Created</span></th>
+          <th data-hide="phone"><span>Amount</span></th>
+          <th></th>
+          <th> </th>{/}{/}
+        </thead>{/}
+        {$subheader}
+        <tbody>{rows}{row}
+          <tr data-id="{$id}" class="{$odd_even}">{cols}
+            <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}{$document_no}
+              <div class="xepan-push-small"></div><a href="?page=xepan_commerce_customerdetail&amp;contact_id={$contact_id}"><span class="user-subhead">{$contact}</span></a>
+            </td>
+            <td>
+              <div class="row"><span>{$created_at}</span></div>
+              <div class="row"><span>{$days_left} days left</span></div>
+            </td>
+            <td>{$net_amount_self_currency}
+              <div class="user-subhead">{$net_amount_client_currency}</div>
+            </td>
+            <td style="width: 15%;">
+              {$edit}
+              {$delete}
+            </td>{/}
+          </tr>{/}{/}
+        </tbody>{not_found}
         <div class="row">
           <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
         </div>{/}
-      </tbody>{totals}
+      </table>{totals}
       <tfoot>
         <tr class="totals">
           {cols}{col}
@@ -45,6 +48,6 @@
           {/}{/}
         </tr>
       </tfoot>{/}
-    </table>{$Paginator}
+    </div>{$Paginator}
   </div>
 </div>

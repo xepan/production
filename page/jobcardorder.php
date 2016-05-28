@@ -21,7 +21,7 @@ class page_jobcardorder extends \xepan\base\Page{
 			$order_id = $p->api->stickyGET('sales_order_clicked');
 			$jobcard_m=$p->add('xepan\production\Model_Jobcard')->addCondition('order_no',$order_id);
 				
-			$crud=$p->add('xepan\hr\CRUD',null,null,['view/grid/jobcard']);
+			$crud=$p->add('xepan\hr\CRUD',['allow_add'=>false],null,['view/grid/jobcard']);
 			$crud->setModel($jobcard_m);
 		});
 

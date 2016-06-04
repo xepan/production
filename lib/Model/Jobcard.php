@@ -164,6 +164,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			$first_department = $oi->firstProductionDepartment();
 			if(!$first_department or !$first_department->loaded())
 				return;
+				
 			//Creating new Jobcard
 			$jobcard = $this->add('xepan\production\Model_Jobcard');
 

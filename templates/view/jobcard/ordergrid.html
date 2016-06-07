@@ -13,7 +13,6 @@
           <th id="{$document_no_number_sortid}"><span>Name </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$document_no_number_sort}</span></th>
           <th><span>Created</span></th>
           <th data-hide="phone"><span>Amount</span></th>
-          <th></th>
           <th> </th>{/}{/}
         </thead>{/}
         {$subheader}
@@ -28,10 +27,6 @@
             </td>
             <td>{$net_amount_self_currency}
               <div class="user-subhead">{$net_amount_client_currency}</div>
-            </td>
-            <td style="width: 15%;">
-              {$edit}
-              {$delete}
             </td>{/}
           </tr>{/}{/}
         </tbody>{not_found}

@@ -13,7 +13,7 @@ class Initiator extends \Controller_Addon {
 		// if($this->app->is_admin){
 			$m = $this->app->top_menu->addMenu('Production');
 			$m->addItem(['OutsourceParty','icon'=>'fa fa-user'],'xepan_production_outsourceparties');
-			$m->addItem(['Jobcard Orders','icon'=>'fa fa-user'],'xepan_production_jobcardorder');
+			$m->addItem(['Jobcard Orders','icon'=>'fa fa-pencil-square-o'],'xepan_production_jobcardorder');
 			
 			$departments = $this->add('xepan\hr\Model_Department')->setOrder('production_level','asc');
 

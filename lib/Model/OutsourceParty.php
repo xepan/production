@@ -34,7 +34,6 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 
 		$this->hasMany('xepan/commerce/Model_QSP_Master',null,null,'QSPMaster');
 		$this->addCondition('type','OutsourceParty');
-		
 		//TODO Extra Organization Specific Fields other Contacts
 		$this->getElement('status')->defaultValue('Active');
 		// $this->addHook('beforeSave',$this);		

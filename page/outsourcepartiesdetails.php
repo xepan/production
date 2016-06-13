@@ -12,7 +12,18 @@ class page_outsourcepartiesdetails extends \xepan\base\Page{
 
 		$action = $this->api->stickyGET('action')?:'view';
 		$osp = $this->add('xepan\production\Model_OutsourceParty')->tryLoadBy('id',$this->api->stickyGET('contact_id'));
-		$contact_view = $this->add('xepan\base\View_Contact',['acl'=>'xepan\production\Model_OutsourceParty'],'contact_view');
+		
+		if($action=="add"){
+
+			$contact_view = $this->add('xepan\base\View_Contact',['acl'=>'xepan\production\Model_OutsourceParty','view_document_class'=>'xepan\hr\View_Document'],'contact_view_full_width');
+			$contact_view->document_view->effective_template->del('im_and_events_andrelation');
+			$contact_view->document_view->effective_template->del('email_and_phone');
+			$this->template->del('details');
+			$contact_view->setStyle(['width'=>'50%','margin'=>'auto']);
+		}else{
+			$contact_view = $this->add('xepan\base\View_Contact',['acl'=>'xepan\production\Model_OutsourceParty','view_document_class'=>'xepan\hr\View_Document'],'contact_view');
+		}	
+
 		$contact_view->setModel($osp);
 
 		if($osp->loaded()){

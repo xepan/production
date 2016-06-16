@@ -17,6 +17,7 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 		
 		$this->addHook('beforeDelete',[$this,'checkExistingRelatedTransactionRow']);
 
+		$this->addExpression('item_name')->set($this->ref('jobcard_id')->fieldQuery('order_item'));
 	}
 
 	function checkExistingRelatedTransactionRow(){

@@ -19,6 +19,10 @@ class page_outsourceparties extends \xepan\base\Page {
 
 		$crud->add('xepan\base\Controller_Avatar');
 
+		if(!$crud->isEditing()){
+			$crud->grid->js('click')->_selector('.do-view-frame')->univ()->frameURL('Outsource Parties Details',[$this->api->url('xepan_production_outsourcepartiesdetails'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-id]')->data('id')]);
+		}
+
 		
 	}
 }

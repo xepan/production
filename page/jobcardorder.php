@@ -29,5 +29,6 @@ class page_jobcardorder extends \xepan\base\Page{
 			$g->current_row_html[$field] = '<a href="#na" onclick="javascript:'.$this->js()->univ()->frameURL('Sale Order Detail', $this->api->url($this->vp->getURL(),array('sales_order_clicked'=>$g->model->id))).'">'. $g->current_row[$field]. "</a>";
 		});
 		$g->addFormatter('document_no','document_no');
+		$g->js('click')->_selector('.do-view-frame')->univ()->frameURL('Jobcard Order Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-contact-id]')->data('contact-id')]);
 	}
 }

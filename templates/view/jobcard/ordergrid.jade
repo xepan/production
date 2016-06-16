@@ -36,7 +36,8 @@
                             //- a.user-link(href='{url}?page=xepan_production_jobcardorderdetail&document_id={$document_no}{/}')
                             {$document_no}
                             .xepan-push-small
-                            a(href='?page=xepan_commerce_customerdetail&contact_id={$contact_id}')
+                            //- a(href='?page=xepan_commerce_customerdetail&contact_id={$contact_id}')
+                            a.do-view-frame(href='#' data-contact-id="{$contact_id}")
                                 span.user-subhead{$contact}
                         td
                             .row

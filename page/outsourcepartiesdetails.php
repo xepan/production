@@ -40,8 +40,10 @@ class page_outsourcepartiesdetails extends \xepan\base\Page{
 				$orderstatus_view = $this->add('xepan\hr\View_Document',['action'=> $action],'orderstatus',['view/outsourceparty/orderstatus']);
 				
 				$orderstatus_view->setIdField('contact_id');
-				
-			}
+			$orderstatus_view->js('click')->_selector('.do-view-outsourceparties-jobcard')->univ()->frameURL('Jobcard Details',[$this->api->url('xepan_production_jobcarddetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-id]')->data('id')]);
+			$orderstatus_view->js('click')->_selector('.do-view-outsourceparties-order')->univ()->frameURL('Order Details',[$this->api->url('xepan_commerce_salesorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-id]')->data('id')]);
+			$orderstatus_view->js('click')->_selector('.do-view-outsourceparties-customer-details')->univ()->frameURL('Customer Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-id]')->data('id')]);
+		}	
 		if($osp->loaded()){
 			$activity_view = $this->add('xepan\base\Grid',null,'activity',['view/activity/activity-grid']);
 

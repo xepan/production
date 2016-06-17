@@ -19,9 +19,10 @@
         </thead>
         <tbody>
           <tr>
-            <td style="width: 30%;">{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="{url}?page=xepan_production_jobcarddetail&amp;document_id={$id}{/}" class="user-link">{$id}</a><small><a href="{url}?page=xepan_commerce_salesorderdetail&amp;document_id={$id{/}" class="user-link"> 
-                  <div class="user-subhead">{document_no}1111{/}</div></a></small><a href="{url}?page=xepan_commerce_customerdetail&amp;contact_id={$id}{/}" class="user-link">
-                <h6>{customer_id}Xavoctacnocratspvt.ltd{/}</h6></a></td>
+            <td style="width: 30%;">{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="#" data-id="{$id}" class="user-link do-view-outsourceparties-order">{$id}</a><small><a href="{url}?page=xepan_commerce_salesorderdetail&amp;document_id={$id{/}" class="user-link do-view-outsourceparties-order"> 
+                  <div class="user-subhead">{document_no}1111{/}</div></a></small><a href="#" data-id="{$id}" class="user-link do-view-outsourceparties-customer-details">
+                <h6>{customer_id}Xavoctacnocratspvt.ltd{/}</h6></a>
+            </td>
             <td>
               <div class="row"><span>{$created_date} </span></div>
               <div class="row">       <span>{days_elapsed} days elapsed{/}</span></div>

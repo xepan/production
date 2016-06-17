@@ -18,8 +18,7 @@ class Initiator extends \Controller_Addon {
 			$departments = $this->add('xepan\hr\Model_Department')->setOrder('production_level','asc');
 
 			foreach ($departments as $department) {
-				// $m->addItem($department['name'],'xepan_production_jobcard&department_id='.$department->id);
-				$m->addItem(([$department['name'],'icon'=>'fa fa-empire']),'xepan_production_jobcard&department_id='.$department->id);
+				$m->addItem(([$department['name'],'icon'=>'fa fa-empire']),$this->app->url('xepan_production_jobcard',['department_id'=>$department->id]),['department_id']);
 			}
 
 			$this->app->addHook('sales_order_approved',['xepan\production\Model_Jobcard','createFromOrder']);

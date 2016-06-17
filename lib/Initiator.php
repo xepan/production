@@ -36,6 +36,18 @@ class Initiator extends \Controller_Addon {
 			$search_outsourceparty = $this->add('xepan\production\Model_OutsourceParty');
         	$this->app->addHook('quick_searched',[$search_outsourceparty,'quickSearch']);
 
+        	$this->app->status_icon["xepan\production\Model_Jobcard"] = 
+        							[
+        								'All'=>' fa fa-globe',
+        								'ToReceived'=>"fa fa-circle text-success",
+        								'Received'=>'fa fa-circle text-danger',
+        								'Processing'=>' fa fa-spinner',
+        								'Forwarded'=>'fa-mail-forward',
+        								'Completed'=>' fa fa-check text-success',
+        								'Cancelled'=>' fa fa-ban text-danger',
+        								'Rejected'=>' fa fa-times text-danger'
+        							];
+			
 			return $this;
 
 		// }

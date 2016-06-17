@@ -163,6 +163,7 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
  					'title'=>$data['name'],
  					'relevency'=>$data['Relevance'],
  					'url'=>$this->app->url('xepan_production_outsourcepartiesdetails',['contact_id'=>$data['id']])->getURL(),
+ 					'type_status'=>$data['type'].' '.'['.$data['status'].']',
  				];
  			}
 		}
@@ -179,6 +180,7 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
  					'title'=> '#'.$data['id'].' ['.$data['order_no'].'] ['.$data['customer_name'].']',
  					'relevency'=>$data['Relevance'],
  					'url'=>$this->app->url('xepan_production_jobcardorder')->getURL(),
+ 					'type_status'=>$data['type'].' '.'['.$data['status'].']',
  				];
  			}
 		}

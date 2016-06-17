@@ -18,6 +18,11 @@ class page_outsourcepartiesdetails extends \xepan\base\Page{
 			$contact_view = $this->add('xepan\base\View_Contact',['acl'=>'xepan\production\Model_OutsourceParty','view_document_class'=>'xepan\hr\View_Document'],'contact_view_full_width');
 			$contact_view->document_view->effective_template->del('im_and_events_andrelation');
 			$contact_view->document_view->effective_template->del('email_and_phone');
+			$contact_view->document_view->effective_template->tryDel('online_status_wrapper');
+			$contact_view->document_view->effective_template->del('avatar_wrapper');
+			$contact_view->document_view->effective_template->tryDel('contact_since_wrapper');
+			$contact_view->document_view->effective_template->tryDel('contact_type_wrapper');
+			$contact_view->document_view->effective_template->tryDel('send_email_sms_wrapper');
 			$this->template->del('details');
 			$contact_view->setStyle(['width'=>'50%','margin'=>'auto']);
 		}else{
@@ -40,8 +45,10 @@ class page_outsourcepartiesdetails extends \xepan\base\Page{
 				$orderstatus_view = $this->add('xepan\hr\View_Document',['action'=> $action],'orderstatus',['view/outsourceparty/orderstatus']);
 				
 				$orderstatus_view->setIdField('contact_id');
-				
-			}
+			$orderstatus_view->js('click')->_selector('.do-view-outsourceparties-jobcard')->univ()->frameURL('Jobcard Details',[$this->api->url('xepan_production_jobcarddetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-id]')->data('id')]);
+			$orderstatus_view->js('click')->_selector('.do-view-outsourceparties-order')->univ()->frameURL('Order Details',[$this->api->url('xepan_commerce_salesorderdetail'),'document_id'=>$this->js()->_selectorThis()->closest('[data-id]')->data('id')]);
+			$orderstatus_view->js('click')->_selector('.do-view-outsourceparties-customer-details')->univ()->frameURL('Customer Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-id]')->data('id')]);
+		}	
 		if($osp->loaded()){
 			$activity_view = $this->add('xepan\base\Grid',null,'activity',['view/activity/activity-grid']);
 

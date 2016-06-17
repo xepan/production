@@ -26,7 +26,7 @@ class page_jobcard extends \xepan\base\Page {
 		$crud->grid->addColumn('departmental_status');
 
 		$crud->setModel($jobcard_model);
-		$crud->grid->addQuickSearch(['name']);
+		$crud->grid->addQuickSearch(['customer_name','order_no','order_item_name']);
 
 
 		$crud->grid->addMethod('format_department123',function($grid,$field){

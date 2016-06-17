@@ -151,28 +151,36 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 		$this['search_string'] = $search_string;
 	}
 
-	function quickSearch($app,$search_string,$view){		
+	function quickSearch($app,$search_string,&$result_array){		
 		$this->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" IN NATURAL LANGUAGE MODE)');
 		$this->addCondition('Relevance','>',0);
  		$this->setOrder('Relevance','Desc');
+ 			
  		if($this->count()->getOne()){
- 			$oc = $view->add('Completelister',null,null,['view/grid/quicksearch-production-grid']);
- 			$oc->setModel($this);
-    		$oc->addHook('formatRow',function($g){
-    			$g->current_row_html['url'] = $this->app->url('xepan_production_outsourcepartiesdetails',['contact_id'=>$g->model->id]);	
-     		});	
+ 			foreach ($this->getRows() as $data) {	 				 				
+ 				$result_array[] = [
+ 					'image'=>null,
+ 					'title'=>$data['name'],
+ 					'relevency'=>$data['Relevance'],
+ 					'url'=>$this->app->url('xepan_production_outsourcepartiesdetails',['contact_id'=>$data['id']])->getURL(),
+ 				];
+ 			}
 		}
 
 		$jobcard = $this->add('xepan\production\Model_Jobcard');
 		$jobcard->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" IN NATURAL LANGUAGE MODE)');
 		$jobcard->addCondition('Relevance','>',0);
  		$jobcard->setOrder('Relevance','Desc');
+ 		
  		if($jobcard->count()->getOne()){
- 			$jc = $view->add('Completelister',null,null,['view/grid/quicksearch-production-grid']);
- 			$jc->setModel($jobcard);
-    		$jc->addHook('formatRow',function($g){
-    			$g->current_row_html['url'] = $this->app->url('xepan_production_jobcardorder');	
-     		});	
+ 			foreach ($jobcard->getRows() as $data) {	 				 				
+ 				$result_array[] = [
+ 					'image'=>null,
+ 					'title'=> '#'.$data['id'].' ['.$data['order_no'].'] ['.$data['customer_name'].']',
+ 					'relevency'=>$data['Relevance'],
+ 					'url'=>$this->app->url('xepan_production_jobcardorder')->getURL(),
+ 				];
+ 			}
 		}
 	}
 }

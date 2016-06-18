@@ -151,8 +151,8 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 		$this['search_string'] = $search_string;
 	}
 
-	function quickSearch($app,$search_string,&$result_array){		
-		$this->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" IN NATURAL LANGUAGE MODE)');
+	function quickSearch($app,$search_string,&$result_array,$relevency_mode){		
+		$this->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" '.$relevency_mode.')');
 		$this->addCondition('Relevance','>',0);
  		$this->setOrder('Relevance','Desc');
  			
@@ -169,7 +169,7 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 		}
 
 		$jobcard = $this->add('xepan\production\Model_Jobcard');
-		$jobcard->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" IN NATURAL LANGUAGE MODE)');
+		$jobcard->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" '.$relevency_mode.')');
 		$jobcard->addCondition('Relevance','>',0);
  		$jobcard->setOrder('Relevance','Desc');
  		

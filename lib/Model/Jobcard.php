@@ -32,7 +32,6 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$job_j->hasMany('xepan\commerce\Store_Transaction','jobcard_id');
 
 		$this->addCondition('type','Jobcard');
-		$this->addCondition('created_by_id',$this->app->employee->id);
 		$this->addHook('beforeDelete',[$this,'checkExistingRelatedTransaction']);
 
 		$this->addExpression('order_no')->set(function($m,$q){

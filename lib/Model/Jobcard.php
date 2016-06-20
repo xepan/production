@@ -185,12 +185,16 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$grid_jobcard_row = $page->add('xepan\hr\Grid',['action_page'=>'xepan_production_jobcard'],null,['view/jobcard/transactionrow']);
 
 		$grid_jobcard_row->addSelectable($jobcard_field);
+		$jobcard_model = $this;
+		// if(!$this->loaded())
+		// 	$jobcard_model = $this->add('xepan\production\Model_Jobcard')->load($_GET[$this->model->name]);
 
-		$jobcard = $this->ref('xepan\production\Jobcard_Detail');
-		$jobcard->addCondition('status','ToReceived');
+		
+		$jobcard = $this->add('xepan\production\Model_Jobcard_Detail')
+					->addCondition('jobcard_id',$jobcard_model->id)
+					->addCondition('status','ToReceived');
 
 		$grid_jobcard_row->setModel($jobcard);
-
 		if($form->isSubmitted()){
 			
 			//doing jobcard detail/row received

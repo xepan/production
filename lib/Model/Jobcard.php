@@ -186,7 +186,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 		$grid_jobcard_row->addSelectable($jobcard_field);
 
-		$jobcard = $this->ref('xepan\production\Jobcard_Detail');
+		$jobcard = $this->refSQL('xepan\production\Jobcard_Detail');
 		$jobcard->addCondition('status','ToReceived');
 
 		$grid_jobcard_row->setModel($jobcard);
@@ -232,7 +232,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		if(!$this['parent_jobcard_id'])
 			throw new \Exception("Parent Jobcard not found ", 1);
 
-		return $this->ref('parent_jobcard_id');
+		return $this->refSQL('parent_jobcard_id');
 			
 	}
 

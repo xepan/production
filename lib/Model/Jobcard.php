@@ -190,7 +190,6 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$jobcard->addCondition('status','ToReceived');
 
 		$grid_jobcard_row->setModel($jobcard);
-
 		if($form->isSubmitted()){
 			
 			//doing jobcard detail/row received

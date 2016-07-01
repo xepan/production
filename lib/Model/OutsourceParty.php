@@ -28,7 +28,6 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 		$osp_j->addField('os_state');
 		$osp_j->addField('os_country');
 		$osp_j->addField('os_pincode');
-		$osp_j->addField('remark')->type('text');
 		
 		$osp_j->hasMany('xepan\production\Jobcard','outsourceparty_id');
 

@@ -186,7 +186,8 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 		$grid_jobcard_row->addSelectable($jobcard_field);
 
-		$jobcard = $this->refSQL('xepan\production\Jobcard_Detail');
+		$jobcard = $this->add('xepan\production\Model_Jobcard_Detail');
+		$jobcard->addCondition('jobcard_id',$this->id);
 		$jobcard->addCondition('status','ToReceived');
 
 		$grid_jobcard_row->setModel($jobcard);

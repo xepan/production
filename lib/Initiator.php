@@ -21,7 +21,8 @@ class Initiator extends \Controller_Addon {
 				$m->addItem(([$department['name'],'icon'=>'fa fa-empire']),$this->app->url('xepan_production_jobcard',['department_id'=>$department->id]),['department_id']);
 			}
 
-			$this->app->addHook('sales_order_approved',['xepan\production\Model_Jobcard','createFromOrder']);
+			$jobcard = $this->add('xepan\production\Model_Jobcard');
+			$this->app->addHook('sales_order_approved',[$jobcard,'createFromOrder']);
 
 			//Order Item Modification related Jobcard
 			$jobcard_m=$this->add('xepan\production\Model_Jobcard');

@@ -78,7 +78,7 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 	function ledger(){
 		$account = $this->add('xepan\accounts\Model_Ledger')
 				->addCondition('contact_id',$this->id)
-				->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->loadSundryDebtor()->fieldQuery('id'));
+				->addCondition('group_id',$this->add('xepan\accounts\Model_Group')->load("SundryDebtor")->get('id'));
 		$account->tryLoadAny();
 		if(!$account->loaded()){
 			$account['name'] = $this['name'];

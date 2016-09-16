@@ -48,6 +48,7 @@
                           a.user-subhead(href='{url}?page=xepan_commerce_salesorderdetail&document_id={$order_no}{/}' title="Order No. {$order_no}"){order_no}order not found{/}
                             span [ {$order_item} ]
                           div.user-subhead(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}'){customer_name}Not Found{/}
+                      p(title="Jobcard Department").label.label-primary {$department}                          
                     td
                         div {days_elapsed}{/} Days
                         small created at: {$created_at}

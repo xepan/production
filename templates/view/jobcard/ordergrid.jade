@@ -18,8 +18,6 @@
                         span(style= "cursor:pointer; cursor: hand; max-width:600px;"){$document_no_number_sort}
                     th
                         span Created
-                    th(data-hide="phone")
-                        span Amount
                     th  
                     {/}{/}
                 {/}
@@ -44,11 +42,6 @@
                                 span {$created_at}
                             .row
                                 span {$days_left} days left
-
-                        td
-                            | {$net_amount_self_currency}
-                            div.user-subhead{$net_amount_client_currency}
-                        
                         {/}
                     {/}{/}
                 {not_found}

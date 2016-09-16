@@ -208,6 +208,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 	function receive(){
 		
+		
 		//Mark Complete the Previous Department Jobcard if exist
 		$this->add('xepan\commerce\Model_SalesOrder')
 			->load($this['order_no'])
@@ -232,7 +233,9 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		if(!$this['parent_jobcard_id'])
 			throw new \Exception("Parent Jobcard not found ", 1);
 
-		return $this->refSQL('parent_jobcard_id');
+		return $this->add('xepan\production\Model_Jobcard')->load($this['parent_jobcard_id']);		
+
+		// return $this->refSQL('parent_jobcard_id');
 			
 	}
 
@@ -338,7 +341,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 		$order_item = $this->orderItem();
         $this->app->employee
-            ->addActivity("Jobcard ".$this['id']. "forwarded", $this->id /* Related Document ID*/,$order_item['customer'] /*Related Contact ID*/)
+            ->addActivity("Jobcard ".$this['id']. " forwarded", $this->id /* Related Document ID*/,$order_item['customer'] /*Related Contact ID*/)
             ->notifyWhoCan('reject,convert,open etc Actions perform on','Converted Any Status');
 
         $this->unload();

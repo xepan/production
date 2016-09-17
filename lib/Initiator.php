@@ -12,6 +12,7 @@ class Initiator extends \Controller_Addon {
 		$this->addLocation(array('template'=>'templates'));
 		// if($this->app->is_admin){
 			$m = $this->app->top_menu->addMenu('Production');
+			$m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_production_dashboard');
 			$m->addItem(['OutsourceParty','icon'=>'fa fa-user'],'xepan_production_outsourceparties');
 			$m->addItem(['Jobcard Orders','icon'=>'fa fa-pencil-square-o'],'xepan_production_jobcardorder');
 			

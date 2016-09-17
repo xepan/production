@@ -177,6 +177,8 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 	}
 
 	function page_receive($page){
+		$dep=$this->add('xepan\hr\Model_Department')->load($this['department_id']);
+
 		$form = $page->add('Form');
 		$jobcard_field = $form->addField('hidden','jobcard_row');
 		$form->addSubmit('Receive Jobcard');
@@ -191,6 +193,12 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$jobcard->addCondition('status','ToReceived');
 
 		$grid_jobcard_row->setModel($jobcard);
+		
+		if($dep['is_outsourced']){
+			$outsource_partyfield=$form->addField('DropDown','outsource_party');
+			$outsource_partyfield->setEmptyText('Please Select');
+			$outsource_partyfield->setModel('xepan\production\OutsourceParty');
+		}
 		if($form->isSubmitted()){
 			
 			//doing jobcard detail/row received
@@ -199,14 +207,14 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 				$jobcard_row_model->received();
 			}
 			// calling jobcard receive function 
-			if($this->receive())
+			if($this->receive($form['outsource_party']))
 				return $form->js()->univ()->successMessage('Received Successfully')->closeDialog();
 			else
 				return $form->js()->univ()->errorMessage('Not Received');
 		}
 	}
 
-	function receive(){
+	function receive($outsource_party=null){
 		
 		//Mark Complete the Previous Department Jobcard if exist
 		$this->add('xepan\commerce\Model_SalesOrder')
@@ -220,7 +228,9 @@ class Model_Jobcard extends \xepan\base\Model_Document{
         $this->app->employee
 	            ->addActivity("Jobcard Received", $this->id /* Related Document ID*/, $this['customer'] /*Related Contact ID*/)
 	            ->notifyWhoCan('reject,receive,forward','Jobcard Received');
-
+	    if($outsource_party){
+		$this['outsourceparty_id']=$outsource_party;
+	    }        
 		$this['status']='Received';
 		$this->saveAndUnload();
 		return true;

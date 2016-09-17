@@ -20,6 +20,7 @@ class Initiator extends \Controller_Addon {
 			foreach ($departments as $department) {
 				$m->addItem(([$department['name'],'icon'=>'fa fa-empire']),$this->app->url('xepan_production_jobcard',['department_id'=>$department->id]),['department_id']);
 			}
+			$m->addItem(['Report','icon'=>'fa fa-pencil-square-o'],'xepan_production_report');
 
 			$jobcard = $this->add('xepan\production\Model_Jobcard');
 			$this->app->addHook('sales_order_approved',[$jobcard,'createFromOrder']);

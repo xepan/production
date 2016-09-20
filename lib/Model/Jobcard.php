@@ -384,10 +384,10 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 								->addCondition('item_id',$this['item_id'])
 								->tryLoadAny();
 
-		if(!$dept_assos->loaded()){
-			$page->add('View_Error')->set('Please define item\'s association with this department first');
-			return;
-		}
+		// if(!$dept_assos->loaded()){
+		// 	$page->add('View_Error')->set('Please define item\'s association with this department first');
+		// 	return;
+		// }
 
 		$model_item_consumption = $this->add('xepan\commerce\Model_Item_Department_Consumption')
 											->addCondition('item_department_association_id',$dept_assos->id)->tryLoadAny();
@@ -422,7 +422,8 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		
 		$form->addField('line','total_qty_to_complete')->setAttr('readonly','true')->set($qty_to_complete);
 		$qty_to_com_field = $form->addField('Number','qty_to_complete')->set($qty_to_complete);
-		$form->addField('DropDown','warehouse')->setModel('xepan\commerce\Store_Warehouse');
+		$warehouse = $form->addField('DropDown','warehouse')->setEmptyText('Please Select');
+		$warehouse->setModel('xepan\commerce\Store_Warehouse');
 		
 		foreach ($model_item_consumption as $m) {
 	      	$item_field = $form->addField('xepan\commerce\Form_Field_Item','item_'.$m->id);

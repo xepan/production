@@ -376,14 +376,85 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 		$form = $page->add('Form');
 		$form->addField('line','total_qty_to_complete')->setAttr('readonly','true')->set($qty_to_complete);
-		$form->addField('Number','qty_to_complete')->set($qty_to_complete);
+		$qty_to_com_field = $form->addField('Number','qty_to_complete')->set($qty_to_complete);
+		$form->addField('DropDown','warehouse')->setModel('xepan\commerce\Store_Warehouse');
+		
+
+
+		$dept_assos = $page->add('xepan\commerce\Model_Item_Department_Association')
+								->addCondition('department_id',$this['department_id'])
+								->addCondition('item_id',$this['item_id'])
+								->tryLoadAny();
+
+		if(!$dept_assos->loaded()){
+			$page->add('View_Error')->set('Please define item\'s association with this department first');
+			return;
+		}
+
+		$model_item_consumption = $this->add('xepan\commerce\Model_Item_Department_Consumption')
+											->addCondition('item_department_association_id',$dept_assos->id)->tryLoadAny();
+		
+		foreach ($model_item_consumption as $m) {
+	      	$item_field = $form->addField('xepan\commerce\Form_Field_Item','item_'.$m->id);
+			$item_field->setModel('xepan\commerce\Item');
+			$col = $form->add('Columns')->addClass('row');
+	      	$col_left = $col->addColumn(8)->addClass('col-md-8');
+			$item_field->custom_field_element = 'extra_info_'.$m->id;
+			$item_field->custom_field_btn_class = 'extra_info_'.$m->id;
+			$item_field->is_mandatory = false;
+
+			$col_right = $col->addColumn('4')->addClass('col-md-4');
+			$col_right->add('Button')->set('Extra Info')->addClass('btn btn-primary extra_info_'.$m->id );
+
+
+			$extra_info = $form->addField('text','extra_info_'.$m->id);
+			// $extra_info = $form->addField('hidden','hidden_extra_info_'.$m->id);
+			$qty_field = $col_left->addField('line','qty_'.$m->id);
+			
+		}					
+		// $no_of_item=5
+		// foreach ($no_of_item as  $value) {
+			
+		// }
+		for ($m=1; $m < 6; $m++) { 
+			$item_field = $form->addField('xepan\commerce\Form_Field_Item','item_x_'.$m);
+			$item_field->setModel('xepan\commerce\Item');
+			$col = $form->add('Columns')->addClass('row');
+	      	$col_left = $col->addColumn(8)->addClass('col-md-8');
+			$item_field->custom_field_element = 'extra_info_x_'.$m;
+			$item_field->custom_field_btn_class = 'extra_info_x_'.$m;
+			$item_field->is_mandatory = false;
+
+			$col_right = $col->addColumn('4')->addClass('col-md-4');
+			$col_right->add('Button')->set('Extra Info')->addClass('btn btn-primary extra_info_x_'.$m );
+
+
+			$extra_info = $form->addField('text','extra_info_x_'.$m);
+			// $extra_info = $form->addField('hidden','hidden_extra_info_x_'.$m);
+			$qty_field = $col_left->addField('line','qty_x_'.$m);
+		}
+		
 		$form->addSubmit('mark completed');
 
+
 		if($form->isSubmitted()){
+			
 			if($form['qty_to_complete'] > $form['total_qty_to_complete'])
 				$form->displayError('qty_to_complete',"qty cannot be more than ".$form['total_qty_to_complete']);
 			// create One New Transaction row of Completed in self jobcard
 			$jd = $this->createJobcardDetail("Completed",$form['qty_to_complete']);
+			// exit;
+			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
+			$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$warehouse->id,'Production_Consumption');
+			
+			foreach ($model_item_consumption as $m) {
+				$transaction->addItem($this['order_item_id'],$form['item_'.$m->id],$form['qty_'.$m->id],$jd->id,$form['extra_info_'.$m->id],'ToReceived');
+			}
+
+			for ($m=1; $m < 6; $m++) { 
+				$transaction->addItem($this['order_item_id'],$form['item_x_'.$m],$form['qty_x_'.$m],$jd->id,$form['extra_info_x_'.$m],'ToReceived');
+			}
+			
 			$this->complete();
 			return $form->js()->univ()->successMessage($form['qty_to_complete']." Completed")->closeDialog();
 		}
@@ -448,12 +519,15 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 		foreach ($order_items->getRows() as $oi) {
 			if($oi['is_dispatchable']){
-				// echo "is Dispatchable ";
-				// echo $oi['item']. '<pre>';
-				// echo $oi['quantity'] .' > '. $oi['total_dispacthed'].'<br/>';
 				if ($oi['quantity'] > $oi['total_dispacthed'] ) return false;
 			}else{
+
 				$io_json=json_decode($oi['extra_info'],true);
+				
+				if(!count($io_json)){
+					return true;
+				}
+
 				$io_key=array_keys($io_json);
 				$last_dept = array_pop($io_key);
 				$order_items2 = $this->add('xepan\commerce\Model_QSP_Detail');
@@ -559,7 +633,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
     	
     	$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($warehouse_id);
 		$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$this['customer_id'],'Store_DispatchRequest');
-		$transaction->addItem($this['order_item_id'],$qty,$jobcard_detail->id,null,null,'ToReceived');
+		$transaction->addItem($this['order_item_id'],$this['item_id'],$qty,$jobcard_detail->id,null,'ToReceived');
 
 		if($this['status'] != "Completed")
 			$this['status']='Processing';

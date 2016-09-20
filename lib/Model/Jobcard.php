@@ -408,7 +408,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 
 			$extra_info = $form->addField('text','extra_info_'.$m->id);
-			$extra_info = $form->addField('hidden','hidden_extra_info_'.$m->id);
+			// $extra_info = $form->addField('hidden','hidden_extra_info_'.$m->id);
 			$qty_field = $col_left->addField('line','qty_'.$m->id);
 			
 		}					
@@ -416,22 +416,22 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		// foreach ($no_of_item as  $value) {
 			
 		// }
-		for ($m=1; $m = 5; $m++) { 
-			$item_field = $form->addField('xepan\commerce\Form_Field_Item','item_x'.$m);
+		for ($m=1; $m < 6; $m++) { 
+			$item_field = $form->addField('xepan\commerce\Form_Field_Item','item_x_'.$m);
 			$item_field->setModel('xepan\commerce\Item');
 			$col = $form->add('Columns')->addClass('row');
 	      	$col_left = $col->addColumn(8)->addClass('col-md-8');
-			$item_field->custom_field_element = 'extra_info_x'.$m;
-			$item_field->custom_field_btn_class = 'extra_info_x'.$m;
+			$item_field->custom_field_element = 'extra_info_x_'.$m;
+			$item_field->custom_field_btn_class = 'extra_info_x_'.$m;
 			$item_field->is_mandatory = false;
 
 			$col_right = $col->addColumn('4')->addClass('col-md-4');
-			$col_right->add('Button')->set('Extra Info')->addClass('btn btn-primary extra_info_x'.$m );
+			$col_right->add('Button')->set('Extra Info')->addClass('btn btn-primary extra_info_x_'.$m );
 
 
-			$extra_info = $form->addField('text','extra_info_x'.$m);
-			$extra_info = $form->addField('hidden','hidden_extra_info_x'.$m);
-			$qty_field = $col_left->addField('line','qty_x'.$m);
+			$extra_info = $form->addField('text','extra_info_x_'.$m);
+			// $extra_info = $form->addField('hidden','hidden_extra_info_x_'.$m);
+			$qty_field = $col_left->addField('line','qty_x_'.$m);
 		}
 		
 		$form->addSubmit('mark completed');
@@ -451,8 +451,8 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 				$transaction->addItem($this['order_item_id'],$form['item_'.$m->id],$form['qty_'.$m->id],$jd->id,$form['extra_info_'.$m->id],'ToReceived');
 			}
 
-			for ($m=1; $m = 5; $m++) { 
-				$transaction->addItem($this['order_item_id'],$form['item_x'.$m],$form['qty_x'.$m],$jd->id,$form['extra_info_x'.$m],'ToReceived');
+			for ($m=1; $m < 6; $m++) { 
+				$transaction->addItem($this['order_item_id'],$form['item_x_'.$m],$form['qty_x_'.$m],$jd->id,$form['extra_info_x_'.$m],'ToReceived');
 			}
 			
 			$this->complete();

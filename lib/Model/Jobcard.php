@@ -170,6 +170,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			$jobcard['department_id'] = $first_department->id;
 			$jobcard['order_item_id'] = $oi->id;
 			$jobcard['status'] = "ToReceived";
+			// $jobcard['outsourceparty_id'] = $this['outsource_party_id'];
 			$new_jobcard = $jobcard->save();
 
 			//Create New Jobcard Detail /Transactin Row Entry
@@ -375,12 +376,9 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$qty_to_complete = $this['processing'];
 
 		$form = $page->add('Form');
-		$form->addField('line','total_qty_to_complete')->setAttr('readonly','true')->set($qty_to_complete);
-		$qty_to_com_field = $form->addField('Number','qty_to_complete')->set($qty_to_complete);
-		$form->addField('DropDown','warehouse')->setModel('xepan\commerce\Store_Warehouse');
+		$template = $this->add('GiTemplate');
+        $template->loadTemplate('view/form/jobcard-complete-form');
 		
-
-
 		$dept_assos = $page->add('xepan\commerce\Model_Item_Department_Association')
 								->addCondition('department_id',$this['department_id'])
 								->addCondition('item_id',$this['item_id'])
@@ -393,48 +391,72 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 
 		$model_item_consumption = $this->add('xepan\commerce\Model_Item_Department_Consumption')
 											->addCondition('item_department_association_id',$dept_assos->id)->tryLoadAny();
+
+        $template->trySetHTML('total_qty_to_complete','{$total_qty_to_complete}');
+        $template->trySetHTML('qty_to_complete','{$qty_to_complete}');
+        $template->trySetHTML('warehouse','{$warehouse}');
+		
+		foreach ($model_item_consumption as $m) {
+			$item_template = $this->add('GiTemplate');
+            $item_template->loadTemplate('view/form/jobcard-complete-items-row');
+            $item_template->trySetHTML('item','{$item_'.$m->id.'}');
+            $item_template->trySetHTML('qty','{$qty_'.$m->id.'}');
+            $item_template->trySetHTML('extra_info','{$extra_info_'.$m->id.'}');
+            $item_template->trySetHTML('view_extra_info','{$view_extra_info_'.$m->id.'}');
+			$template->appendHTML('items',$item_template->render());
+		}
+		
+		for ($m=1; $m < 6; $m++) { 
+			$item_template = $this->add('GiTemplate');
+            $item_template->loadTemplate('view/form/jobcard-complete-items-row');
+            $item_template->trySetHTML('item','{$item_x_'.$m.'}');
+            $item_template->trySetHTML('qty','{$qty_x_'.$m.'}');
+            $item_template->trySetHTML('extra_info','{$extra_info_x_'.$m.'}');
+            $item_template->trySetHTML('view_extra_info','{$view_extra_info_'.$m.'}');
+
+			$template->appendHTML('items',$item_template->render());
+		}
+		
+		$template->loadTemplateFromString($template->render());
+        $form->setLayout($template);
+		
+		$form->addField('line','total_qty_to_complete')->setAttr('readonly','true')->set($qty_to_complete);
+		$qty_to_com_field = $form->addField('Number','qty_to_complete')->set($qty_to_complete);
+		$form->addField('DropDown','warehouse')->setModel('xepan\commerce\Store_Warehouse');
 		
 		foreach ($model_item_consumption as $m) {
 	      	$item_field = $form->addField('xepan\commerce\Form_Field_Item','item_'.$m->id);
 			$item_field->setModel('xepan\commerce\Item');
-			$col = $form->add('Columns')->addClass('row');
-	      	$col_left = $col->addColumn(8)->addClass('col-md-8');
+			// $col = $form->add('Columns')->addClass('row');
+	      	// $col_left = $col->addColumn(8)->addClass('col-md-8');
 			$item_field->custom_field_element = 'extra_info_'.$m->id;
 			$item_field->custom_field_btn_class = 'extra_info_'.$m->id;
 			$item_field->is_mandatory = false;
 
-			$col_right = $col->addColumn('4')->addClass('col-md-4');
-			$col_right->add('Button')->set('Extra Info')->addClass('btn btn-primary extra_info_'.$m->id );
-
-
+			// $col_right = $col->addColumn('4')->addClass('col-md-4');
+			$form->layout->add('View',null,'view_extra_info_'.$m->id)->set('Extra Info')->addClass('btn btn-primary extra_info_'.$m->id );
 			$extra_info = $form->addField('text','extra_info_'.$m->id);
-			// $extra_info = $form->addField('hidden','hidden_extra_info_'.$m->id);
-			$qty_field = $col_left->addField('line','qty_'.$m->id);
-			
-		}					
-		// $no_of_item=5
-		// foreach ($no_of_item as  $value) {
-			
-		// }
+			$qty_field = $form->addField('line','qty_'.$m->id,'Quantity');
+
+            					
+		}
+
 		for ($m=1; $m < 6; $m++) { 
 			$item_field = $form->addField('xepan\commerce\Form_Field_Item','item_x_'.$m);
 			$item_field->setModel('xepan\commerce\Item');
-			$col = $form->add('Columns')->addClass('row');
-	      	$col_left = $col->addColumn(8)->addClass('col-md-8');
+			// $col = $form->add('Columns')->addClass('row');
+	  //     	$col_left = $col->addColumn(8)->addClass('col-md-8');
 			$item_field->custom_field_element = 'extra_info_x_'.$m;
 			$item_field->custom_field_btn_class = 'extra_info_x_'.$m;
 			$item_field->is_mandatory = false;
-
-			$col_right = $col->addColumn('4')->addClass('col-md-4');
-			$col_right->add('Button')->set('Extra Info')->addClass('btn btn-primary extra_info_x_'.$m );
-
-
+			// $col_right = $col->addColumn('4')->addClass('col-md-4');
 			$extra_info = $form->addField('text','extra_info_x_'.$m);
-			// $extra_info = $form->addField('hidden','hidden_extra_info_x_'.$m);
-			$qty_field = $col_left->addField('line','qty_x_'.$m);
+			$qty_field = $form->addField('line','qty_x_'.$m,'Quantity');
+			$form->layout->add('View',null,'view_extra_info_'.$m)->set('Extra Info')->addClass('btn btn-primary extra_info_x_'.$m );
 		}
+
 		
-		$form->addSubmit('mark completed');
+		$form->addSubmit('mark completed')->addClass('btn btn-primary');
 
 
 		if($form->isSubmitted()){

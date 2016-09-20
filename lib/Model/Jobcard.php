@@ -428,29 +428,21 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		foreach ($model_item_consumption as $m) {
 	      	$item_field = $form->addField('xepan\commerce\Form_Field_Item','item_'.$m->id);
 			$item_field->setModel('xepan\commerce\Item');
-			// $col = $form->add('Columns')->addClass('row');
-	      	// $col_left = $col->addColumn(8)->addClass('col-md-8');
 			$item_field->custom_field_element = 'extra_info_'.$m->id;
 			$item_field->custom_field_btn_class = 'extra_info_'.$m->id;
 			$item_field->is_mandatory = false;
 
-			// $col_right = $col->addColumn('4')->addClass('col-md-4');
 			$form->layout->add('View',null,'view_extra_info_'.$m->id)->set('Extra Info')->addClass('btn btn-primary extra_info_'.$m->id );
 			$extra_info = $form->addField('text','extra_info_'.$m->id);
 			$qty_field = $form->addField('line','qty_'.$m->id,'Quantity');
-
-            					
 		}
 
 		for ($m=1; $m < 6; $m++) { 
 			$item_field = $form->addField('xepan\commerce\Form_Field_Item','item_x_'.$m);
 			$item_field->setModel('xepan\commerce\Item');
-			// $col = $form->add('Columns')->addClass('row');
-	  //     	$col_left = $col->addColumn(8)->addClass('col-md-8');
 			$item_field->custom_field_element = 'extra_info_x_'.$m;
 			$item_field->custom_field_btn_class = 'extra_info_x_'.$m;
 			$item_field->is_mandatory = false;
-			// $col_right = $col->addColumn('4')->addClass('col-md-4');
 			$extra_info = $form->addField('text','extra_info_x_'.$m);
 			$qty_field = $form->addField('line','qty_x_'.$m,'Quantity');
 			$form->layout->add('View',null,'view_extra_info_'.$m)->set('Extra Info')->addClass('btn btn-primary extra_info_x_'.$m );
@@ -459,16 +451,15 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		
 		$form->addSubmit('mark completed')->addClass('btn btn-primary');
 
-
 		if($form->isSubmitted()){
 			
 			if($form['qty_to_complete'] > $form['total_qty_to_complete'])
 				$form->displayError('qty_to_complete',"qty cannot be more than ".$form['total_qty_to_complete']);
 			// create One New Transaction row of Completed in self jobcard
 			$jd = $this->createJobcardDetail("Completed",$form['qty_to_complete']);
-			// exit;
+			
 			if($form['warehouse']){
-				
+
 				$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
 				$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$warehouse->id,'Production_Consumption');
 				

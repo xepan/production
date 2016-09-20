@@ -467,15 +467,18 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 			// create One New Transaction row of Completed in self jobcard
 			$jd = $this->createJobcardDetail("Completed",$form['qty_to_complete']);
 			// exit;
-			$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
-			$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$warehouse->id,'Production_Consumption');
-			
-			foreach ($model_item_consumption as $m) {
-				$transaction->addItem($this['order_item_id'],$form['item_'.$m->id],$form['qty_'.$m->id],$jd->id,$form['extra_info_'.$m->id],'ToReceived');
-			}
+			if($form['warehouse']){
+				
+				$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
+				$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$warehouse->id,'Production_Consumption');
+				
+				foreach ($model_item_consumption as $m) {
+					$transaction->addItem($this['order_item_id'],$form['item_'.$m->id],$form['qty_'.$m->id],$jd->id,$form['extra_info_'.$m->id],'ToReceived');
+				}
 
-			for ($m=1; $m < 6; $m++) { 
-				$transaction->addItem($this['order_item_id'],$form['item_x_'.$m],$form['qty_x_'.$m],$jd->id,$form['extra_info_x_'.$m],'ToReceived');
+				for ($m=1; $m < 6; $m++) { 
+					$transaction->addItem($this['order_item_id'],$form['item_x_'.$m],$form['qty_x_'.$m],$jd->id,$form['extra_info_x_'.$m],'ToReceived');
+				}
 			}
 			
 			$this->complete();

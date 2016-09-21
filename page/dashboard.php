@@ -36,6 +36,5 @@ class page_dashboard extends \xepan\base\Page{
 			$g->current_row_html['bg'] = $color[$this->count].'-bg';	
 			$this->count++;			
 		});
-
 	}
 } 

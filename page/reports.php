@@ -34,16 +34,30 @@ class page_reports extends \xepan\base\Page{
 				$jobcard_model->addCondition('status',$jobcard_status);
 	
 			$grid = $p->add('xepan\hr\Grid');
-			$grid->setModel($jobcard_model,['department', 'order_item', 'order_no', 'customer_name', 'order_item_quantity','order_document_id']);
+			$grid->setModel($jobcard_model,['department', 'order_item', 'order_no', 'customer_name','order_item_quantity','order_document_id','customer_id']);
 			
 			$grid->addMethod('init_order_no',function($g,$f){
-				$g->js('click')->_selector('.order_no')->univ()->frameURL('Order',[$this->app->url('xepan_commerce_salesorderdetail'),'document_id'=>$g->js()->_selectorThis()->data('order_document_id')]);
+				$g->js('click')->_selector('.order_no')->univ()->frameURL('ORDER',[$this->app->url('xepan_commerce_salesorderdetail'),'document_id'=>$g->js()->_selectorThis()->data('order_document_id')]);
 			});
 
 			$grid->addMethod('format_order_no',function($g,$f){
 				$g->current_row_html[$f]='<div class="order_no" style="cursor:pointer" data-order_document_id="'.$g->model['order_document_id'].'">'.$g->model['order_no'].'</div>';
 			});
+
 			$grid->addFormatter('order_no','order_no');
+
+			$grid->addMethod('init_customer_name',function($g,$f){
+				$g->js('click')->_selector('.customer_detail')->univ()->frameURL('CUSTOMER',[$this->app->url('xepan_commerce_customerdetail'),'contact_id'=>$g->js()->_selectorThis()->data('contact_id')]);
+			});
+
+			$grid->addMethod('format_customer_name',function($g,$f){												
+				$g->current_row_html[$f]='<div class="customer_detail" style="cursor:pointer" data-contact_id="'.$g->model['customer_id'].'">'.$g->model['customer_name'].'</div>';
+			});
+
+			$grid->addFormatter('customer_name','customer_name');
+
+			$grid->removeColumn('customer_id');
+			$grid->removeColumn('order_document_id');
 
 		});
 			

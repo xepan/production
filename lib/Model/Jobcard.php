@@ -464,6 +464,11 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 				$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$warehouse->id,'Production_Consumption');
 				
 				foreach ($model_item_consumption as $m) {
+					if($form['item_'.$m->id]){
+						if(!$form['qty_'.$m->id]){
+							$form->displayError('qty_'.$m->id,'Quantity Must not be Empty');
+						}
+					}
 					$transaction->addItem($this['order_item_id'],$form['item_'.$m->id],$form['qty_'.$m->id],$jd->id,$form['extra_info_'.$m->id],'ToReceived');
 				}
 

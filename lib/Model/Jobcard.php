@@ -35,7 +35,19 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		$this->addHook('beforeDelete',[$this,'checkExistingRelatedTransaction']);
 
 		$this->addExpression('order_no')->set(function($m,$q){
-			return $m->refSQL('order_item_id')->fieldQuery('qsp_master_id');
+			$sales_order =  $m->add('xepan/commerce/Model_SalesOrder',['table_alias'=>'order_no']);
+			$order_detail_j = $sales_order->join('qsp_detail.qsp_master_id');
+			$order_detail_j->addField('details_id','id');
+			$sales_order->addCondition('details_id',$m->getElement('order_item_id'));
+			return $sales_order->fieldQuery('document_no');
+		})->sortable(true);
+
+		$this->addExpression('order_document_id')->set(function($m,$q){
+			$sales_order =  $m->add('xepan/commerce/Model_SalesOrder',['table_alias'=>'order_no']);
+			$order_detail_j = $sales_order->join('qsp_detail.qsp_master_id');
+			$order_detail_j->addField('details_id','id');
+			$sales_order->addCondition('details_id',$m->getElement('order_item_id'));
+			return $sales_order->fieldQuery('id');
 		})->sortable(true);
 
 		$this->addExpression('customer_id')->set(function($m,$q){

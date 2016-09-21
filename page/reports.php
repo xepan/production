@@ -34,7 +34,17 @@ class page_reports extends \xepan\base\Page{
 				$jobcard_model->addCondition('status',$jobcard_status);
 	
 			$grid = $p->add('xepan\hr\Grid');
-			$grid->setModel($jobcard_model,['department', 'order_item', 'order_no', 'customer_name', 'order_item_quantity','']);
+			$grid->setModel($jobcard_model,['department', 'order_item', 'order_no', 'customer_name', 'order_item_quantity','order_document_id']);
+			
+			$grid->addMethod('init_order_no',function($g,$f){
+				$g->js('click')->_selector('.order_no')->univ()->frameURL('Order',[$this->app->url('xepan_commerce_salesorderdetail'),'document_id'=>$g->js()->_selectorThis()->data('order_document_id')]);
+			});
+
+			$grid->addMethod('format_order_no',function($g,$f){
+				$g->current_row_html[$f]='<div class="order_no" style="cursor:pointer" data-order_document_id="'.$g->model['order_document_id'].'">'.$g->model['order_no'].'</div>';
+			});
+			$grid->addFormatter('order_no','order_no');
+
 		});
 			
 		$grid->on('click','.xepan-production-report',function($js,$data)use($vp, $from_date, $to_date){

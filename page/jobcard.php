@@ -25,6 +25,7 @@ class page_jobcard extends \xepan\base\Page {
 		$crud=$this->add('xepan\hr\CRUD',null,null,['view/grid/jobcard']);
 		$crud->grid->addColumn('departmental_status');
 
+
 		$crud->setModel($jobcard_model);
 		$crud->grid->addQuickSearch(['customer_name','order_no','order_item_name']);
 
@@ -36,8 +37,8 @@ class page_jobcard extends \xepan\base\Page {
 				$v->setModel($m);
 				$grid->current_row_html[$field] = $v->getHtml();
 			});
+		$crud->grid->addPaginator($ipp=30);
 		//$crud->grid->addFormatter('departmental_status','departmental_status');
-
 	}
 	
 }

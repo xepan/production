@@ -232,7 +232,8 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		
 		//Mark Complete the Previous Department Jobcard if exist
 		$this->add('xepan\commerce\Model_SalesOrder')
-			->load($this['order_no'])
+			->addCondition('document_no',$this['order_no'])
+			->tryLoadAny()
 			->inprogress();
 
 		if($this['parent_jobcard_id'] and $this->parentJobcard()->checkAllDetailComplete()){
@@ -505,7 +506,7 @@ class Model_Jobcard extends \xepan\base\Model_Document{
 		//check for the mark order complete
 		if($this['status'] == "Completed"){
 
-			$sale_order_model = $this->add('xepan\commerce\Model_SalesOrder')->load($this['order_no']);
+			$sale_order_model = $this->add('xepan\commerce\Model_SalesOrder')->addCondition('document_no',$this['order_no'])->tryLoadAny();
 			if($is_complete = $this->checkOrderComplete($sale_order_model)){
 				$sale_order_model->complete();
 			}

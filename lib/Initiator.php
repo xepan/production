@@ -63,18 +63,18 @@ class Initiator extends \Controller_Addon {
 
 	function resetDB(){
 		// Clear DB
-		if(!isset($this->app->old_epan)) $this->app->old_epan = $this->app->epan;
-        if(!isset($this->app->new_epan)) $this->app->new_epan = $this->app->epan;
+		// if(!isset($this->app->old_epan)) $this->app->old_epan = $this->app->epan;
+  //       if(!isset($this->app->new_epan)) $this->app->new_epan = $this->app->epan;
                 
-        $this->app->epan=$this->app->old_epan;
-        $truncate_models = ['Jobcard_Detail','Jobcard','OutsourceParty'];
-        foreach ($truncate_models as $t) {
-            $m=$this->add('xepan\production\Model_'.$t);
-            foreach ($m as $mt) {
-                $mt->delete();
-            }
-        }
+  //       $this->app->epan=$this->app->old_epan;
+  //       $truncate_models = ['Jobcard_Detail','Jobcard','OutsourceParty'];
+  //       foreach ($truncate_models as $t) {
+  //           $m=$this->add('xepan\production\Model_'.$t);
+  //           foreach ($m as $mt) {
+  //               $mt->delete();
+  //           }
+  //       }
         
-        $this->app->epan=$this->app->new_epan;
+  //       $this->app->epan=$this->app->new_epan;
 	}
 }

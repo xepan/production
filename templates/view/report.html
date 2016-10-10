@@ -1,0 +1,52 @@
+
+<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
+  <header class="main-box-header clearfix atk-actions  {$class} ">
+    <div style="100%" class="filter-block">
+      <div class="pull-right">{$grid_buttons} </div>
+      <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></span></div>
+    </div>
+  </header>{/Pannel}
+  <div class="main-box-body clearfix table">
+    <table style="width:100%" class="table user-list table-hover">{header}
+      <thead>{cols}{col}
+        <th><span>Department</span></th>
+        <th><span>Total Jobcards</span></th>
+        <th><span>To Received</span></th>
+        <th><span>Received</span></th>
+        <th><span>Processing</span></th>
+        <th><span>Forwarded</span></th>
+        <th><span>Completed</span></th>
+        <th><span>Cancelled</span></th>
+        <th><span>Rejected</span></th>
+        <th> </th>{/}{/}
+      </thead>{/}
+      {$subheader}
+      <tbody>{rows}{row}
+        <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td><span>{$name}</span></td>
+          <td><span data-status="all" data-id="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="xepan-production-report">{$total_jobcards}</span></td>
+          <td><span data-status="ToReceived" data-id="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="xepan-production-report">{$ToReceived}</span></td>
+          <td><span data-status="Received" data-id="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="xepan-production-report">{$Received}</span></td>
+          <td><span data-status="Processing" data-id="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="xepan-production-report">{$Processing}</span></td>
+          <td><span data-status="Forwarded" data-id="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="xepan-production-report">{$Forwarded}</span></td>
+          <td><span data-status="Completed" data-id="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="xepan-production-report">{$Completed}</span></td>
+          <td><span data-status="Cancelled" data-id="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="xepan-production-report">{$Cancelled}</span></td>
+          <td><span data-status="Rejected" data-id="{$id}" style="cursor:pointer; cursor: hand; max-width:600px;" class="xepan-production-report">{$Rejected}</span></td>{/}
+        </tr>{/}{/}
+        {not_found}
+        <div class="row">
+          <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+        </div>{/}
+      </tbody>{totals}
+      <tfoot>
+        <tr class="totals">
+          {cols}{col}
+          <td {$tdparam}>
+          {$content}
+          </td>
+          {/}{/}
+        </tr>
+      </tfoot>{/}
+    </table>{$Paginator}
+  </div>
+</div>

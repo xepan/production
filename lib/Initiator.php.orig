@@ -21,7 +21,11 @@ class Initiator extends \Controller_Addon {
 			foreach ($departments as $department) {
 				$m->addItem(([$department['name'],'icon'=>'fa fa-empire']),$this->app->url('xepan_production_jobcard',['department_id'=>$department->id]),['department_id']);
 			}
+<<<<<<< HEAD
 			$m->addItem(['Reports','icon'=>'fa fa-cog'],'xepan_production_reports');
+=======
+			$m->addItem(['Report','icon'=>'fa fa-pencil-square-o'],'xepan_production_report');
+>>>>>>> a3cf5fad1c8527d7d86c25abaa757c2c595641c3
 
 			$jobcard = $this->add('xepan\production\Model_Jobcard');
 			$this->app->addHook('sales_order_approved',[$jobcard,'createFromOrder']);
@@ -63,18 +67,18 @@ class Initiator extends \Controller_Addon {
 
 	function resetDB(){
 		// Clear DB
-		// if(!isset($this->app->old_epan)) $this->app->old_epan = $this->app->epan;
-  //       if(!isset($this->app->new_epan)) $this->app->new_epan = $this->app->epan;
+		if(!isset($this->app->old_epan)) $this->app->old_epan = $this->app->epan;
+        if(!isset($this->app->new_epan)) $this->app->new_epan = $this->app->epan;
                 
-  //       $this->app->epan=$this->app->old_epan;
-  //       $truncate_models = ['Jobcard_Detail','Jobcard','OutsourceParty'];
-  //       foreach ($truncate_models as $t) {
-  //           $m=$this->add('xepan\production\Model_'.$t);
-  //           foreach ($m as $mt) {
-  //               $mt->delete();
-  //           }
-  //       }
+        $this->app->epan=$this->app->old_epan;
+        $truncate_models = ['Jobcard_Detail','Jobcard','OutsourceParty'];
+        foreach ($truncate_models as $t) {
+            $m=$this->add('xepan\production\Model_'.$t);
+            foreach ($m as $mt) {
+                $mt->delete();
+            }
+        }
         
-  //       $this->app->epan=$this->app->new_epan;
+        $this->app->epan=$this->app->new_epan;
 	}
 }

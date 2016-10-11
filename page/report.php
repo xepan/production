@@ -27,7 +27,7 @@ class page_report extends \xepan\base\Page{
 			$jobcard_m->addCondition('id',-1);
 		}
 		$grid->setModel($jobcard_m);//,['department','outsourceparty','order_item','order_no','customer_name','order_item_quantity']);
-
+		$grid->addQuickSearch(['department']);
 		if($form->isSubmitted()){
 			$grid->js()->reload(
 									[

@@ -2,7 +2,7 @@
 
 namespace xepan\production;
 
-class Model_Jobcard extends \xepan\base\Model_Document{
+class Model_Jobcard extends \xepan\hr\Model_Document{
 	public $status=['ToReceived','Received','Processing','Forwarded','Completed','Cancelled','Rejected'];
 
 	public $actions=[

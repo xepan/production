@@ -219,6 +219,9 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 				$jobcard_row_model = $this->add('xepan\production\Model_Jobcard_Detail')->load($transaction_row_id);
 				$jobcard_row_model->received();
 			}
+			$this->app->employee
+			->addActivity("Jobcard No : ".$this->id." Successfully Received By Department : '".$this['department']."'", $this->id/* Related Document ID*/, $this['contact_id'] /*Related Contact ID*/,null,null,"xepan_production_jobcarddetail&document_id=".$this->id."")
+			->notifyWhoCan('processing,complete,cancel','Received');
 			// calling jobcard receive function 
 			if($this->receive($form['outsource_party']))
 				return $form->js()->univ()->successMessage('Received Successfully')->closeDialog();
@@ -240,9 +243,6 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			$this->parentJobcard()->complete();
 		}
 
-        $this->app->employee
-	            ->addActivity("Jobcard Received", $this->id /* Related Document ID*/, $this['customer'] /*Related Contact ID*/)
-	            ->notifyWhoCan('reject,receive,forward','Jobcard Received');
 	    if($outsource_party){
 		$this['outsourceparty_id']=$outsource_party;
 	    }        

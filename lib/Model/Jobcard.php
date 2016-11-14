@@ -189,6 +189,77 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			$new_jobcard->createJobcardDetail("ToReceived",$oi['quantity']);
 	}
 
+	function generatePDF($action ='return'){
+
+		if(!in_array($action, ['return','dump']))
+			throw $this->exception('Please provide action as result or dump');
+
+		$pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		// set document information
+		$pdf->SetCreator(PDF_CREATOR);
+		$pdf->SetAuthor('xEpan ERP');
+		$pdf->SetTitle($this['type']. ' '. $this['id']);
+		$pdf->SetSubject($this['type']. ' '. $this['id']);
+		$pdf->SetKeywords($this['type']. ' '. $this['id']);
+
+		// set default monospaced font
+		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+		// set font
+		$pdf->SetFont('dejavusans', '', 10);
+		// add a page
+		$pdf->AddPage();
+		
+		$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
+		[
+			'fields'=>[
+						'subject'=>'Line',
+						'body'=>'xepan\base\RichText',
+						'master'=>'xepan\base\RichText',
+
+						],
+				'config_key'=>'PRODUCTION_JOBCARD_SYSTEM_CONFIG',
+				'application'=>'production'
+		]);
+		$config_m->tryLoadAny();
+		
+		$jobcard_config = $config_m['master'];
+		$jobcard_layout = $this->add('GiTemplate');
+		$jobcard_layout->loadTemplateFromString($jobcard_config);	
+		
+
+		$new = $this->add('xepan\production\Model_Jobcard');
+		$new->load($this->id);
+		$view = $this->app->add('View',null,null,$jobcard_layout);
+		$view->setModel($new);
+
+		// $order_item_detail=$this->add('xepan\commerce\Model_QSP_Detail');
+		// $order_item_detail->tryLoadBy('id',$new['order_item_id']);
+
+		// $array = json_decode($order_item_detail['extra_info']?:"[]",true);
+		
+		// $view = $this->add('View')->set("Production Jobcard Received View TODO");
+		$html = $view->getHTML();
+		// echo "<pre>";
+		// print_r($html);
+		// echo "</pre>";
+		// output the HTML content
+		$pdf->writeHTML($html, false, false, true, false, '');
+		// set default form properties
+		$pdf->setFormDefaultProp(array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 200), 'strokeColor'=>array(255, 128, 128)));
+		// reset pointer to the last page
+		$pdf->lastPage();
+		//Close and output PDF document
+		switch ($action) {
+			case 'return':
+				return $pdf->Output(null, 'S');
+				break;
+			case 'dump':
+				return $pdf->Output(null, 'I');
+				exit;
+			break;
+		}
+	}
+
 	function page_receive($page){
 		$dep=$this->add('xepan\hr\Model_Department')->load($this['department_id']);
 		$grid_jobcard_row = $page->add('xepan\hr\Grid',['action_page'=>'xepan_production_jobcard'],null,['view/jobcard/transactionrow']);
@@ -224,6 +295,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 				'fields'=>[
 							'subject'=>'Line',
 							'body'=>'xepan\base\RichText',
+							'master'=>'xepan\base\RichText',
 							],
 					'config_key'=>'PRODUCTION_JOBCARD_SYSTEM_CONFIG',
 					'application'=>'production'
@@ -247,7 +319,6 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 
 			$form->addField('line','subject')->set($subject->render());
 			$form->addField('xepan\base\RichText','message')->set($temp->render());
-			$form->addSubmit('Receive Jobcard');
 
 			$notify_to->js(true)->univ()->bindConditionalShow([
 				''=>[],
@@ -257,13 +328,9 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			$outsource_partyfield->js('change',$email_to_field->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$email_to_field->name]),'outsource_id'=>$outsource_partyfield->js()->val()]));
 		}
 			
-		$mail = $this->add('xepan\communication\Model_Communication_Email');
+		$form->addSubmit('Receive Jobcard');
 		if($form->isSubmitted()){
-			// if(!$form['jobcard_row']){
-			// 	$form->displayError('jobcard_row','Please Select Receiveable Item');
-			// }
-
-			if($form['notify_via_email']){
+			// if($form['notify_via_email']){
 				if(!$form['outsource_party'])
 					$form->displayError('outsource_party','OutsourceParty is Required');
 				if(!$form['email_to'])
@@ -273,19 +340,34 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 				if(!$form['message'])
 					$form->displayError('message','Message is Required');
 
-				$support_email = $this->add('xepan\communication\Model_Communication_EmailSetting')->tryLoadAny();
-				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+				$communication = $this->add('xepan\communication\Model_Communication_Abstract_Email');					
+				$communication->getElement('status')->defaultValue('Draft');
+				$communication['direction']='Out';
+
+				$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting')->tryLoadAny();
+				$communication->setfrom($email_setting['from_email'],$email_setting['from_name']);
+				$communication->addCondition('communication_type','Email');
 					
 				$to_emails=explode(',', trim($form['email_to']));
 				foreach ($to_emails as $to_mail) {
-					$mail->addTo($to_mail);
+					$communication->addTo($to_mail);
 				}
+				$communication->setSubject($form['subject']);
+				$communication->setBody($form['message']);
+				$communication['to_id']=$this['outsourceparty_id'];
+				$communication->save();
 
-				$mail->setSubject($form['subject']);
-				$mail->setBody($form['message']);
-				$mail['to_id']=$this['outsourceparty_id'];
-				$mail->send($support_email);
-			}
+				// Attach Jobcard Details
+				$file =	$this->add('xepan/filestore/Model_File',array('policy_add_new_type'=>true,'import_mode'=>'string','import_source'=>$this->generatePDF('return')));
+				$file['filestore_volume_id'] = $file->getAvailableVolumeID();
+				$file['original_filename'] =  strtolower($this['type']).'_'.$this['document_no_number'].'_'.$this->id.'.pdf';
+				$file->save();
+
+				$communication->addAttachment($file->id);
+				$communication->findContact('to');
+				$communication->send($email_setting);
+			// }
+			
 			//doing jobcard detail/row received
 			foreach (json_decode($form['jobcard_row']) as $transaction_row_id) {
 				$jobcard_row_model = $this->add('xepan\production\Model_Jobcard_Detail')->load($transaction_row_id);

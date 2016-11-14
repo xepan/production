@@ -197,38 +197,66 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 		$jobcard_field = $form->addField('hidden','jobcard_row');
 		$grid_jobcard_row->addSelectable($jobcard_field);
 
-		$notify_to = $form->addField('Checkbox','notify_via_email');
-		$form->addSubmit('Receive Jobcard');
-
-		//$grid_jobcard_row = $page->add('Grid');
-
 		$jobcard = $this->add('xepan\production\Model_Jobcard_Detail');
 		$jobcard->addCondition('jobcard_id',$this->id);
 		$jobcard->addCondition('status','ToReceived');
 
 		$grid_jobcard_row->setModel($jobcard);
+
+		//$grid_jobcard_row = $page->add('Grid');
+
 		
 		if($dep['is_outsourced']){
+			$notify_to = $form->addField('Checkbox','notify_via_email');
 			$outsource_partyfield=$form->addField('DropDown','outsource_party');
 			$outsource_partyfield->setEmptyText('Please Select');
 			$outsource_partyfield->setModel('xepan\production\OutsourceParty');
+
+			$email_to_field = $form->addField('line','email_to');
+
+			if($this->app->stickyGET('outsource_id')){
+				$outsource_m = $this->add('xepan\production\Model_OutsourceParty')->load($_GET['outsource_id']);
+				$email_to_field->set(str_replace("<br/>", ", ",$outsource_m['emails_str']));
+			}
+
+			$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'subject'=>'Line',
+							'body'=>'xepan\base\RichText',
+							],
+					'config_key'=>'PRODUCTION_JOBCARD_SYSTEM_CONFIG',
+					'application'=>'production'
+			]);
+			$config_m->add('xepan\hr\Controller_ACL');
+			$config_m->tryLoadAny();
+
+			$email_subject = $config_m['subject'];
+			$email_body = $config_m['body'];
+			// $config_model=$this->add('xepan\base\Model_Epan_Configuration');
+			// $config_model->addCondition('application','crm');
+			// $email_subject=$config_model->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_SUBJECT');
+			// $email_body=$config_model->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_BODY');
+			
+			$subject=$this->add('GiTemplate');
+			$subject->loadTemplateFromString($email_subject);
+
+			$temp=$this->add('GiTemplate');
+			$temp->loadTemplateFromString($email_body);
+
+
+			$form->addField('line','subject')->set($subject->render());
+			$form->addField('xepan\base\RichText','message')->set($temp->render());
+			$form->addSubmit('Receive Jobcard');
+
+			$notify_to->js(true)->univ()->bindConditionalShow([
+				''=>[],
+				'*'=>['email_to','subject','message'],
+			],'div.atk-form-row');
+
+			$outsource_partyfield->js('change',$email_to_field->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$email_to_field->name]),'outsource_id'=>$outsource_partyfield->js()->val()]));
 		}
-		$email_to_field = $form->addField('line','email_to');
-		$form->addField('line','subject');
-		$form->addField('xepan\base\RichText','message');
-
-		if($this->app->stickyGET('outsource_id')){
-			$outsource_m = $this->add('xepan\production\Model_OutsourceParty')->load($_GET['outsource_id']);
-			$email_to_field->set(str_replace("<br/>", ", ",$outsource_m['emails_str']));
-		}
-
-
-		$notify_to->js(true)->univ()->bindConditionalShow([
-			''=>[],
-			'*'=>['email_to','subject','message'],
-		],'div.atk-form-row');
-
-		$outsource_partyfield->js('change',$email_to_field->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$email_to_field->name]),'outsource_id'=>$outsource_partyfield->js()->val()]));	
+			
 		$mail = $this->add('xepan\communication\Model_Communication_Email');
 		if($form->isSubmitted()){
 			// if(!$form['jobcard_row']){

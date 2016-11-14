@@ -191,15 +191,16 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 
 	function page_receive($page){
 		$dep=$this->add('xepan\hr\Model_Department')->load($this['department_id']);
+		$grid_jobcard_row = $page->add('xepan\hr\Grid',['action_page'=>'xepan_production_jobcard'],null,['view/jobcard/transactionrow']);
 
 		$form = $page->add('Form');
 		$jobcard_field = $form->addField('hidden','jobcard_row');
+		$grid_jobcard_row->addSelectable($jobcard_field);
+
+		$notify_to = $form->addField('Checkbox','notify_via_email');
 		$form->addSubmit('Receive Jobcard');
 
 		//$grid_jobcard_row = $page->add('Grid');
-		$grid_jobcard_row = $page->add('xepan\hr\Grid',['action_page'=>'xepan_production_jobcard'],null,['view/jobcard/transactionrow']);
-
-		$grid_jobcard_row->addSelectable($jobcard_field);
 
 		$jobcard = $this->add('xepan\production\Model_Jobcard_Detail');
 		$jobcard->addCondition('jobcard_id',$this->id);
@@ -212,8 +213,51 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			$outsource_partyfield->setEmptyText('Please Select');
 			$outsource_partyfield->setModel('xepan\production\OutsourceParty');
 		}
+		$email_to_field = $form->addField('line','email_to');
+		$form->addField('line','subject');
+		$form->addField('xepan\base\RichText','message');
+
+		if($this->app->stickyGET('outsource_id')){
+			$outsource_m = $this->add('xepan\production\Model_OutsourceParty')->load($_GET['outsource_id']);
+			$email_to_field->set(str_replace("<br/>", ", ",$outsource_m['emails_str']));
+		}
+
+
+		$notify_to->js(true)->univ()->bindConditionalShow([
+			''=>[],
+			'*'=>['email_to','subject','message'],
+		],'div.atk-form-row');
+
+		$outsource_partyfield->js('change',$email_to_field->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$email_to_field->name]),'outsource_id'=>$outsource_partyfield->js()->val()]));	
+		$mail = $this->add('xepan\communication\Model_Communication_Email');
 		if($form->isSubmitted()){
-			
+			// if(!$form['jobcard_row']){
+			// 	$form->displayError('jobcard_row','Please Select Receiveable Item');
+			// }
+
+			if($form['notify_via_email']){
+				if(!$form['outsource_party'])
+					$form->displayError('outsource_party','OutsourceParty is Required');
+				if(!$form['email_to'])
+					$form->displayError('email_to','Email To is Required');
+				if(!$form['subject'])
+					$form->displayError('message','Subject is Required');
+				if(!$form['message'])
+					$form->displayError('message','Message is Required');
+
+				$support_email = $this->add('xepan\communication\Model_Communication_EmailSetting')->tryLoadAny();
+				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+					
+				$to_emails=explode(',', trim($form['email_to']));
+				foreach ($to_emails as $to_mail) {
+					$mail->addTo($to_mail);
+				}
+
+				$mail->setSubject($form['subject']);
+				$mail->setBody($form['message']);
+				$mail['to_id']=$this['outsourceparty_id'];
+				$mail->send($support_email);
+			}
 			//doing jobcard detail/row received
 			foreach (json_decode($form['jobcard_row']) as $transaction_row_id) {
 				$jobcard_row_model = $this->add('xepan\production\Model_Jobcard_Detail')->load($transaction_row_id);

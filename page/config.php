@@ -27,7 +27,7 @@ class page_config extends \xepan\base\Page{
 		$form->setModel($config_m,['subject','body','master']);
 		$form->getElement('subject')->set($config_m['subject'])->setFieldHint(' ')->setCaption('Subject');
 		$form->getElement('body')->set($config_m['body'])->setFieldHint(' ')->setCaption('Message');
-		$form->getElement('master')->set($config_m['master'])->setFieldHint(' ')->setCaption('Master');
+		$form->getElement('master')->set($config_m['master'])->setFieldHint('{$status},{$next_department},{$id},{$order_no},{$created_at},{$order_created_at},{$due_date},{$order_item},{$qsp_item_narration},{$extra_info},{$order_item_quantity},{$extra_notes}')->setCaption('Master');
 
 		$form->addSubmit('Update')->addClass('btn btn-primary');
 

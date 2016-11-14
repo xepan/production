@@ -42,6 +42,11 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			return $sales_order->fieldQuery('document_no');
 		})->sortable(true);
 
+		$this->addExpression('qsp_item_narration')->set(function($m,$q){
+			return $m->refSQL('order_item_id')->fieldQuery('narration');
+			
+		});
+
 		$this->addExpression('order_document_id')->set(function($m,$q){
 			$sales_order =  $m->add('xepan/commerce/Model_SalesOrder',['table_alias'=>'order_no']);
 			$order_detail_j = $sales_order->join('qsp_detail.qsp_master_id');
@@ -315,10 +320,12 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 
 			$temp=$this->add('GiTemplate');
 			$temp->loadTemplateFromString($email_body);
-
+			$body = $this->add('View',null,null,$temp);
+			$form->addField('xepan\base\RichText','extra_notes');
+			$body->template->trySetHTML('extra_notes',$form['extra_notes']);
 
 			$form->addField('line','subject')->set($subject->render());
-			$form->addField('xepan\base\RichText','message')->set($temp->render());
+			$form->addField('xepan\base\RichText','message')->set($body->getHTML());
 
 			$notify_to->js(true)->univ()->bindConditionalShow([
 				''=>[],
@@ -330,7 +337,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			
 		$form->addSubmit('Receive Jobcard');
 		if($form->isSubmitted()){
-			// if($form['notify_via_email']){
+			if($form['notify_via_email']){
 				if(!$form['outsource_party'])
 					$form->displayError('outsource_party','OutsourceParty is Required');
 				if(!$form['email_to'])
@@ -366,7 +373,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 				$communication->addAttachment($file->id);
 				$communication->findContact('to');
 				$communication->send($email_setting);
-			// }
+			}
 			
 			//doing jobcard detail/row received
 			foreach (json_decode($form['jobcard_row']) as $transaction_row_id) {
@@ -397,9 +404,6 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			$this->parentJobcard()->complete();
 		}
 
-        $this->app->employee
-	            ->addActivity("Jobcard Received", $this->id /* Related Document ID*/, $this['customer'] /*Related Contact ID*/)
-	            ->notifyWhoCan('reject,receive,forward','Jobcard Received');
 	    if($outsource_party){
 		$this['outsourceparty_id']=$outsource_party;
 	    }        
@@ -592,7 +596,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 		
 		$form->addField('line','total_qty_to_complete')->setAttr('readonly','true')->set($qty_to_complete);
 		$qty_to_com_field = $form->addField('Number','qty_to_complete')->set($qty_to_complete);
-		$warehouse = $form->addField('DropDown','warehouse')->setEmptyText('Please Select Warehouse');
+		$warehouse = $form->addField('DropDown','warehouse')->setEmptyText('Please Select');
 		$warehouse->setModel('xepan\commerce\Store_Warehouse');
 		
 		foreach ($model_item_consumption as $m) {
@@ -824,7 +828,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
     function sendToDispatch($qty,$warehouse_id,$jobcard_detail){
     	
     	$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($warehouse_id);
-		$transaction = $warehouse->newTransaction($this['order_document_id'],$this->id,$this['customer_id'],'Store_DispatchRequest');
+		$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$this['customer_id'],'Store_DispatchRequest');
 		$transaction->addItem($this['order_item_id'],$this['item_id'],$qty,$jobcard_detail->id,null,'ToReceived');
 
 		if($this['status'] != "Completed")

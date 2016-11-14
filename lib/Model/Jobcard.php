@@ -191,13 +191,13 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 
 	function page_receive($page){
 		$dep=$this->add('xepan\hr\Model_Department')->load($this['department_id']);
+		$grid_jobcard_row = $page->add('xepan\hr\Grid',['action_page'=>'xepan_production_jobcard'],null,['view/jobcard/transactionrow']);
 
 		$form = $page->add('Form');
 		$jobcard_field = $form->addField('hidden','jobcard_row');
 		$form->addSubmit('Receive Jobcard');
 
 		//$grid_jobcard_row = $page->add('Grid');
-		$grid_jobcard_row = $page->add('xepan\hr\Grid',['action_page'=>'xepan_production_jobcard'],null,['view/jobcard/transactionrow']);
 
 		$grid_jobcard_row->addSelectable($jobcard_field);
 
@@ -435,7 +435,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 		
 		$form->addField('line','total_qty_to_complete')->setAttr('readonly','true')->set($qty_to_complete);
 		$qty_to_com_field = $form->addField('Number','qty_to_complete')->set($qty_to_complete);
-		$warehouse = $form->addField('DropDown','warehouse')->setEmptyText('Please Select');
+		$warehouse = $form->addField('DropDown','warehouse')->setEmptyText('Please Select Warehouse');
 		$warehouse->setModel('xepan\commerce\Store_Warehouse');
 		
 		foreach ($model_item_consumption as $m) {
@@ -667,7 +667,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
     function sendToDispatch($qty,$warehouse_id,$jobcard_detail){
     	
     	$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($warehouse_id);
-		$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$this['customer_id'],'Store_DispatchRequest');
+		$transaction = $warehouse->newTransaction($this['order_document_id'],$this->id,$this['customer_id'],'Store_DispatchRequest');
 		$transaction->addItem($this['order_item_id'],$this['item_id'],$qty,$jobcard_detail->id,null,'ToReceived');
 
 		if($this['status'] != "Completed")

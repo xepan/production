@@ -45,7 +45,7 @@
                       a.user-link(href = '{url}?page=xepan_production_jobcarddetail&document_id={$id}{/}' title="Jobcard No. {$id} " style="margin-left: 0px;")
                         {$id}
                         small
-                          a.user-subhead(href='{url}?page=xepan_commerce_salesorderdetail&document_id={$order_no}{/}' title="Order No. {$order_no}"){order_no}order not found{/}
+                          a.user-subhead(href='{url}?page=xepan_commerce_salesorderdetail&document_id={$order_document_id}{/}' title="Order No. {$order_no}"){order_no}order not found{/}
                             span [ {$order_item} ]
                           div.user-subhead(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}'){customer_name}Not Found{/}
                       p(title="Jobcard Department").label.label-primary {$department}                          

@@ -23,7 +23,7 @@
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td style="width: 30%;"><a href="{url}?page=xepan_production_jobcarddetail&amp;document_id={$id}{/}" title="Jobcard No. {$id} " style="margin-left: 0px;" class="user-link">{$id}<small><a href="{url}?page=xepan_commerce_salesorderdetail&amp;document_id={$order_no}{/}" title="Order No. {$order_no}" class="user-subhead">{order_no}order not found{/}<span>[ {$order_item} ]</span></a>
+          <td style="width: 30%;"><a href="{url}?page=xepan_production_jobcarddetail&amp;document_id={$id}{/}" title="Jobcard No. {$id} " style="margin-left: 0px;" class="user-link">{$id}<small><a href="{url}?page=xepan_commerce_salesorderdetail&amp;document_id={$order_document_id}{/}" title="Order No. {$order_no}" class="user-subhead">{order_no}order not found{/}<span>[ {$order_item} ]</span></a>
                 <div href="{url}?page=xepan_commerce_customerdetail&amp;contact_id={$id}{/}" class="user-subhead">{customer_name}Not Found{/}</div></small></a>
             <p title="Jobcard Department" class="label label-primary">{$department}                          </p>
           </td>

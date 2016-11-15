@@ -828,7 +828,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
     function sendToDispatch($qty,$warehouse_id,$jobcard_detail){
     	
     	$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($warehouse_id);
-		$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$this['customer_id'],'Store_DispatchRequest');
+		$transaction = $warehouse->newTransaction($this['order_document_id'],$this->id,$this['customer_id'],'Store_DispatchRequest');
 		$transaction->addItem($this['order_item_id'],$this['item_id'],$qty,$jobcard_detail->id,null,'ToReceived');
 
 		if($this['status'] != "Completed")

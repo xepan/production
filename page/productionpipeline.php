@@ -3,7 +3,7 @@
 namespace xepan\production;
 
 class page_productionpipeline extends \xepan\base\Page{
-	public $title="Order Item Production Pipeline";
+	public $title="Order Item Production TimeLine";
 
 	function page_index(){
 		// parent::init(); 

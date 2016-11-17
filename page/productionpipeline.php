@@ -7,8 +7,8 @@ class page_productionpipeline extends \xepan\base\Page{
 
 	function page_index(){
 		// parent::init(); 
-		$this->api->stickyGET('order_id');
-		$this->api->stickyGET('customer_id');
+		$selected_order_id = $this->api->stickyGET('order_id');
+		$selected_customer_id = $this->api->stickyGET('customer_id');
 
 		$form = $this->add('Form');
 		$customer_field = $form->addField('xepan\base\Basic','customer');
@@ -27,8 +27,8 @@ class page_productionpipeline extends \xepan\base\Page{
 								]);
 		});
 
-		if($_GET['customer_id']){
-			$order_m->addCondition('contact_id',$_GET['customer_id']);
+		if($selected_customer_id){
+			$order_m->addCondition('contact_id',$selected_customer_id);
 		}
 		$order_m->setOrder('created_at','desc');
 		$order_m->title_field = 'name_with_info';
@@ -37,20 +37,32 @@ class page_productionpipeline extends \xepan\base\Page{
 		// change auto complete
 		$order_field->send_other_fields = [$customer_field];
 		if($customer_id = $_GET['o_'.$customer_field->name]){
-			$order_field->getModel()->addCondition('contact_id',$customer_id);
+			$order_field->getModel()->addCondition('contact_id',$customer_id)->setOrder('id','desc');
 		}
 
 		$form->addSubmit('Submit')->addClass('btn btn-primary');
 
 		$wrapper_view = $this->add('View');
 
-		if($_GET['order_id']){
+		if($selected_order_id or $selected_customer_id){
 
+			$sale_order = $wrapper_view->add('xepan\commerce\Model_SalesOrder');
+			$sale_order->setOrder('document_no','desc');
+			if($selected_order_id)
+				$sale_order->addCondition('id',$selected_order_id);
+			if($selected_customer_id)
+				$sale_order->addCondition('contact_id',$selected_customer_id);
+
+			$order_pipeline = $wrapper_view->add('xepan\production\View_OrderPipeline');
+			$order_pipeline->setModel($sale_order);
+			$order_pipeline->addPaginator($ipp=10);
+			
 			// $order_items = $this->add('xepan\commerce\Model_QSP_Detail')
 			// 				->addCondition('qsp_master_id',$_GET['order_id']);
 			// $grid = $wrapper_view->add('Grid');
 			// $grid->setModel($order_items,['item','quantity']);
 			// $grid->addColumn('expander','timeline');
+
 		}else{
 			$wrapper_view->set('no record found');
 		}

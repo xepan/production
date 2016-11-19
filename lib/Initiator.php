@@ -15,6 +15,7 @@ class Initiator extends \Controller_Addon {
 			// $m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],'xepan_production_dashboard');
 			$m->addItem(['OutsourceParty','icon'=>'fa fa-user'],'xepan_production_outsourceparties');
 			$m->addItem(['Jobcard Orders','icon'=>'fa fa-pencil-square-o'],'xepan_production_jobcardorder');
+			$m->addItem(['Jobcard Order Timeline','icon'=>'fa fa-pencil-square-o'],'xepan_production_productionpipeline');
 			
 			$departments = $this->add('xepan\hr\Model_Department')->setOrder('production_level','asc');
 

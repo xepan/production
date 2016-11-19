@@ -7,7 +7,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 
 	public $actions=[
 				'ToReceived'=>['view','edit','delete','receive','reject'],
-				'Received'=>['view','edit','delete','processing','complete','cancel'],
+				'Received'=>['view','edit','delete','processing','complete','cancel','print'],
 				'Processing'=>['view','edit','delete','complete','forward','sendToDispatch','cancel'],
 				'Forwarded'=>['view','edit','delete','cancel'],
 				'Completed'=>['view','edit','delete','forward','sendToDispatch','cancel'],
@@ -158,6 +158,12 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 		}
 	}
 
+	function print(){
+		// $this->api->redirect($this->api->url('xepan_commerce_printqsp',['document_id'=>$this->id]));
+		$js=$this->app->js()->univ()->newWindow($this->app->url('xepan_production_test',['jobcard_id'=>$this->id]),'Print'.$this['type']);
+		$this->app->js(null,$js)->univ()->execute();
+	}
+
 	function checkExistingRelatedTransaction(){
 		$this->ref('xepan\commerce\Store_Transaction')->each(function($m){$m->delete();});
 	}
@@ -227,7 +233,12 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 		]);
 		$config_m->tryLoadAny();
 		
+
 		$jobcard_config = $config_m['master'];
+		
+		if(!$config_m->loaded()){
+			$jobcard_config = file_get_contents(realpath("../vendor/xepan/production/templates/view/print-templates/jobcard-received-print.html"));
+		}
 		$jobcard_layout = $this->add('GiTemplate');
 		$jobcard_layout->loadTemplateFromString($jobcard_config);	
 		
@@ -237,10 +248,25 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 		$view = $this->app->add('View',null,null,$jobcard_layout);
 		$view->setModel($new);
 
-		// $order_item_detail=$this->add('xepan\commerce\Model_QSP_Detail');
-		// $order_item_detail->tryLoadBy('id',$new['order_item_id']);
+		$order_item_detail=$this->add('xepan\commerce\Model_QSP_Detail');
+		$order_item_detail->tryLoadBy('id',$this['order_item_id']);
 
-		// $array = json_decode($order_item_detail['extra_info']?:"[]",true);
+		$array = json_decode($order_item_detail['extra_info']?:"[]",true);
+		$cf_html = "";
+
+		foreach ($array as $department_id => &$details) {
+			$department_name = $details['department_name'];
+			$cf_list = $view->add('CompleteLister',null,'extra_info',['view\qsp\extrainfo']);
+			$cf_list->template->trySet('department_name',$department_name);
+			unset($details['department_name']);
+			
+			$cf_list->setSource($details);
+
+			$cf_html  .= $cf_list->getHtml();	
+		}		
+
+		$view->template->trySetHtml('extra_info',$cf_html);
+
 		
 		// $view = $this->add('View')->set("Production Jobcard Received View TODO");
 		$html = $view->getHTML();

@@ -1,0 +1,38 @@
+<h2 style="text-align:center">Jobcard Detail</h2>
+<table style="width: 100%;">
+<tbody>
+<tr style="height: 13px;">
+<td style="height: 13px; border: 1px solid #6e6e6e; text-align: right; vertical-align: middle;">
+<p>Status : {$status}</p>
+</td>
+<td style="height: 13px; border: 1px solid #6e6e6e; text-align: right; vertical-align: middle;">
+<p>Next Department&nbsp; : {$next_department}&nbsp;</p>
+</td>
+</tr>
+<tr style="height: 61px;">
+<td style="text-align: right; height: 61px; border: 1px solid #6e6e6e;">
+<p>Order No. {$order_no}</p>
+<p>Created Date : {$order_created_at}</p>
+<p>&nbsp;</p>
+</td>
+<td style="height: 61px; border: 1px solid #6e6e6e;">
+<p style="text-align: right;">Jobcard No . {$id}</p>
+<p style="text-align: right;">Created: Date : {$created_at}&nbsp;</p>
+<p style="text-align: right;">Due Date : {$due_date}</p>
+<p style="text-align: right;">&nbsp;</p>
+</td>
+</tr>
+</tbody>
+</table>
+<table style="height: 12px; width: 100%;">
+<tbody>
+<tr style="height: 13px;">
+<td style="text-align: center; height: 13px; border: 1px solid #6e6e6e;"><strong>ITEM<br /></strong></td>
+<td style="text-align: center; height: 13px; border: 1px solid #6e6e6e;"><strong>QUANTITY<br /></strong></td>
+</tr>
+<tr style="height: 39px;">
+<td style="height: 39px; border: 1px solid #6e6e6e; text-align: center; vertical-align: middle;">{$order_item}<br />{$extra_info}<br />{$extra_notes}</td>
+<td style="height: 39px; border: 1px solid #6e6e6e; text-align: center; vertical-align: middle;">{$order_item_quantity}</td>
+</tr>
+</tbody>
+</table>

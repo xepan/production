@@ -158,11 +158,11 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 		}
 	}
 
-	function print(){
-		// $this->api->redirect($this->api->url('xepan_commerce_printqsp',['document_id'=>$this->id]));
-		$js=$this->app->js()->univ()->newWindow($this->app->url('xepan_production_test',['jobcard_id'=>$this->id]),'Print'.$this['type']);
-		$this->app->js(null,$js)->univ()->execute();
-	}
+	// function print(){
+	// 	// $this->api->redirect($this->api->url('xepan_commerce_printqsp',['document_id'=>$this->id]));
+	// 	$js=$this->app->js()->univ()->newWindow($this->app->url('xepan_production_test',['jobcard_id'=>$this->id]),'Print'.$this['type']);
+	// 	$this->app->js(null,$js)->univ()->execute();
+	// }
 
 	function checkExistingRelatedTransaction(){
 		$this->ref('xepan\commerce\Store_Transaction')->each(function($m){$m->delete();});

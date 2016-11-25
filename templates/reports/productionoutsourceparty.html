@@ -20,19 +20,18 @@
           <td style="width:90%;"><span style="font-size:20px !important;" class="atk-label atk-swatch label label-primary label-bg"> <strong>{$name}</strong></span>
             <div id="{$_name}" style="{$style}" class="main-box infographic-box colored emerald-bg {$class}">
               <div class="row">
-                <h2><b>Total Jobcards : </b></h2>
+                <h2><b>Total Jobcards : {$total_jobcards}</b></h2>
               </div>
               <div class="row">
-                <div data-status="Draft" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Draft &nbsp;  </b>{$draft_odr_count}</div>
-                <div data-status="Submitted" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Submitted &nbsp;  </b>{$submitted_odr_count}</div>
-                <div data-status="Approved" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Approved &nbsp;  </b>{$approved_odr_count}</div>
-                <div data-status="Inprogress" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Inprogress &nbsp;  </b>{$inprogress_odr_count}</div>
+                <div data-status="ToReceived" data-outsourceparty="{$id}" data-url="xepan_production_jobcard" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>To Received &nbsp;  </b>{$ToReceived}</div>
+                <div data-status="Received" data-outsourceparty="{$id}" data-url="xepan_production_jobcard" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Received &nbsp;  </b>{$Received}</div>
+                <div data-status="Processing" data-outsourceparty="{$id}" data-url="xepan_production_jobcard" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Processing &nbsp;  </b>{$Processing}</div>
+                <div data-status="Forwarded" data-outsourceparty="{$id}" data-url="xepan_production_jobcard" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Forwarded &nbsp;  </b>{$Forwarded}</div>
               </div>
               <div class="row"> 
-                <div data-status="Canceled" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Canceled &nbsp;</b>{$canceled_odr_count}</div>
-                <div data-status="Completed" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Completed &nbsp;</b>{$completed_odr_count}</div>
-                <div data-status="OnlineUnpaid" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Online Unpaid &nbsp;</b>{$onlineunpaid_odr_count}</div>
-                <div data-status="Redesign" data-customer="{$id}" data-url="xepan_commerce_salesorder" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Redesign &nbsp;</b>{$redesign_odr_count}</div>
+                <div data-status="Completed" data-outsourceparty="{$id}" data-url="xepan_production_jobcard" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Completed &nbsp;</b>{$Completed}</div>
+                <div data-status="Cancelled" data-outsourceparty="{$id}" data-url="xepan_production_jobcard" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Cancelled &nbsp;</b>{$Cancelled}</div>
+                <div data-status="Rejected" data-outsourceparty="{$id}" data-url="xepan_production_jobcard" style="cursor:pointer; cursor: hand; max-width:600px;" class="col-md-3"><b>Rejected &nbsp;</b>{$Rejected}</div>
               </div>
             </div>
           </td>

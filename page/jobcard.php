@@ -10,6 +10,9 @@ class page_jobcard extends \xepan\base\Page {
 		parent::init();
 
 		$this->department_id = $this->api->stickyGET('department_id');
+		$this->customer_id = $this->api->stickyGET('customer_id');
+		$this->outsource_party_id = $this->api->stickyGET('outsource_party_id');
+
 
 		$jobcard_model = $this->add('xepan\production\Model_Jobcard')->setOrder('id','desc');
 		$jobcard_model->add('xepan\production\Controller_SideBarStatusFilter');
@@ -20,6 +23,14 @@ class page_jobcard extends \xepan\base\Page {
 			$jobcard_model->tryLoadAny();
 
 			$this->title = "Jobcard / Department :: ".$jobcard_model['department_name'];
+		}
+
+		if($this->customer_id){
+			$jobcard_model->addCondition('customer_id',$this->customer_id);
+		}
+
+		if($this->outsource_party_id){			
+			$jobcard_model->addCondition('outsourceparty_id',$this->outsource_party_id);
 		}
 
 		$crud=$this->add('xepan\hr\CRUD',null,null,['view/grid/jobcard']);

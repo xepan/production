@@ -15,15 +15,24 @@ class Reports_FilterForm extends \Form{
 								 ->setStartDate($this->app->now)
 								 ->setEndDate($this->app->now)
 								 ->getBackDatesSet();
-	    if($this->entity == 'customer'){
-	    	$this->addField('autocomplete/Basic','contact')->setModel('xepan\base\Contact');
-			$this->layout->template->tryDel('department_wrapper');
-	    }
-		else{
-	    	$this->addField('autocomplete/Basic','department')->setModel('xepan\hr\Department');
-			$this->layout->template->tryDel('contact_wrapper');
-		}	
-		
+		switch ($this->entity) {
+					case 'customer':
+						$this->addField('autocomplete/Basic','contact')->setModel('xepan\base\Contact');
+						$this->layout->template->tryDel('department_wrapper');
+						$this->layout->template->tryDel('outsourceparty_wrapper');
+						break;
+					case 'outsourceparty':
+						$this->addField('autocomplete/Basic','outsource_party')->setModel('xepan\production\OutsourceParty');
+						$this->layout->template->tryDel('department_wrapper');
+						$this->layout->template->tryDel('contact_wrapper');
+						break;	
+					default:
+						$this->addField('autocomplete/Basic','department')->setModel('xepan\hr\Department');
+						$this->layout->template->tryDel('contact_wrapper');
+						$this->layout->template->tryDel('outsourceparty_wrapper');
+						break;
+				}
+
 		if($this->extra_fields){
 			$this->addField('xepan\base\DropDown','status')->setValueList($this->status_array)->setEmptyText('Please Select');
 			$this->addField('xepan\base\DropDown','order')->setValueList(['desc'=>'Highest','asc'=>'Lowest'])->setEmptyText('Please Select');
@@ -52,8 +61,9 @@ class Reports_FilterForm extends \Form{
 					'to_date'=>$to_date,
 					'customer_id'=>$this['contact'],
 					'department_id'=>$this['department'],
+					'outsource_party_id'=>$this['outsource_party'],
 					'jobcard_status'=>$this['status'],
-					'order'=>$this['order']
+					'order'=>$this['order'],
 				]))->univ()->successMessage('wait ... ')->execute();
 	}
 }

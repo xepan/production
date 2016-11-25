@@ -33,33 +33,30 @@
 						.main-box.infographic-box.colored.emerald-bg(id="{$_name}" class="{$class}" style="{$style}")
 							.row
 								h2
-									b Total Jobcards : 
+									b Total Jobcards : {$total_jobcards}
 							.row
-								.col-md-3(data-status = "Draft" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
-									b Draft &nbsp;  
-									{$draft_odr_count}
-								.col-md-3(data-status = "Submitted" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
-									b Submitted &nbsp;  
-									{$submitted_odr_count}
-								.col-md-3(data-status = "Approved" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
-									b Approved &nbsp;  
-									{$approved_odr_count}
-								.col-md-3(data-status = "Inprogress" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
-									b Inprogress &nbsp;  
-									{$inprogress_odr_count}
+								.col-md-3(data-status = "ToReceived" data-outsourceparty = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b To Received &nbsp;  
+									{$ToReceived}
+								.col-md-3(data-status = "Received" data-outsourceparty = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Received &nbsp;  
+									{$Received}
+								.col-md-3(data-status = "Processing" data-outsourceparty = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Processing &nbsp;  
+									{$Processing}
+								.col-md-3(data-status = "Forwarded" data-outsourceparty = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Forwarded &nbsp;  
+									{$Forwarded}
 							.row 
-								.col-md-3(data-status = "Canceled" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
-									b Canceled &nbsp;
-									{$canceled_odr_count}
-								.col-md-3(data-status = "Completed" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
+								.col-md-3(data-status = "Completed" data-outsourceparty = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
 									b Completed &nbsp;
-									{$completed_odr_count}
-								.col-md-3(data-status = "OnlineUnpaid" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
-									b Online Unpaid &nbsp;
-									{$onlineunpaid_odr_count}
-								.col-md-3(data-status = "Redesign" data-customer = "{$id}" data-url="xepan_commerce_salesorder" style= "cursor:pointer; cursor: hand; max-width:600px;")
-									b Redesign &nbsp;
-									{$redesign_odr_count}
+									{$Completed}
+								.col-md-3(data-status = "Cancelled" data-outsourceparty = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Cancelled &nbsp;
+									{$Cancelled}
+								.col-md-3(data-status = "Rejected" data-outsourceparty = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Rejected &nbsp;
+									{$Rejected}
 					td(style="width:10%;")
 						span
 					{/}

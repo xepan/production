@@ -1,0 +1,79 @@
+.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+	{Pannel}
+	header.main-box-header.clearfix.atk-actions(class=" {$class} ")
+		div.filter-block( style="100%")
+			.pull-right {$grid_buttons} 
+			.form-group.pull-right.xepan-filter-form
+				span(class="form-control pull-left")|{$quick_search}
+					i(class="fa fa-search search-icon")
+	{/Pannel}
+	.main-box-body.clearfix.table
+		table.table.user-list.table-hover(style="width:100%")
+			{header}
+			thead
+				{cols}{col}
+				th
+					span
+				th
+					span 
+				th 
+				{/}{/}
+			{/}
+			{$subheader}
+
+			tbody
+				{rows}{row}
+				tr(class="{$odd_even}" data-id="{$id}")
+					{cols}
+					td(style="width:0%;")
+						span 
+					td(style="width:90%;")
+						span(style="font-size:20px !important;").atk-label.atk-swatch.label.label-primary.label-bg 
+							strong {$name}
+						.main-box.infographic-box.colored.emerald-bg(id="{$_name}" class="{$class}" style="{$style}")
+							.row
+								h2
+									b Total Jobcards : {$total_jobcards}
+							.row
+								.col-md-3(data-status = "ToReceived" data-customer = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b To Received &nbsp;  
+									{$ToReceived}
+								.col-md-3(data-status = "Received" data-customer = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Received &nbsp;  
+									{$Received}
+								.col-md-3(data-status = "Processing" data-customer = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Processing &nbsp;  
+									{$Processing}
+								.col-md-3(data-status = "Forwarded" data-customer = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Forwarded &nbsp;  
+									{$Forwarded}
+							.row 
+								.col-md-3(data-status = "Completed" data-customer = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Completed &nbsp;
+									{$Completed}
+								.col-md-3(data-status = "Cancelled" data-customer = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Cancelled &nbsp;
+									{$Cancelled}
+								.col-md-3(data-status = "Rejected" data-customer = "{$id}" data-url="xepan_production_jobcard" style= "cursor:pointer; cursor: hand; max-width:600px;")
+									b Rejected &nbsp;
+									{$Rejected}
+					td(style="width:10%;")
+						span
+					{/}
+				{/}{/}
+				{not_found}
+				div.row
+					.col-md-12.text-center.alert.alert-warning(role="alert")
+						span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
+				{/}
+
+			{totals}
+			tfoot
+				tr(class="totals")
+					{cols}{col}
+					<td {$tdparam}>
+					{$content}
+					</td>
+					{/}{/}
+			{/}
+		{$Paginator}

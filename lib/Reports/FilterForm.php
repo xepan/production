@@ -15,7 +15,7 @@ class Reports_FilterForm extends \Form{
 								 ->setStartDate($this->app->now)
 								 ->setEndDate($this->app->now)
 								 ->getBackDatesSet();
-	    if($this->entity == 'contact'){
+	    if($this->entity == 'customer'){
 	    	$this->addField('autocomplete/Basic','contact')->setModel('xepan\base\Contact');
 			$this->layout->template->tryDel('department_wrapper');
 	    }
@@ -50,7 +50,7 @@ class Reports_FilterForm extends \Form{
 				[
 					'from_date'=>$from_date,
 					'to_date'=>$to_date,
-					'contact_id'=>$this['contact'],
+					'customer_id'=>$this['contact'],
 					'department_id'=>$this['department'],
 					'jobcard_status'=>$this['status'],
 					'order'=>$this['order']

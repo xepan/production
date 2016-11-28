@@ -18,6 +18,7 @@ class page_outsourceparties extends \xepan\base\Page {
 		//$crud->gird->addPaginator(10);
 
 		$crud->add('xepan\base\Controller_Avatar');
+		$crud->add('xepan\base\Controller_MultiDelete');
 
 		if(!$crud->isEditing()){
 			$crud->grid->js('click')->_selector('.do-view-outsourceparties')->univ()->frameURL('Outsource Parties Details',[$this->api->url('xepan_production_outsourcepartiesdetails'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-id]')->data('id')]);

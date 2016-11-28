@@ -9,6 +9,7 @@
   <div class="main-box-body clearfix table-responsive">
     <table style="width:100%" class="table user-list table-hover footable toggle-circle-filled">{header}
       <thead class="xepan-hover-hand">{cols}{col}
+        <th></th>
         <th id="{$name_sortid}"><span>OutSource Parties  </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$name_sort}</span></th>
         <th id="{$status_sortid}"><span>Status </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$status_sort}</span></th>
         <th id="{$panding_jobcard_sortid}" data-hide="phone"><span>Panding Job-Card </span><span style="cursor:pointer; cursor: hand; max-width:600px;">{$panding_jobcard_sort}</span></th>
@@ -17,6 +18,7 @@
       </thead>{$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td>{$selected}</td>
           <td style="width: 30%;">{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="#" data-id="{$id}" class="user-link do-view-outsourceparties">{name}outsource party{/}</a><span class="user-subhead">{os_address}F-4301{/}</span>
           </td>
           <td>{action} InActive{/}</td>

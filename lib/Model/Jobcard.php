@@ -573,6 +573,9 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 	}
 
 	function page_complete($page){
+
+
+		$consum_qty = $this->app->stickyGET('consumption_qty');
 		$qty_to_complete = $this['processing'];
 
 		$form = $page->add('Form');
@@ -583,7 +586,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 								->addCondition('department_id',$this['department_id'])
 								->addCondition('item_id',$this['item_id'])
 								->tryLoadAny();
-
+														
 		// if(!$dept_assos->loaded()){
 		// 	$page->add('View_Error')->set('Please define item\'s association with this department first');
 		// 	return;
@@ -597,6 +600,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
         $template->trySetHTML('warehouse','{$warehouse}');
 		
 		foreach ($model_item_consumption as $m) {
+		// throw new \Exception($m['quantity'], 1);
 			$item_template = $this->add('GiTemplate');
             $item_template->loadTemplate('view/form/jobcard-complete-items-row');
             $item_template->trySetHTML('item','{$item_'.$m->id.'}');
@@ -621,12 +625,12 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
         $form->setLayout($template);
 		
 		$form->addField('line','total_qty_to_complete')->setAttr('readonly','true')->set($qty_to_complete);
-		$qty_to_com_field = $form->addField('Number','qty_to_complete')->set($qty_to_complete);
-		$warehouse = $form->addField('DropDown','warehouse')->setEmptyText('Please Select');
+		$qty_to_com_field = $form->addField('Number','qty_to_complete')->set($consum_qty?:$qty_to_complete);
+		$warehouse = $form->addField('xepan\base\DropDownNormal','warehouse')->setEmptyText('Please Select');
 		$warehouse->setModel('xepan\commerce\Store_Warehouse');
 		
 		foreach ($model_item_consumption as $m) {
-	      	$item_field = $form->addField('xepan\commerce\Form_Field_Item','item_'.$m->id);
+	      	$item_field = $form->addField('xepan\commerce\Form_Field_Item','item_'.$m->id)->set($m['composition_item_id']);
 			$item_field->setModel('xepan\commerce\Item');
 			$item_field->custom_field_element = 'extra_info_'.$m->id;
 			$item_field->custom_field_btn_class = 'extra_info_'.$m->id;
@@ -634,7 +638,19 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 
 			$form->layout->add('View',null,'view_extra_info_'.$m->id)->set('Extra Info')->addClass('btn btn-primary extra_info_'.$m->id );
 			$extra_info = $form->addField('text','extra_info_'.$m->id);
-			$qty_field = $form->addField('line','qty_'.$m->id,'Quantity');
+
+			if($consum_qty){
+				$set_qty = $m['quantity'] * $consum_qty;
+			}else{
+				$set_qty = $m['quantity'] * $form['qty_to_complete'];
+			}
+
+			$qty_field = $form->addField('line','qty_'.$m->id,'Quantity')->set($set_qty);
+			$qty_to_com_field->js('change',$page->js()->reload(null,null,[
+										$this->app->url(),
+										'consumption_qty'=>$qty_to_com_field->js()->val()
+								]));
+
 		}
 
 		for ($m=1; $m < 6; $m++) { 
@@ -658,24 +674,40 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			// create One New Transaction row of Completed in self jobcard
 			$jd = $this->createJobcardDetail("Completed",$form['qty_to_complete']);
 			
-			if($form['warehouse']){
-
-				$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($form['warehouse']);
-				$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$warehouse->id,'Production_Consumption');
+				$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->tryLoadBy('id',$form['warehouse']);
+				$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$warehouse->id,'Consumed');
 				
 				foreach ($model_item_consumption as $m) {
+					if($form['item_'.$m->id]){
+						$form->displayError('warehouse',"Please Select Warehouse ");
+					}
+					
 					if($form['item_'.$m->id]){
 						if(!$form['qty_'.$m->id]){
 							$form->displayError('qty_'.$m->id,'Quantity Must not be Empty');
 						}
 					}
-					$transaction->addItem($this['order_item_id'],$form['item_'.$m->id],$form['qty_'.$m->id],$jd->id,$form['extra_info_'.$m->id],'ToReceived');
-				}
+					$transaction->addItem($this['order_item_id'],$form['item_'.$m->id],$form['qty_'.$m->id],$jd->id,$form['extra_info_'.$m->id],'Consumed');
 
-				for ($m=1; $m < 6; $m++) { 
-					$transaction->addItem($this['order_item_id'],$form['item_x_'.$m],$form['qty_x_'.$m],$jd->id,$form['extra_info_x_'.$m],'ToReceived');
+					$tr_row = $this->add('xepan\commerce\Model_Store_TransactionRow');
+					$tr_row->addCondition('type',"Consumption_Booked");
+					$tr_row->addCondition('qsp_detail_id',$this['order_item_id']);
+					$tr_row->addCondition('department_id',$this['department_id']);
+					$tr_row->addCondition('item_id',$form['item_'.$m->id]);
+					$tr_row->tryLoadAny();
+					if($transaction_row->loaded()){				
+					}
 				}
-			}
+				
+				for ($m=1; $m < 6; $m++) {
+					if($form['item_x_'.$m])
+						$form->displayError('warehouse',"Please Select Warehouse"); 
+					$transaction->addItem($this['order_item_id'],$form['item_x_'.$m],$form['qty_x_'.$m],$jd->id,$form['extra_info_x_'.$m],'Consumed');
+				}
+				throw new \Exception("Error Processing Request", 1);
+
+			// }
+
 			
 			$this->complete();
 			return $form->js()->univ()->successMessage($form['qty_to_complete']." Completed")->closeDialog();

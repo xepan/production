@@ -675,11 +675,12 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			$jd = $this->createJobcardDetail("Completed",$form['qty_to_complete']);
 			
 				$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->tryLoadBy('id',$form['warehouse']);
-				$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$warehouse->id,'Consumed');
+				$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$warehouse->id,'Consumed',$this['department_id']);
 				
 				foreach ($model_item_consumption as $m) {
 					if($form['item_'.$m->id]){
-						$form->displayError('warehouse',"Please Select Warehouse ");
+						if(!$form['warehouse'])
+							$form->displayError('warehouse',"Please Select Warehouse ");
 					}
 					
 					if($form['item_'.$m->id]){
@@ -695,20 +696,41 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 					$tr_row->addCondition('department_id',$this['department_id']);
 					$tr_row->addCondition('item_id',$form['item_'.$m->id]);
 					$tr_row->tryLoadAny();
-					if($transaction_row->loaded()){				
+					if($tr_row->loaded()){
+						
+						if($form['qty_'.$m->id] >= $tr_row['quantity']){
+							$tr_row->delete();
+						}else{
+							$available_qty = $tr_row['quantity'] - $form['qty_'.$m->id];
+							$tr_row['quantity'] = $available_qty;
+							$tr_row->save();
+						}
 					}
 				}
 				
 				for ($m=1; $m < 6; $m++) {
-					if($form['item_x_'.$m])
-						$form->displayError('warehouse',"Please Select Warehouse"); 
-					$transaction->addItem($this['order_item_id'],$form['item_x_'.$m],$form['qty_x_'.$m],$jd->id,$form['extra_info_x_'.$m],'Consumed');
+					if($form['item_x_'.$m]){
+						if(!$form['warehouse'])
+							$form->displayError('warehouse',"Please Select Warehouse ");
+						$transaction->addItem($this['order_item_id'],$form['item_x_'.$m],$form['qty_x_'.$m],$jd->id,$form['extra_info_x_'.$m],'Consumed');
+
+						$tr_row = $this->add('xepan\commerce\Model_Store_TransactionRow');
+						$tr_row->addCondition('type',"Consumption_Booked");
+						$tr_row->addCondition('qsp_detail_id',$this['order_item_id']);
+						$tr_row->addCondition('department_id',$this['department_id']);
+						$tr_row->addCondition('item_id',$form['item_x_'.$m]);
+						$tr_row->tryLoadAny();
+						if($tr_row->loaded()){
+							if($form['qty_x_'.$m] >= $tr_row['quantity']){
+								$tr_row->delete();
+							}else{
+								$available_qty = $tr_row['quantity'] - $form['qty_x_'.$m];
+								$tr_row['quantity'] = $available_qty;
+								$tr_row->save();
+							}
+						}
+					}
 				}
-				throw new \Exception("Error Processing Request", 1);
-
-			// }
-
-			
 			$this->complete();
 			return $form->js()->univ()->successMessage($form['qty_to_complete']." Completed")->closeDialog();
 		}

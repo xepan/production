@@ -237,7 +237,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 		$jobcard_config = $config_m['master'];
 		
 		if(!$config_m->loaded()){
-			$jobcard_config = file_get_contents(realpath("../vendor/xepan/production/templates/view/print-templates/jobcard-received-print.html"));
+			$jobcard_config = file_get_contents(realpath("../vendor/xepan/production/templates/default/jobcard-received-print.html"));
 		}
 		$jobcard_layout = $this->add('GiTemplate');
 		$jobcard_layout->loadTemplateFromString($jobcard_config);	

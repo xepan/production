@@ -7,7 +7,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 
 	public $actions=[
 				'ToReceived'=>['view','edit','delete','receive','reject'],
-				'Received'=>['view','edit','delete','processing','complete','cancel','print'],
+				'Received'=>['view','edit','delete','processing','assign','complete','cancel','print'],
 				'Processing'=>['view','edit','delete','complete','forward','sendToDispatch','cancel'],
 				'Forwarded'=>['view','edit','delete','cancel'],
 				'Completed'=>['view','edit','delete','forward','sendToDispatch','cancel'],
@@ -24,6 +24,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 
 		$job_j->hasOne('xepan\production\OutsourceParty','outsourceparty_id')->sortable(true); //it show current department
 		$job_j->hasOne('xepan\commerce\QSP_Detail','order_item_id')->sortable(true);
+		$job_j->hasOne('xepan\hr\Employee','assign_to_id')->sortable(true); 
 
 		$job_j->addField('due_date')->type('datetime')->sortable(true);
 
@@ -296,6 +297,9 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 		$grid_jobcard_row = $page->add('xepan\hr\Grid',['action_page'=>'xepan_production_jobcard'],null,['view/jobcard/transactionrow']);
 
 		$form = $page->add('Form');
+		$form->add('View')->setElement('H4')->set('You Can Assign It To An Employee')->addClass('project-box-header green-bg well-sm')->setstyle('color','white');
+		$employee = $form->addField('DropDown','assign_to_employee')->setEmptyText('Please select an employee');
+		$employee->setModel('xepan\hr\Employee');
 		$jobcard_field = $form->addField('hidden','jobcard_row');
 		$grid_jobcard_row->addSelectable($jobcard_field);
 
@@ -401,6 +405,23 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 				$communication->send($email_setting);
 			}
 			
+			//Saving Assign To Employee Id In Jobcard
+			if($form['assign_to_employee']){
+				
+				$this['assign_to_id'] = $form['assign_to_employee'];
+				$this->save();
+
+				// Assigning Activity Message
+				$model_emp = $this->add('xepan\hr\Model_Employee');
+				$model_emp->load($this['assign_to_id']);
+				if($model_emp->loaded())
+					$emp_name = $model_emp['name'];
+
+				$assignjobcard_notify_msg = ['title'=>'New Jobcard','message'=>" JobCard No . " . $this['id'] ."' Assigned To You' by '". $this->app->employee['name'] ."' ",'type'=>'info','sticky'=>true,'desktop'=>true];
+				$this->app->employee
+		            ->addActivity("Jobcard No. '".$this['id']."' assigned to '". $emp_name ."'",null, $this['assign_to_id'] /*Related Contact ID*/,null,null,"xepan_production_jobcarddetail&document_id=".$this->id."")
+		            ->notifyTo([$this['assign_to_id']],$assignjobcard_notify_msg);
+			}
 			//doing jobcard detail/row received
 			foreach (json_decode($form['jobcard_row']) as $transaction_row_id) {
 				$jobcard_row_model = $this->add('xepan\production\Model_Jobcard_Detail')->load($transaction_row_id);
@@ -458,7 +479,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 				
 		$all_complete = false;
 		
-		$jd_detail = $this->add('xepan\production\Model_Jobcard_Detail')
+		$jd_detail = $this->add('xepan\production\Mode/l_Jobcard_Detail')
 			->addCondition('jobcard_id',$this->id)->getRows();
 
 		$total_received_qty = 0;
@@ -482,6 +503,33 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 	function processing(){
 		$this['status']='Processing';
 		$this->saveAndUnload();
+	}
+
+	function page_assign($page){
+		$page->add('View')->setElement('H4')->set('Please select an employee to assign ' .$this['id'] .' no. jobcard')->addClass('project-box-header green-bg well-sm')->setstyle('color','white');
+		$form = $page->add('Form');
+		$employee = $form->addField('DropDown','assign_to_employee')->setEmptyText('Please select');
+		$employee->setModel('xepan\hr\Employee');
+		$form->addSubmit('Assign')->addClass('btn btn-primary');
+		if($form->isSubmitted()){
+			if($this->loaded()){
+				$this['assign_to_id'] = $form['assign_to_employee'];
+				$this->save();
+			}
+			$this->app->page_action_result = $form->js(null,$form->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Jobcard assigned successfully to Employee :' .$this['assign_to']);
+			
+			//Activity Message
+			$model_emp = $this->add('xepan\hr\Model_Employee');
+			$model_emp->load($this['assign_to_id']);
+			if($model_emp->loaded())
+				$emp_name = $model_emp['name'];
+
+			$assignjobcard_notify_msg = ['title'=>'New Jobcard','message'=>" JobCard No . " . $this['id'] ."' Assigned To You' by '". $this->app->employee['name'] ."' ",'type'=>'info','sticky'=>true,'desktop'=>true];
+			$this->app->employee
+	            ->addActivity("Jobcard No. '".$this['id']."' assigned to '". $emp_name ."'",null, $this['assign_to_id'] /*Related Contact ID*/,null,null,"xepan_production_jobcarddetail&document_id=".$this->id."")
+	            ->notifyTo([$this['assign_to_id']],$assignjobcard_notify_msg); 
+			
+		}
 	}
 	
 

@@ -501,8 +501,21 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 	}
 
 	function processing(){
-		$this['status']='Processing';
-		$this->saveAndUnload();
+		$department_m = $this->add('xepan\hr\Model_Department');
+		$department_m->load($this['department_id']);
+
+		$jobcard = $this->add('xepan\production\Model_Jobcard')
+					->addCondition('status','Processing')
+					->addCondition('department_id',$department_m->id);
+
+		$count = $jobcard->count()->getOne();
+		if($count < $department_m['simultaneous_no_process_allowed'] ){
+			$this['status']='Processing';
+			$this->save();
+		}else{
+			throw $this->exception('Already "'.$count.'" No. Of Jobcards In Processing In "'.$department_m['name'].'" Department, so Jobcard No. "'.$this['id'].'" could not be processed');
+		}
+
 	}
 
 	function page_assign($page){

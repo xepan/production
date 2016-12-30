@@ -479,8 +479,8 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 				
 		$all_complete = false;
 		
-		$jd_detail = $this->add('xepan\production\Mode/l_Jobcard_Detail')
-			->addCondition('jobcard_id',$this->id)->getRows();
+		$jd_detail = $this->add('xepan\production\Model_Jobcard_Detail')
+					->addCondition('jobcard_id',$this->id)->getRows();
 
 		$total_received_qty = 0;
 		$total_complete_qty = 0;
@@ -632,7 +632,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 		$detail['jobcard_id'] = $this->id;
 		$detail['quantity'] = $qty;
 		$detail['parent_detail_id'] = $parent_detail_id;
-		$detail['status'] = $status?:"ToReceived";		
+		$detail['status'] = $status?:"ToReceived";
 		return $detail->save();
 	}
 
@@ -738,15 +738,23 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			// create One New Transaction row of Completed in self jobcard
 			$jd = $this->createJobcardDetail("Completed",$form['qty_to_complete']);
 			
-				$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->tryLoadBy('id',$form['warehouse']);
-				$transaction = $warehouse->newTransaction($this['order_no'],$this->id,$warehouse->id,'Consumed',$this['department_id']);
 				
 				foreach ($model_item_consumption as $m) {
 					if($form['item_'.$m->id]){
 						if(!$form['warehouse'])
 							$form->displayError('warehouse',"Please Select Warehouse ");
 					}
+
+
+					if(!isset($this->warehouse)){
+						$this->warehouse = $warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->tryLoadBy('id',$form['warehouse']);
+						$this->transaction= $transaction = $warehouse->newTransaction($this['order_no'],$this->id,$warehouse->id,'Consumed',$this['department_id']);
+					}else{
+						$warehouse = $this->warehouse;
+						$transaction = $this->transaction;
+					}
 					
+
 					if($form['item_'.$m->id]){
 						if(!$form['qty_'.$m->id]){
 							$form->displayError('qty_'.$m->id,'Quantity Must not be Empty');
@@ -776,6 +784,15 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 					if($form['item_x_'.$m]){
 						if(!$form['warehouse'])
 							$form->displayError('warehouse',"Please Select Warehouse ");
+
+						if(!isset($this->warehouse)){
+							$this->warehouse = $warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->tryLoadBy('id',$form['warehouse']);
+							$this->transaction = $transaction = $warehouse->newTransaction($this['order_no'],$this->id,$warehouse->id,'Consumed',$this['department_id']);
+						}else{
+							$warehouse = $this->warehouse;
+							$transaction = $this->transaction;
+						}
+
 						$transaction->addItem($this['order_item_id'],$form['item_x_'.$m],$form['qty_x_'.$m],$jd->id,$form['extra_info_x_'.$m],'Consumed');
 
 						$tr_row = $this->add('xepan\commerce\Model_Store_TransactionRow');

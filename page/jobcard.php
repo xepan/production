@@ -50,6 +50,17 @@ class page_jobcard extends \xepan\base\Page {
 			});
 		$crud->grid->addPaginator($ipp=30);
 		//$crud->grid->addFormatter('departmental_status','departmental_status');
+
+
+		//  MATERIAL REQUEST MANAGEMENT
+		$this->app->side_menu->addItem(
+										[
+											'Material Request',
+											'icon'=>"fa fa-user",
+											'badge'=>[0,'swatch'=>' label label-primary label-circle pull-right']
+										],
+										$this->api->url("xepan_production_materialrequest",['department_id'=>$this->department_id])
+									)->setAttr(['title'=>"Material Request"]);
 	}
 	
 }

@@ -59,7 +59,7 @@ class page_jobcard extends \xepan\base\Page {
 											'icon'=>"fa fa-user",
 											'badge'=>[0,'swatch'=>' label label-primary label-circle pull-right']
 										],
-										$this->api->url("xepan_production_materialrequest",['department_id'=>$this->department_id])
+										$this->api->url("xepan_production_departmentstock",['department_id'=>$this->department_id])
 									)->setAttr(['title'=>"Material Request"]);
 	}
 	

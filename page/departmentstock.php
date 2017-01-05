@@ -20,9 +20,11 @@ class page_departmentstock extends \xepan\base\Page {
 		$this->title = $department['name']." Material Request / Stock Management";
 		// check department has warehouse or not
 		$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse');
-		$warehouse->addCondition('first_name',$department['name']);
+		$warehouse->addCondition('related_id',$department->id);
+		$warehouse->addCondition('related_with',"xepan\hr\Model_Department");
 		$warehouse->tryLoadAny();
 		if(!$warehouse->loaded()){
+		$warehouse['first_name'] = $department['name'];
 			$warehouse->save();
 		}
 
@@ -30,6 +32,7 @@ class page_departmentstock extends \xepan\base\Page {
 		$tab = $this->add('Tabs');
 		$mr_send_tab = $tab->addTab('Material Request Send');
 		$mr_received_tab = $tab->addTab('Material Request Received');
+		$mr_receiveddispatch_tab = $tab->addTab('Material Request Dispatch Received');
 		$dept_stock_tab = $tab->addTab('Department Stock');
 
 
@@ -69,15 +72,33 @@ class page_departmentstock extends \xepan\base\Page {
 
 		       });
 		}
-
-
 		// mr received 
-		$mr_received_model = $mr_received_tab->add('xepan\production\Model_MaterialRequestDispatch');
+		$mr_received_model = $mr_received_tab->add('xepan\production\Model_MaterialRequest');
 		$mr_received_model
 			->addCondition('to_warehouse_id',$warehouse->id)
 			->setOrder('created_at','desc')
 			;
 		$crud = $mr_received_tab->add('xepan\hr\CRUD',['allow_add'=>false]);
 		$crud->setModel($mr_received_model,['from_warehouse','from_warehouse_id','status','related_transaction_id','ToReceived','Received']);
+
+		// mr received Dispatch 
+		$mr_receiveddispatch_model = $mr_receiveddispatch_tab->add('xepan\production\Model_MaterialRequestDispatch');
+		$mr_receiveddispatch_model
+			->addCondition('to_warehouse_id',$warehouse->id)
+			->setOrder('created_at','desc')
+			;
+		$crud = $mr_receiveddispatch_tab->add('xepan\hr\CRUD',['allow_add'=>false]);
+		$crud->setModel($mr_receiveddispatch_model,['from_warehouse','from_warehouse_id','status','related_transaction_id','ToReceived','Received']);
+
+		/*Department Stock*/
+		
+		$grid= $dept_stock_tab->add('xepan\hr\Grid');
+		$department_stock = $this->add('xepan\commerce\Model_Item_Stock',['warehouse_id'=>$warehouse->id]);
+		$department_stock->addCondition('net_stock','<>',0);
+		$grid->setModel($department_stock,['name','opening','purchase','purchase_return','consumed','consumption_booked','received','adjustment_add','adjustment_removed','issue','issue_submitted','sales_return','movement_in','movement_out','net_stock']);	
+
+		$this->js(true,
+			"$('#page-wrapper').addClass('nav-small');"
+		);
 	}
 }

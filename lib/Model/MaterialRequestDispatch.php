@@ -52,8 +52,8 @@ class Model_MaterialRequestDispatch extends \xepan\commerce\Model_Store_Transact
 			$c2->addField('line','item_unit_'.$ri->id)->set($ri['unit'])->setAttr('disabled','disabled');
 
 			$c3 = $c->addColumn(2)->addClass('col-md-2');
-			$c3->addField('line','item_qty_'.$ri->id)->set($ri['quantity'])->setAttr('disabled','disabled');
-			$c3->addField('hidden','item_qty_hidden'.$ri->id)->set($ri['quantity']);
+			$c3->addField('line','item_qty_'.$ri->id)->set($ri['request_qty'])->setAttr('disabled','disabled');
+			$c3->addField('hidden','item_qty_hidden'.$ri->id)->set($ri['request_qty']);
 			
 			$c4 = $c->addColumn(2)->addClass('col-md-2');
 			$c4->addField('line','item_pre_dispatched_qty_'.$ri->id)->set($ri['pre_received']?:0)->setAttr('disabled','disabled');
@@ -82,7 +82,7 @@ class Model_MaterialRequestDispatch extends \xepan\commerce\Model_Store_Transact
 				// stock entry
 		    	$item_model = $this->add('xepan\commerce\Model_Item')->load($item['item_id']);
 		    	$cf = [];
-		    	$custom_field_combination = $item_model->convertCustomFieldToKey($item['extra_info']);
+		    	$custom_field_combination = $item_model->convertCustomFieldToKey(json_decode($item['extra_info'],true));
 		    	if($custom_field_combination)
 					$cf = $this->convertCFKeyToArray($custom_field_combination);
 
@@ -130,6 +130,13 @@ class Model_MaterialRequestDispatch extends \xepan\commerce\Model_Store_Transact
 					->addCondition('status',"Received")
 					->sum('quantity');
 			return $q->expr("IFNULL([0], 0)",[$mrd]);
+		});
+
+		$row->addExpression('request_qty')->set(function($m,$q){
+			$rqr = $m->add('xepan\commerce\Model_Store_TransactionRow',['table_alias'=>'rqr_m'])
+					->addCondition('id',$m->getElement('related_transaction_row_id'))
+					->sum('quantity');
+			return $q->expr("IFNULL([0], 0)",[$rqr]);
 		});
 
 		return $row;

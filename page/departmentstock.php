@@ -20,9 +20,11 @@ class page_departmentstock extends \xepan\base\Page {
 		$this->title = $department['name']." Material Request / Stock Management";
 		// check department has warehouse or not
 		$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse');
-		$warehouse->addCondition('first_name',$department['name']);
+		$warehouse->addCondition('related_id',$department->id);
+		$warehouse->addCondition('related_with',"xepan\hr\Model_Department");
 		$warehouse->tryLoadAny();
 		if(!$warehouse->loaded()){
+		$warehouse['first_name'] = $department['name'];
 			$warehouse->save();
 		}
 
@@ -90,7 +92,7 @@ class page_departmentstock extends \xepan\base\Page {
 
 		/*Department Stock*/
 		
-		$grid= $this->add('xepan\hr\Grid');
+		$grid= $dept_stock_tab->add('xepan\hr\Grid');
 		$department_stock = $this->add('xepan\commerce\Model_Item_Stock',['warehouse_id'=>$warehouse->id]);
 		$department_stock->addCondition('net_stock','<>',0);
 		$grid->setModel($department_stock,['name','opening','purchase','purchase_return','consumed','consumption_booked','received','adjustment_add','adjustment_removed','issue','issue_submitted','sales_return','movement_in','movement_out','net_stock']);	

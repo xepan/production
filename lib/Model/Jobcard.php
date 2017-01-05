@@ -72,6 +72,11 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			return $m->refSQL('order_item_id')->fieldQuery('quantity');
 		})->sortable(true);
 
+		$this->addExpression('order_item_unit_id')->set(function($m,$q){
+			return $m->refSQL('order_item_id')->fieldQuery('qty_unit_id');
+		})->sortable(true);
+		
+
 		$this->addExpression('item_id')->set(function($m,$q){
 			return $m->refSQL('order_item_id')->fieldQuery('item_id');
 		})->sortable(true);

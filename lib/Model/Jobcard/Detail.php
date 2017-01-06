@@ -10,7 +10,7 @@ class Model_Jobcard_Detail extends \xepan\base\Model_Table{
 		parent::init();
 
 		$this->hasOne('xepan\production\Jobcard','jobcard_id');
-		$this->addField('quantity'); 
+		$this->addField('quantity')->hint('converted quantity');
 		$this->addField('parent_detail_id')->defaultValue(0); //parent jobcard detail id
 		$this->addField('status');
 		$this->hasMany('xepan\commerce\Store_TransactionRow','jobcard_detail_id');

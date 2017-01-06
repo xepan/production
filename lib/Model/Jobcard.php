@@ -76,6 +76,17 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			return $m->refSQL('order_item_id')->fieldQuery('qty_unit_id');
 		})->sortable(true);
 		
+		$this->addExpression('order_item_unit')->set(function($m,$q){
+			return $m->refSQL('order_item_id')->fieldQuery('qty_unit');
+		})->sortable(true);
+
+		$this->addExpression('item_base_unit_id')->set(function($m,$q){
+			return $m->refSQL('order_item_id')->fieldQuery('item_qty_unit_id');
+		})->sortable(true);
+
+		$this->addExpression('item_base_unit')->set(function($m,$q){
+			return $m->refSQL('order_item_id')->fieldQuery('item_qty_unit');
+		})->sortable(true);
 
 		$this->addExpression('item_id')->set(function($m,$q){
 			return $m->refSQL('order_item_id')->fieldQuery('item_id');
@@ -203,7 +214,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			$new_jobcard = $jobcard->save();
 
 			//Create New Jobcard Detail /Transactin Row Entry
-			$new_jobcard->createJobcardDetail("ToReceived",$oi['quantity']);
+			$new_jobcard->createJobcardDetail("ToReceived",$oi['quantity'],null,$unit_conversion = true);
 	}
 
 	function generatePDF($action ='return'){
@@ -628,10 +639,13 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
         return true;
 	}
 
-	function createJobcardDetail($status,$qty,$parent_detail_id=null){
+	function createJobcardDetail($status,$qty,$parent_detail_id=null,$check_unit_conversion = false){
 		if(!$this->loaded())
 			throw new \Exception("jobcard must loaded for creating it's detail");
 
+		// convert quantity to base quantity
+		if($check_unit_conversion)
+			$qty = $this->app->getConvertedQty($this['item_base_unit_id'],$this['order_item_unit_id'],$qty);
 		
 		$detail = $this->add('xepan\production\Model_Jobcard_Detail');
 		$detail['jobcard_id'] = $this->id;
@@ -742,8 +756,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 				$form->displayError('qty_to_complete',"qty cannot be more than ".$form['total_qty_to_complete']);
 			// create One New Transaction row of Completed in self jobcard
 			$jd = $this->createJobcardDetail("Completed",$form['qty_to_complete']);
-			
-				
+							
 				foreach ($model_item_consumption as $m) {
 					if($form['item_'.$m->id]){
 						if(!$form['warehouse'])
@@ -765,7 +778,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 							$form->displayError('qty_'.$m->id,'Quantity Must not be Empty');
 						}
 					}
-					$transaction->addItem($this['order_item_id'],$form['item_'.$m->id],$form['qty_'.$m->id],$jd->id,$form['extra_info_'.$m->id],'Consumed');
+					$transaction->addItem($this['order_item_id'],$form['item_'.$m->id],$form['qty_'.$m->id],$jd->id,$form['extra_info_'.$m->id],'Consumed',null,null,false);
 
 					$tr_row = $this->add('xepan\commerce\Model_Store_TransactionRow');
 					$tr_row->addCondition('type',"Consumption_Booked");
@@ -995,7 +1008,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
     	
     	$warehouse = $this->add('xepan\commerce\Model_Store_Warehouse')->load($warehouse_id);
 		$transaction = $warehouse->newTransaction($this['order_document_id'],$this->id,$this['customer_id'],'Store_DispatchRequest');
-		$transaction->addItem($this['order_item_id'],$this['item_id'],$qty,$jobcard_detail->id,null,'ToReceived');
+		$transaction->addItem($this['order_item_id'],$this['item_id'],$qty,$jobcard_detail->id,null,'ToReceived',null,null,false);
 
 		if($this['status'] != "Completed")
 			$this['status']='Processing';

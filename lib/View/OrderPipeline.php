@@ -10,7 +10,7 @@ class View_OrderPipeline extends \xepan\hr\Grid{
 		$order_items = $this->add('xepan\commerce\Model_QSP_Detail')
 						->addCondition('qsp_master_id',$this->model->id);
 		$grid_item = $this->add('xepan\hr\Grid',null,'order_detail',['view\orderpipeline','order_detail']);
-		$grid_item->setModel($order_items,['item','quantity']);
+		$grid_item->setModel($order_items,['item','quantity','qty_unit_id','qty_unit']);
 		$grid_item->addColumn('expander','Timeline');
 
 		$grid_item->addHook('formatRow',function($g){

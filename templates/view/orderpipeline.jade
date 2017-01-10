@@ -32,7 +32,7 @@ div(id="{$_name}" class="{$class} main-box clearfix" style="{$style} padding:10p
 								ul.steps
 									{rows}
 									{row}
-									li(data-target='#step1' class="{$active}")
+									li.do-view-jobcard-details(data-target='#step1' class="{$active}" data-jobcard-id="{$jobcard_no}")
 										span.badge.badge-primary {$s_no}
 										| {$department_name}
 										p(style="line-height:15px;") {$jobcard_no} {$status}

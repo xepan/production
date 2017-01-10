@@ -57,6 +57,12 @@ class page_productionpipeline extends \xepan\base\Page{
 			$order_pipeline->setModel($sale_order);
 			$order_pipeline->addPaginator($ipp=10);
 			
+			$order_pipeline->js('click')->_selector('.do-view-jobcard-details')
+					->univ()->frameURL('Jobcard Details',
+					 	[
+					 	$this->api->url('xepan_production_jobcarddetail'),
+					 	'document_id'=>$this->js()->_selectorThis()->data('jobcard-id')
+					 	]);
 			// $order_items = $this->add('xepan\commerce\Model_QSP_Detail')
 			// 				->addCondition('qsp_master_id',$_GET['order_id']);
 			// $grid = $wrapper_view->add('Grid');

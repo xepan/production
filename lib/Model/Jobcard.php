@@ -589,7 +589,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 		$form = $page->add('Form');
 		$form->addField('line','total_quantity_to_forward')->setAttr('readonly','true')->set($qty_to_forward);
 		$form->addField('Number','quantity_to_forward')->set($qty_to_forward);
-		$form->addSubmit('forward to '.$next_dept['name']);
+		$form->addSubmit('Forward to Next Department : '.$next_dept['name']);
 
 		if($form->isSubmitted()){
 			if($form['quantity_to_forward'] > $form['total_quantity_to_forward'])

@@ -689,7 +689,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
             $item_template->trySetHTML('item','{$item_'.$m->id.'}');
             $item_template->trySetHTML('qty','{$qty_'.$m->id.'}');
             $item_template->trySetHTML('extra_info','{$extra_info_'.$m->id.'}');
-            $item_template->trySetHTML('view_extra_info','{$view_extra_info_'.$m->id.'}');
+            $item_template->trySetHTML('view_extra_info','{$consumption_item_view_extra_info_'.$m->id.'}');
 			$template->appendHTML('items',$item_template->render());
 		}
 		
@@ -719,7 +719,7 @@ class Model_Jobcard extends \xepan\hr\Model_Document{
 			$item_field->custom_field_btn_class = 'extra_info_'.$m->id;
 			$item_field->is_mandatory = false;
 
-			$form->layout->add('View',null,'view_extra_info_'.$m->id)->set('Extra Info')->addClass('btn btn-primary extra_info_'.$m->id );
+			$form->layout->add('View',null,'consumption_item_view_extra_info_'.$m->id)->set('Extra Info')->addClass('btn btn-primary extra_info_'.$m->id );
 			$extra_info = $form->addField('text','extra_info_'.$m->id);
 
 			if($consum_qty){

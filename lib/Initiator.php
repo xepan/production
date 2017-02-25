@@ -61,4 +61,13 @@ class Initiator extends \Controller_Addon {
 
 	function resetDB(){
 	}
+
+	function exportEntities($app,&$array){
+        $array['OutsourceParty'] = ['caption'=>'OutsourceParty','type'=>'xepan\base\Basic','model'=>'xepan\production\Model_OutsourceParty'];
+        $array['Jobcard'] = ['caption'=>'Jobcard','type'=>'xepan\base\Basic','model'=>'xepan\production\Model_Jobcard'];
+        $array['Jobcard'] = ['caption'=>'Jobcard','type'=>'xepan\base\Basic','model'=>'xepan\production\Model_PRODUCTION_JOBCARD_SYSTEM_CONFIG'];
+        $array['MaterialRequestSend'] = ['caption'=>'MaterialRequestSend','type'=>'xepan\base\Basic','model'=>'xepan\production\Model_MaterialRequestSend'];
+        $array['MaterialRequestDispatch'] = ['caption'=>'MaterialRequestDispatch','type'=>'xepan\base\Basic','model'=>'xepan\production\Model_MaterialRequestDispatch'];
+
+    }
 }

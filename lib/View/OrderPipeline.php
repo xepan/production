@@ -17,7 +17,7 @@ class View_OrderPipeline extends \xepan\hr\Grid{
 			$order_detail = $g->add('xepan\commerce\Model_QSP_Detail')->load($g->model->id);
 			$array = json_decode($order_detail['extra_info']?:"[]",true);
 			unset($array[0]);
-			
+			ksort($array);
 			$jobcard_pipeline = $g->add('xepan\production\View_JobcardPipeline',['order_detail_id'=>$g->model->id],'production_step',['view\orderpipeline','production_step']);
 			$jobcard_pipeline->setSource($array);
 

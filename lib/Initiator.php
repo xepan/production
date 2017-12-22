@@ -42,6 +42,7 @@ class Initiator extends \Controller_Addon {
 
 		$search_outsourceparty = $this->add('xepan\production\Model_OutsourceParty');
     	$this->app->addHook('quick_searched',[$search_outsourceparty,'quickSearch']);
+    	$this->app->addHook('collect_shortcuts',[$this,'collect_shortcuts']);
 
     	$this->app->status_icon["xepan\production\Model_Jobcard"] = 
     							[
@@ -63,6 +64,19 @@ class Initiator extends \Controller_Addon {
 		$this->addLocation(array('template'=>'templates'));
 		return $this;
 	}
+
+	function collect_shortcuts($app,&$shortcuts){
+        $shortcuts[]=["title"=>"Outsourced parties","keywords"=>"out source job work","description"=>"Manage your out source vendors","normal_access"=>"Production -> OutsourceParty","url"=>$this->app->url('xepan_production_outsourceparties'),'mode'=>'frame'];
+        $shortcuts[]=["title"=>"Jobcard Order Timeline","keywords"=>"timeline pipeline order status job","description"=>"TRack your order status with job cards","normal_access"=>"Production -> JObCard Order Timeline","url"=>$this->app->url('xepan_production_productionpipeline'),'mode'=>'frame'];
+
+        $departments = $this->add('xepan\hr\Model_Department')->setOrder('production_level','asc');
+		foreach ($departments as $department) {
+	        $shortcuts[]=["title"=>"Jobcard for ".$department['name'],"keywords"=>"work status pending work jobwork jobcard for ".$department['name'],"description"=>"Jobs Status at ".$department['name'],"normal_access"=>"Production -> ".$department['name'],"url"=>$this->app->url('xepan_production_jobcard',['department_id'=>$department->id]),'mode'=>'frame'];
+		}
+        $shortcuts[]=["title"=>"Customer Production Report","keywords"=>"customer status orders all job cards works","description"=>"Track customers status for all works and job cards","normal_access"=>"Production -> Report","url"=>$this->app->url('xepan_production_reports_customer'),'mode'=>'frame'];
+        $shortcuts[]=["title"=>"JobCard received email content","keywords"=>"jobcard received email content","description"=>"Job Card Received Email content","normal_access"=>"Production -> Configuration","url"=>$this->app->url('xepan_production_config'),'mode'=>'frame'];
+
+    }
 
 	function resetDB(){
 	}

@@ -9,6 +9,8 @@ class Model_OutsourceParty extends \xepan\base\Model_Contact{
 					'InActive'=>['view','edit','delete','activate']
 					];
 
+	public $contact_type = "OutsourceParty";
+	
 	function init(){
 		parent::init();
 

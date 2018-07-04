@@ -100,6 +100,8 @@ class Initiator extends \Controller_Addon {
 			$arr['Production'][]=['name'=>$department['name'],'icon'=>'fa fa-empire', 'url'=>'xepan_production_jobcard','url_param'=>['department_id'=>$department->id]];
 		}
 		$arr['Production'][]=['name'=>'Reports','icon'=>'fa fa-cog', 'url'=>'xepan_production_reports_customer'];
+
+		return $arr;
 	}
 
 	function getConfigTopApplicationMenu(){

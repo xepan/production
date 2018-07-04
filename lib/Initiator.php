@@ -55,23 +55,65 @@ class Initiator extends \Controller_Addon {
 	}
 
 	function populateApplicationMenus(){
-		if(!$this->app->getConfig('hidden_xepan_production',false)){
-			$m = $this->app->top_menu->addMenu('Production');
-			$m->addItem(['OutsourceParty','icon'=>'fa fa-user'],'xepan_production_outsourceparties');
-			$m->addItem(['Jobcard Orders','icon'=>'fa fa-pencil-square-o'],'xepan_production_jobcardorder');
-			$m->addItem(['Jobcard Order Timeline','icon'=>'fa fa-pencil-square-o'],'xepan_production_productionpipeline');
+		// if(!$this->app->getConfig('hidden_xepan_production',false)){
+		// 	$m = $this->app->top_menu->addMenu('Production');
+		// 	$m->addItem(['OutsourceParty','icon'=>'fa fa-user'],'xepan_production_outsourceparties');
+		// 	$m->addItem(['Jobcard Orders','icon'=>'fa fa-pencil-square-o'],'xepan_production_jobcardorder');
+		// 	$m->addItem(['Jobcard Order Timeline','icon'=>'fa fa-pencil-square-o'],'xepan_production_productionpipeline');
 			
-			$departments = $this->add('xepan\hr\Model_Department')->setOrder('production_level','asc');
+		// 	$departments = $this->add('xepan\hr\Model_Department')->setOrder('production_level','asc');
 
-			foreach ($departments as $department) {
-				$m->addItem(([$department['name'],'icon'=>'fa fa-empire']),$this->app->url('xepan_production_jobcard',['department_id'=>$department->id]),['department_id']);
-			}
+		// 	foreach ($departments as $department) {
+		// 		$m->addItem(([$department['name'],'icon'=>'fa fa-empire']),$this->app->url('xepan_production_jobcard',['department_id'=>$department->id]),['department_id']);
+		// 	}
 			
-			$m->addItem(['Reports','icon'=>'fa fa-cog fa-spin'],'xepan_production_reports_customer');
-			$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_production_config');
+		// 	$m->addItem(['Reports','icon'=>'fa fa-cog fa-spin'],'xepan_production_reports_customer');
+		// 	$m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_production_config');
 			
-		}
+		// }
 	}
+
+		// used for custom menu
+	function getTopApplicationMenu(){
+
+		$arr =  ['Production'=>[
+					[	'name'=>'OutsourceParty',
+						'icon'=>'fa fa-user',
+						'url'=>'xepan_production_outsourceparties'
+					],
+					[
+						'name'=>'Jobcard Orders',
+						'icon'=>'fa fa-pencil-square-o',
+						'url'=>'xepan_production_jobcardorder'
+					],
+					[
+						'name'=>'Jobcard Order Timeline',
+						'icon'=>'fa fa-pencil-square-o',
+						'url'=>'xepan_production_productionpipeline'
+					]
+				]
+			];
+
+		$departments = $this->add('xepan\hr\Model_Department')->setOrder('production_level','asc');
+
+		foreach ($departments as $department) {
+			$arr['Production'][]=['name'=>$department['name'],'icon'=>'fa fa-empire', 'url'=>'xepan_production_jobcard','url_param'=>['department_id'=>$department->id]];
+		}
+		$arr['Production'][]=['name'=>'Reports','icon'=>'fa fa-cog', 'url'=>'xepan_production_reports_customer'];
+	}
+
+	function getConfigTopApplicationMenu(){
+		return [
+				'Production_Config'=>[
+					[
+						'name'=>'Jobcard Receive Email layout',
+						'icon'=>'fa fa-cog',
+						'url'=>'xepan_production_config'
+					]
+			    ]
+			];
+
+	} 
 
 	function setup_frontend(){
 		$this->routePages('xepan_production');

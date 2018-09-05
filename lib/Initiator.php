@@ -75,6 +75,7 @@ class Initiator extends \Controller_Addon {
 
 		// used for custom menu
 	function getTopApplicationMenu(){
+		if($this->app->getConfig('hidden_xepan_production',false)){return [];}
 
 		$arr =  ['Production'=>[
 					[	'name'=>'OutsourceParty',
@@ -105,6 +106,8 @@ class Initiator extends \Controller_Addon {
 	}
 
 	function getConfigTopApplicationMenu(){
+		if($this->app->getConfig('hidden_xepan_production',false)){return [];}
+		
 		return [
 				'Production_Config'=>[
 					[
